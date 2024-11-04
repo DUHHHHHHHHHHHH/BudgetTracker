@@ -2,8 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // IMPORTS
-import _404 from "./pages/404/_404"; // pagina nn esistente.
-import LOGIN from "./pages/Login/LOGIN"; // LOGIN e REGISTER.
+import _404 from "./pages/_404/_404"; // pagina nn esistente.
+import LOGIN from "./pages/Login/Login"; // LOGIN e REGISTER.
 import HOME from "./pages/Home/Home"; // home, pagina dove l'utente una volta loggatato accede alle funzionalità.
 import ADMIN from "./pages/Admin/Admin"; // pagina admin, dove l'utente admin può aggiungere le categorie.
 import PROFILE from "./pages/Profile/Profile"; // pagina del profilo, dove l'utente può modificare il proprio profilo.
