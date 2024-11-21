@@ -22,21 +22,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new Exception("Connection to the database failed: " . mysqli_connect_error(), 500);
             }
 
-            $query = "SELECT nome, password FROM utente WHERE mail = ?";
+            $query = "SELECT UTENTE_Nome, UTENTE_Password FROM utente WHERE UTENTE_MAIL = ?";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, 's', $mail);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_store_result($stmt);
 
             if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $nome, $cognome, $hashedPassword);
+                mysqli_stmt_bind_result($stmt, $UTENTE_Nome, $hashedPassword);
                 mysqli_stmt_fetch($stmt);
 
                 if ($password === $hashedPassword) {
                     $user = array(
-                        "mail" => $mail,
-                        "nome" => $nome,
-                        "cognome" => $cognome
+                        "mail" => $UTENTE_Mail,
+                        "nome" => $UTENTE_Nome,
                     );
 
                     mysqli_stmt_close($stmt);

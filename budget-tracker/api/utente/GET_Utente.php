@@ -1,6 +1,8 @@
 <?php
 
-// get utente, fornisce 
+
+// get utente, fornisce un specifico utente tramite L'EMAIL
+
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: OPTIONS, POST");
@@ -22,19 +24,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new Exception("Connection to the database failed: " . mysqli_connect_error());
             }
 
-            $query = "SELECT mail, nome FROM utente WHERE mail = ?";
+            $query = "SELECT * FROM utente WHERE UTENTE_Mail = ?";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, 's', $mail);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_store_result($stmt);
 
             if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $mail, $nome, $data_nascita);
+                mysqli_stmt_bind_result($stmt, $UTENTE_Mail, $UTENTE_Nome, $UTENTE_ID);
                 mysqli_stmt_fetch($stmt);
 
                 $user = array(
-                    "mail" => $mail,
-                    "nome" => $nome,
+                    "UTENTE_Mail" => $UTENTE_Mail,
+                    "UTENTE_Nome" => $UTENTE_Nome,
+                    "UTENTE_ID" => $UTENTE_ID
                 );
 
                 mysqli_stmt_close($stmt);
@@ -42,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 echo json_encode($user);
             } else {
-                throw new Exception("Email non valida.");
+                throw new Exception("Nome utente non valido.");
             }
         } catch (Exception $e) {
             http_response_code(401);

@@ -1,12 +1,12 @@
 DOCUMENTAZIONE API:
 
 ADMIN
-    login                       [sviluppata]
+    login                       [sviluppata, non debuggata]
 
 UTENTE
-    login                       [sviluppata]
-    register                    [sviluppata]
-    GET_Utente                  [W.I.P.]
+    login                       [sviluppata, non debuggata]
+    register                    [sviluppata, non debuggata]
+    GET_Utente                  [sviluppata, non debuggata]
     GET_Utenti                  [W.I.P.]
     PUT_Utente                  [W.I.P.]
     DELETE_Utente               [W.I.P.]
@@ -73,10 +73,10 @@ MILESTONE
 
 /utente/GET_Utente.php 
     [GET]
-    input: {"nome"}
+    input: {"MAIL"}
     output: {"UTENTE_ID","UTENTE_Nome", "UTENTE_Mail"}
 
-    // permette di ottenere le informazioni pubbliche di uno specifico utente 
+    // permette di ottenere le informazioni pubbliche di uno specifico utente tramite l'email
 
 /utente/GET_Utenti.php
     [GET]

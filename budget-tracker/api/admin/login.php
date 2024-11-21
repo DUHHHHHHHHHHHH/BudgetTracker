@@ -9,10 +9,10 @@ include_once "../config.php";
 $db = new Database();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $ADMIN_Name = isset($_POST["ADMIN_Name"]) ? $_POST["ADMIN_Name"] : null;
-    $ADMIN_Password = isset($_POST["ADMIN_Password"]) ? $_POST["ADMIN_Password"] : null;
+    $name = isset($_POST["name"]) ? $_POST["name"] : null;
+    $password = isset($_POST["password"]) ? $_POST["password"] : null;
 
-    if (!empty($ADMIN_Name) && !empty($ADMIN_Password)) {
+    if (!empty($name) && !empty($password)) {
         try {
             $conn = mysqli_connect($db->host, $db->user, $db->password, $db->db_name);
 
@@ -22,12 +22,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $query = "SELECT ADMIN_Name, ADMIN_Password FROM ADMIN WHERE ADMIN_Name = ?";
             $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, 's', $mail);
+            mysqli_stmt_bind_param($stmt, 's', $name);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_store_result($stmt);
 
             if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $nome, $cognome, $hashedPassword);
+                mysqli_stmt_bind_result($stmt, $nome, $hashedPassword);
                 mysqli_stmt_fetch($stmt);
 
                 if ($password === $hashedPassword) {
