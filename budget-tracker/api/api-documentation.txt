@@ -1,0 +1,273 @@
+DOCUMENTAZIONE API:
+
+ADMIN
+    login
+
+UTENTE
+    login
+    register
+    GET_Utente
+    GET_Utenti
+    PUT_Utente
+    DELETE_Utente
+
+CATEGORIA
+    POST_Categoria
+    GET_Categoria
+    GET_Categorie
+    PUT_Categoria
+    DELETE_Categoria
+
+TIPOLOGIA
+    POST_Tipologia
+    GET_Tipologia
+    GET_Tipologie
+    DELETE_Tipologia   
+    PUT_Tipologia
+
+TRANSAZIONE
+    POST_Transazione
+    GET_Transazione
+    GET_Transazioni
+    PUT_Transazione
+    DELETE_Transazione
+
+REPORT
+    POST_Report
+    GET_Report
+    DELETE_Report
+
+MILESTONE 
+    POST_Milestone
+    GET_Milestone
+    GET_Milestones
+    DELETE_Milestone
+    PUT_Milestone
+
+===============================================================================================================
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+===============================================================================================================
+
+/admin/login.php
+    [POST]
+    input: {"name", "password"}
+    output: {"name"}
+
+    //  permette di far accedere all'admin alla parte privata amministrativa dell'applicazione.
+
+---------------------------------------------------------------------------------------------------------------
+
+/utente/login.php
+    [POST]
+    input: {"nome", "password"}
+    output: {"ADMIN_Nome", "ADMIN_Mail"}
+
+    // permette di far accedere all utente alla parte privata dell'applicazione.
+
+/utente/register.php
+    [POST]
+    input: {"nome", "mail", "password"}
+    output: {"UTENTE_Nome", "UTENTE_Mail"}
+
+    // permette di registrare un nuovo utente
+
+/utente/GET_Utente.php 
+    [GET]
+    input: {"nome"}
+    output: {"UTENTE_ID","UTENTE_Nome", "UTENTE_Mail"}
+
+    // permette di ottenere le informazioni pubbliche di uno specifico utente 
+
+/utente/GET_Utenti.php
+    [GET]
+    input: {*}
+    output: {"UTENTE_ID","UTENTE_Nome", "UTENTE_Mail"}
+
+    // permette di ottenere le informazioni pubbliche di tutti gli utenti
+
+/utente/PUT_Utente.php
+    [PUT]
+    input: {"nome", "mail", "password"}
+    output: {"message"}
+
+    // permette di modificare i dati di un utente
+
+/utente/DELETE_Utente.php
+    [DELETE]
+    input: {"id"}
+    output: {"message"}
+
+    // permette di eliminare un utente tramite il suo id
+
+---------------------------------------------------------------------------------------------------------------
+
+/categoria/POST_Categoria.php
+    [POST]
+    input: {"nome", "descrizione", "budget", "tipologia_nome"}
+    output: {"message"}
+
+    // un utente crea una nuova categoria relazionata ad una tipologia, il nome della categoria deve essere univoco in base all utente
+
+/categoria/GET_Categoria.php
+    [GET]
+    input: {"nome"}
+    output: {"CATEGORIA_ID","CATEGORIA_Nome", "CATEGORIA_Descrizione", "CATEGORIA_Budget", "TIPOLOGIA_ID"}
+
+    // permette di ottenere le informazioni pubbliche di una specifica categoria
+
+/categoria/GET_Categorie.php
+    [GET]
+    input: {"UTENTE_Nome"}
+    output: {"CATEGORIA_ID","CATEGORIA_Nome", "CATEGORIA_Descrizione", "CATEGORIA_Budget", "TIPOLOGIA_ID"}
+
+    // permette di ottenere le informazioni pubbliche di tutte le categorie create da un utente
+
+/categoria/PUT_Categoria.php
+    [PUT]
+    input: {"nome", "descrizione", "budget", "tipologiaRelazione"}
+    output: {"message"}
+
+    // permette di modificare i dati di una categoria, se il nuovo nome non è univoco da errore e non modifica
+
+/categoria/DELETE_Categoria.php
+    [DELETE]
+    input: {"id"}
+    output: {"message"}
+
+    // permette di eliminare una categoria creata da un utente tramite il suo nome
+
+----------------------------------------------------------------------------------------------------------------
+
+/tipologia/POST_Tipologia.php
+    [POST]
+    input: {"nome"}
+    output: {"message"}
+
+    // l'admin può creare una nuova tipologia, il nome della tipologia deve essere univoco
+
+/tipologia/GET_Tipologia.php
+    [GET]
+    input: {"nome"}
+    output: {"TIPOLOGIA_ID","TIPOLOGIA_Nome", "TIPOLOGIA_Descrizione", "ADMIN_FK_ID"}
+
+    // permette di ottenere le informazioni pubbliche di una specifica tipologia
+
+/tipologia/GET_Tipologie.php
+    [GET]
+    input: {*}
+    output: {"TIPOLOGIA_ID","TIPOLOGIA_Nome", "TIPOLOGIA_Descrizione", "ADMIN_FK_ID"}
+
+    // permette di ottenere le informazioni pubbliche di tutte le tipologie disponibili
+
+/tipologia/PUT_Tipologia.php
+    [PUT]
+    input: {"nome", "descrizione"}
+    output: {"message"}
+
+    // permette all admin di modificare i dati di una tipologia, se il nuovo nome non è univoco da errore.
+
+----------------------------------------------------------------------------------------------------------------
+
+/transazione/POST_Transazione.php
+    [POST]
+    input: {"nome", "descrizione", "dataGenerazione", "qta", "tipo"}
+    output: {"message"}
+
+    // un utente può creare una nuova transazione elazionata ad una CATEGORIA specifica (nome)
+
+/transazione/GET_Transazione.php
+    [GET]
+    input: {"nome", "dataGenerazione", "utente_nome"}
+    output: {"TRANSAZIONE_ID","TRANSAZIONE_Nome", "TRANSAZIONE_Descrizione", "TRANSAZIONE_DataGenerazione", "TTRANSAZIONE_Qta", "TRANSAZIONE_Tipo", "CATEGORIA_FK_ID"}
+
+    // permette di ottenere le informazioni private di una specifica transazione fatta da un utente
+
+/transazione/GET_Transazioni.php
+    [GET]
+    input: {"utente_nome"}
+    output: {"TRANSAZIONE_ID","TRANSAZIONE_Nome", "TRANSAZIONE_Descrizione", "TRANSAZIONE_DataGenerazione", "TTRANSAZIONE_Qta", "TRANSAZIONE_Tipo", "CATEGORIA_FK_ID"}
+
+    // permette di ottenere le informazioni private di tutte le transazioni fatte da un utente su una categoria
+
+/transazione/PUT_Transazione.php
+    [PUT]
+    input: {"nome", "descrizione", "qta", "tipo"}
+    output: {"message"}
+
+    // permette di modificare i dati di una transazione fatta da un utente su una categoria
+
+/transazione/DELETE_Transazione.php
+    [DELETE]
+    input: {"id"}
+    output: {"message"}
+
+    // permette di eliminare una transazione tramite il suo id, fatta da un utente su una categoria
+
+----------------------------------------------------------------------------------------------------------------
+
+/report/POST_Report.php
+    [POST]
+    input: {"nome", "dataGenerazione", "fileExport", "categoria_nome", "utente_nome"}
+    output: {"message"}
+
+    // un utente crea un report su una categoria specifica
+
+/report/GET_Reports.php
+    [GET]
+    input: {"utente_nome"}
+    output: {"REPORT_ID","REPORT_Nome", "REPORT_DataGenerazione", "REPORT_FileExport", "CATEGORIA_FK_ID", "UTENTE_FK_ID"}
+
+    // permette di ottenere le informazioni private di tutti i report creati da un utente
+
+/report/GET_Report.php
+    [GET]
+    input: {"nome", "utente_nome"}
+    output: {"REPORT_ID","REPORT_Nome", "REPORT_DataGenerazione", "REPORT_FileExport", "CATEGORIA_FK_ID", "UTENTE_FK_ID"}
+
+    // permette di ottenere le informazioni private di un report specifico creato da un utente
+
+/report/DELETE_Report.php
+    [DELETE]
+    input: {"id"}
+    output: {"message"}
+
+    // permette di eliminare un report tramite il suo id
+
+----------------------------------------------------------------------------------------------------------------
+
+/milestone/POST_Milestone.php
+    [POST]
+    input: {"nome", "descrizione", "dataGenerazione", "dataScadenza", "categoria_nome", "utente_nome"}
+    output: {"message"}
+
+    // permette di creare un milestone su una categoria specifica fatta da un utente
+
+/milestone/GET_Milestones.php
+    [GET]
+    input: {"utente_nome"}
+    output: {"MILESTONE_ID","MILESTONE_Nome", "MILESTONE_Descrizione", "MILESTONE_DataGenerazione", "MILESTONE_DataScadenza", "CATEGORIA_FK_ID", "UTENTE_FK_ID"}
+
+    // permette di ottenere le informazioni private di tutti i milestones creati da un utente
+
+/milestone/GET_Milestone.php
+    [GET]
+    input: {"nome", "utente_nome"}
+    output: {"MILESTONE_ID","MILESTONE_Nome", "MILESTONE_Descrizione", "MILESTONE_DataGenerazione", "MILESTONE_DataScadenza", "CATEGORIA_FK_ID", "UTENTE_FK_ID"}
+
+    // permette di ottenere le informazioni private di un milestone specifico creato da un utente
+
+/milestone/PUT_Milestone.php
+    [PUT]
+    input: {"nome", "descrizione", "dataScadenza"}
+    output: {"message"}
+
+    // permette di modificare i dati di un milestone creato da un utente
+
+/milestone/DELETE_Milestone.php
+    [DELETE]
+    input: {"id"}
+    output: {"message"}
+
+    // permette di eliminare un milestone tramite il suo id
+
+----------------------------------------------------------------------------------------------------------------
