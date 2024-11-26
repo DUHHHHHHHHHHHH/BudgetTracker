@@ -4,12 +4,12 @@ ADMIN
     login                       [sviluppata, non debuggata]     permette di fare il login tramite nome e password
 
 UTENTE
-    login                       [sviluppata, non debuggata]     permette di fare il login tramite nome e password
-    register                    [sviluppata, non debuggata]     permette di registrare un nuovo utente tramite nome, mail e password
-    GET_Utente                  [sviluppata, non debuggata]     
-    GET_Utenti                  [W.I.P.]
+    login                       [sviluppata, non debuggata]     permette di fare il login tramite nome e password.
+    register                    [sviluppata, non debuggata]     permette di registrare un nuovo utente tramite nome, mail e password.
+    GET_Utente                  [sviluppata, non debuggata]     permette di ottenere le informazioni pubbliche di uno specifico utente tramite l'email.
+    GET_Utenti                  [sviluppata, non debuggata]     permette di ottenere le informazioni pubbliche di tutti gli utenti.
     PUT_Utente                  [W.I.P.]
-    DELETE_Utente               [W.I.P.]
+    DELETE_Utente               [sviluppata, non debuggata]     permette di eliminare un utente tramite il suo id, email, password.
 
 CATEGORIA
     POST_Categoria              [W.I.P.]
