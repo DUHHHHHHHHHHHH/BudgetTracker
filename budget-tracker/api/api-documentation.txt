@@ -1,12 +1,12 @@
 DOCUMENTAZIONE API:
 
 ADMIN
-    login                       [sviluppata, non debuggata]
+    login                       [sviluppata, non debuggata]     permette di fare il login tramite nome e password
 
 UTENTE
-    login                       [sviluppata, non debuggata]
-    register                    [sviluppata, non debuggata]
-    GET_Utente                  [sviluppata, non debuggata]
+    login                       [sviluppata, non debuggata]     permette di fare il login tramite nome e password
+    register                    [sviluppata, non debuggata]     permette di registrare un nuovo utente tramite nome, mail e password
+    GET_Utente                  [sviluppata, non debuggata]     
     GET_Utenti                  [W.I.P.]
     PUT_Utente                  [W.I.P.]
     DELETE_Utente               [W.I.P.]
@@ -23,26 +23,27 @@ TIPOLOGIA
     GET_Tipologia               [W.I.P.]
     GET_Tipologie               [W.I.P.]
     DELETE_Tipologia            [W.I.P.]
-    PUT_Tipologia               [W.I.P.]
+    PUT_Tipologia               [W.I.P.]        // usata per 
 
 TRANSAZIONE
-    POST_Transazione            [W.I.P.]
-    GET_Transazione             [W.I.P.]
-    GET_Transazioni             [W.I.P.]
-    PUT_Transazione             [W.I.P.]
-    DELETE_Transazione          [W.I.P.]
+    POST_Transazione            [W.I.P.]        // usata per creare una transizione su una categoria
+    GET_Transazione             [W.I.P.]        // usata per richiamare una singola transizione da una categoria
+    GET_Transazioni             [W.I.P.]        // usata per richiamare tutte le transizioni di una categoria quando fa il load della pagina
+    PUT_Transazione             [W.I.P.]        // usata per modificare una transizione
+    DELETE_Transazione          [W.I.P.]        // usata per eliminare una transizione
 
 REPORT
-    POST_Report                 [W.I.P.]  
-    GET_Report                  [W.I.P.]
-    DELETE_Report               [W.I.P.]
+    POST_Report                 [W.I.P.]        // generazione del report 
+    GET_Report                  [W.I.P.]        // usata per richiamare un singolo report
+    GET_Reports                 [W.I.P.]        // usata per richiamare tutti i report quando si fa il load della pagina
+    DELETE_Report               [W.I.P.]        // usata per eliminare un report
 
 MILESTONE 
-    POST_Milestone              [W.I.P.]
-    GET_Milestone               [W.I.P.]
-    GET_Milestones              [W.I.P.]
-    DELETE_Milestone            [W.I.P.]
-    PUT_Milestone               [W.I.P.]
+    POST_Milestone              [W.I.P.]        // crea un milestone
+    GET_Milestone               [W.I.P.]        // usata per richiamare una singola milestone
+    GET_Milestones              [W.I.P.]        // usata per richiamare tutti i milestone quando si fa il load della pagina
+    DELETE_Milestone            [W.I.P.]        // usata per eliminare un milestone
+    PUT_Milestone               [W.I.P.]        // usata per modificare una milestone esistente
 
 ===============================================================================================================
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -59,29 +60,29 @@ MILESTONE
 
 /utente/login.php
     [POST]
-    input: {"nome", "password"}
-    output: {"ADMIN_Nome", "ADMIN_Mail"}
+    input: {"mail", "password"}
+    output: {"ADMIN_Username", "ADMIN_Mail"}
 
-    // permette di far accedere all utente alla parte privata dell'applicazione.
+    // permette di far accedere all utente alla parte privata dell'applicazione tramite mail e password
 
 /utente/register.php
     [POST]
     input: {"nome", "mail", "password"}
-    output: {"UTENTE_Nome", "UTENTE_Mail"}
+    output: {"UTENTE_Username", "UTENTE_Mail"}
 
     // permette di registrare un nuovo utente
 
 /utente/GET_Utente.php 
     [GET]
-    input: {"MAIL"}
-    output: {"UTENTE_ID","UTENTE_Nome", "UTENTE_Mail"}
+    input: {"mail"}
+    output: {"UTENTE_ID","UTENTE_Username", "UTENTE_Mail"}
 
     // permette di ottenere le informazioni pubbliche di uno specifico utente tramite l'email
 
 /utente/GET_Utenti.php
     [GET]
     input: {*}
-    output: {"UTENTE_ID","UTENTE_Nome", "UTENTE_Mail"}
+    output: {"UTENTE_ID","UTENTE_Username", "UTENTE_Mail"}
 
     // permette di ottenere le informazioni pubbliche di tutti gli utenti
 
@@ -103,44 +104,44 @@ MILESTONE
 
 /categoria/POST_Categoria.php
     [POST]
-    input: {"nome", "descrizione", "budget", "tipologia_nome"}
+    input: {"nome", "descrizione", "budget", "tipologia_nome", "utente_username"}
     output: {"message"}
 
     // un utente crea una nuova categoria relazionata ad una tipologia, il nome della categoria deve essere univoco in base all utente
 
 /categoria/GET_Categoria.php
     [GET]
-    input: {"nome"}
+    input: {"nome_categoria, UTENTE_Username"}
     output: {"CATEGORIA_ID","CATEGORIA_Nome", "CATEGORIA_Descrizione", "CATEGORIA_Budget", "TIPOLOGIA_ID"}
 
-    // permette di ottenere le informazioni pubbliche di una specifica categoria
+    // permette di ottenere le informazioni pubbliche di una specifica categoria creata da un utente
 
 /categoria/GET_Categorie.php
     [GET]
-    input: {"UTENTE_Nome"}
+    input: {"UTENTE_Username"}
     output: {"CATEGORIA_ID","CATEGORIA_Nome", "CATEGORIA_Descrizione", "CATEGORIA_Budget", "TIPOLOGIA_ID"}
 
     // permette di ottenere le informazioni pubbliche di tutte le categorie create da un utente
 
 /categoria/PUT_Categoria.php
     [PUT]
-    input: {"nome", "descrizione", "budget", "tipologiaRelazione"}
+    input: {"nome", "descrizione", "budget", "tipologiaRelazione", "utente_username"}
     output: {"message"}
 
-    // permette di modificare i dati di una categoria, se il nuovo nome non è univoco da errore e non modifica
+    // permette di modificare i dati di una categoria creata da un utente, se il nuovo nome non è univoco da errore e non modifica
 
 /categoria/DELETE_Categoria.php
     [DELETE]
-    input: {"id"}
+    input: {"id", "utente_username"}
     output: {"message"}
 
-    // permette di eliminare una categoria creata da un utente tramite il suo nome
+    // permette di eliminare una categoria creata da un utente tramite il suo ID UNIVOCO
 
 ----------------------------------------------------------------------------------------------------------------
 
 /tipologia/POST_Tipologia.php
     [POST]
-    input: {"nome"}
+    input: {"nome", "descrizione", "admin_username"}
     output: {"message"}
 
     // l'admin può creare una nuova tipologia, il nome della tipologia deve essere univoco
@@ -157,7 +158,7 @@ MILESTONE
     input: {*}
     output: {"TIPOLOGIA_ID","TIPOLOGIA_Nome", "TIPOLOGIA_Descrizione", "ADMIN_FK_ID"}
 
-    // permette di ottenere le informazioni pubbliche di tutte le tipologie disponibili
+    // permette di ottenere le informazioni pubbliche di tutte le tipologie disponibili nel database
 
 /tipologia/PUT_Tipologia.php
     [PUT]
@@ -171,41 +172,41 @@ MILESTONE
     input: {"id"}
     output: {"message"}
 
-    // permette all admin di eliminare una tipologia tramite il suo id
+    // permette all admin di eliminare una tipologia tramite il l'id della tipologia
 
 ----------------------------------------------------------------------------------------------------------------
 
 /transazione/POST_Transazione.php
     [POST]
-    input: {"nome", "descrizione", "dataGenerazione", "qta", "tipo"}
+    input: {"nome", "descrizione", "dataGenerazione", "qta", "tipo", "categoria_nome", "utente_username"}
     output: {"message"}
 
     // un utente può creare una nuova transazione elazionata ad una CATEGORIA specifica (nome)
 
 /transazione/GET_Transazione.php
     [GET]
-    input: {"nome", "dataGenerazione", "utente_nome"}
-    output: {"TRANSAZIONE_ID","TRANSAZIONE_Nome", "TRANSAZIONE_Descrizione", "TRANSAZIONE_DataGenerazione", "TTRANSAZIONE_Qta", "TRANSAZIONE_Tipo", "CATEGORIA_FK_ID"}
+    input: {"nome", "data", "utente_username"}
+    output: {"TRANSAZIONE_ID","TRANSAZIONE_Nome", "TRANSAZIONE_Descrizione", "TRANSAZIONE_Data", "TRANSAZIONE_DataGenerazione", "TTRANSAZIONE_Qta", "TRANSAZIONE_Tipo", "CATEGORIA_FK_ID"}
 
     // permette di ottenere le informazioni private di una specifica transazione fatta da un utente
 
 /transazione/GET_Transazioni.php
     [GET]
-    input: {"utente_nome"}
-    output: {"TRANSAZIONE_ID","TRANSAZIONE_Nome", "TRANSAZIONE_Descrizione", "TRANSAZIONE_DataGenerazione", "TTRANSAZIONE_Qta", "TRANSAZIONE_Tipo", "CATEGORIA_FK_ID"}
+    input: {"utente_username", "categoria_nome"}
+    output: {"TRANSAZIONE_ID","TRANSAZIONE_Nome", "TRANSAZIONE_Descrizione", "TRANSAZIONE_Data", "TRANSAZIONE_DataGenerazione", "TTRANSAZIONE_Qta", "TRANSAZIONE_Tipo", "CATEGORIA_FK_ID"}
 
     // permette di ottenere le informazioni private di tutte le transazioni fatte da un utente su una categoria
 
 /transazione/PUT_Transazione.php
     [PUT]
-    input: {"nome", "descrizione", "qta", "tipo"}
+    input: {"nome", "descrizione", "qta", "tipo", "categoria_nome", "utente_username"}
     output: {"message"}
 
     // permette di modificare i dati di una transazione fatta da un utente su una categoria
 
 /transazione/DELETE_Transazione.php
     [DELETE]
-    input: {"id"}
+    input: {"id", "utente_username", "categoria_nome"}
     output: {"message"}
 
     // permette di eliminare una transazione tramite il suo id, fatta da un utente su una categoria
@@ -214,67 +215,67 @@ MILESTONE
 
 /report/POST_Report.php
     [POST]
-    input: {"nome", "dataGenerazione", "fileExport", "categoria_nome", "utente_nome"}
+    input: {"nome", "dataGenerazione", "fileExport", "categoria_nome", "utente_username"}
     output: {"message"}
 
     // un utente crea un report su una categoria specifica
 
 /report/GET_Reports.php
     [GET]
-    input: {"utente_nome"}
+    input: {"utente_username"}
     output: {"REPORT_ID","REPORT_Nome", "REPORT_DataGenerazione", "REPORT_FileExport", "CATEGORIA_FK_ID", "UTENTE_FK_ID"}
 
     // permette di ottenere le informazioni private di tutti i report creati da un utente
 
 /report/GET_Report.php
     [GET]
-    input: {"nome", "utente_nome"}
+    input: {"nome", "utente_username"}
     output: {"REPORT_ID","REPORT_Nome", "REPORT_DataGenerazione", "REPORT_FileExport", "CATEGORIA_FK_ID", "UTENTE_FK_ID"}
 
     // permette di ottenere le informazioni private di un report specifico creato da un utente
 
 /report/DELETE_Report.php
     [DELETE]
-    input: {"id"}
+    input: {"id", "utente_username"}
     output: {"message"}
 
-    // permette di eliminare un report tramite il suo id
+    // permette di eliminare un report di un utente tramite il suo id
 
 ----------------------------------------------------------------------------------------------------------------
 
 /milestone/POST_Milestone.php
     [POST]
-    input: {"nome", "descrizione", "dataGenerazione", "dataScadenza", "categoria_nome", "utente_nome"}
+    input: {"nome", "descrizione", "dataGenerazione", "dataScadenza", "categoria_nome", "utente_usernname"}
     output: {"message"}
 
     // permette di creare un milestone su una categoria specifica fatta da un utente
 
 /milestone/GET_Milestones.php
     [GET]
-    input: {"utente_nome"}
+    input: {"utente_username"}
     output: {"MILESTONE_ID","MILESTONE_Nome", "MILESTONE_Descrizione", "MILESTONE_DataGenerazione", "MILESTONE_DataScadenza", "CATEGORIA_FK_ID", "UTENTE_FK_ID"}
 
     // permette di ottenere le informazioni private di tutti i milestones creati da un utente
 
 /milestone/GET_Milestone.php
     [GET]
-    input: {"nome", "utente_nome"}
+    input: {"nome", "utente_username"}
     output: {"MILESTONE_ID","MILESTONE_Nome", "MILESTONE_Descrizione", "MILESTONE_DataGenerazione", "MILESTONE_DataScadenza", "CATEGORIA_FK_ID", "UTENTE_FK_ID"}
 
-    // permette di ottenere le informazioni private di un milestone specifico creato da un utente
+    // permette di ottenere le informazioni private di un milestone specifico creato da un utente su una categoria
 
 /milestone/PUT_Milestone.php
     [PUT]
-    input: {"nome", "descrizione", "dataScadenza"}
+    input: {"nome", "descrizione", "dataScadenza", "categoria_nome", "utente_username"}
     output: {"message"}
 
-    // permette di modificare i dati di un milestone creato da un utente
+    // permette di modificare i dati di un milestone creato da un utente su una categoria
 
 /milestone/DELETE_Milestone.php
     [DELETE]
-    input: {"id"}
+    input: {"id", "utente_username", "categoria_nome"}
     output: {"message"}
 
-    // permette di eliminare un milestone tramite il suo id
+    // permette di eliminare una milestone creata da un utente tramite il suo id
 
 ----------------------------------------------------------------------------------------------------------------
