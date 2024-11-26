@@ -8,21 +8,21 @@ UTENTE
     register                    [sviluppata, non debuggata]     permette di registrare un nuovo utente tramite nome, mail e password.
     GET_Utente                  [sviluppata, non debuggata]     permette di ottenere le informazioni pubbliche di uno specifico utente tramite l'email.
     GET_Utenti                  [sviluppata, non debuggata]     permette di ottenere le informazioni pubbliche di tutti gli utenti.
-    PUT_Utente                  [W.I.P.]
+    PUT_Utente                  [sviluppata, non debuggata]     permette di modificare i dati di un utente.
     DELETE_Utente               [sviluppata, non debuggata]     permette di eliminare un utente tramite il suo id, email, password.
 
 CATEGORIA
-    POST_Categoria              [W.I.P.]
-    GET_Categoria               [W.I.P.]
-    GET_Categorie               [W.I.P.]
-    PUT_Categoria               [W.I.P.]
-    DELETE_Categoria            [W.I.P.]
+    POST_Categoria              [sviluppata, non debuggata]     permette ad un utente di creare una categoria affiliata ad una tipologia
+    GET_Categoria               [W.I.P.]     permette di ottenere una specifica categoria creata da un utente tramite il nome
+    GET_Categorie               [W.I.P.]     permette di ottenere tutte le categorie create da un utente
+    PUT_Categoria               [W.I.P.]     permette di modificare i dati di una categoria creata da un utente
+    DELETE_Categoria            [W.I.P.]     permette di eliminare una categoria creata da un utente tramite il suo nome
 
 TIPOLOGIA
-    POST_Tipologia              [W.I.P.]
-    GET_Tipologia               [W.I.P.]
-    GET_Tipologie               [W.I.P.]
-    DELETE_Tipologia            [W.I.P.]
+    POST_Tipologia              [W.I.P.]       
+    GET_Tipologia               [W.I.P.]    
+    GET_Tipologie               [W.I.P.]    
+    DELETE_Tipologia            [W.I.P.]    
     PUT_Tipologia               [W.I.P.]        // usata per 
 
 TRANSAZIONE
@@ -39,7 +39,7 @@ REPORT
     DELETE_Report               [W.I.P.]        // usata per eliminare un report
 
 MILESTONE 
-    POST_Milestone              [W.I.P.]        // crea un milestone
+    POST_Milestone              [W.I.P.]        // crea un milestone allegata ad una categoria
     GET_Milestone               [W.I.P.]        // usata per richiamare una singola milestone
     GET_Milestones              [W.I.P.]        // usata per richiamare tutti i milestone quando si fa il load della pagina
     DELETE_Milestone            [W.I.P.]        // usata per eliminare un milestone
@@ -61,13 +61,13 @@ MILESTONE
 /utente/login.php
     [POST]
     input: {"mail", "password"}
-    output: {"ADMIN_Username", "ADMIN_Mail"}
+    output: {"UTENTE_Username", "UTENTE_Mail"}
 
     // permette di far accedere all utente alla parte privata dell'applicazione tramite mail e password
 
 /utente/register.php
     [POST]
-    input: {"nome", "mail", "password"}
+    input: {"username", "mail", "password"}
     output: {"UTENTE_Username", "UTENTE_Mail"}
 
     // permette di registrare un nuovo utente
@@ -88,26 +88,26 @@ MILESTONE
 
 /utente/PUT_Utente.php
     [PUT]
-    input: {"nome", "mail", "password"}
+    input: {"username", "mail", "password"}
     output: {"message"}
 
     // permette di modificare i dati di un utente
 
 /utente/DELETE_Utente.php
     [DELETE]
-    input: {"id"}
+    input: {"userid", "password", "mail"}
     output: {"message"}
 
-    // permette di eliminare un utente tramite il suo id
+    // permette di eliminare un utente tramite il suo id, l'id lo salvo insieme al token nel cookie.
 
 ---------------------------------------------------------------------------------------------------------------
 
 /categoria/POST_Categoria.php
     [POST]
-    input: {"nome", "descrizione", "budget", "tipologia_nome", "utente_username"}
+    input: {"nome", "descrizione", "budget", "nomeTipologiaAllegata", "username"}
     output: {"message"}
 
-    // un utente crea una nuova categoria relazionata ad una tipologia, il nome della categoria deve essere univoco in base all utente
+    // un utente crea una nuova categoria relazionata ad una tipologia, il nome della categoria deve essere univoco rispetto alla tipologia e utente
 
 /categoria/GET_Categoria.php
     [GET]
