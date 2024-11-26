@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new Exception("Connection to the database failed: " . mysqli_connect_error(), 500);
             }
 
-            $query = "SELECT ADMIN_Name, ADMIN_Password FROM ADMIN WHERE ADMIN_Name = ?";
+            $query = "SELECT ADMIN_Username, ADMIN_Password FROM ADMIN WHERE ADMIN_Name = ?";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, 's', $name);
             mysqli_stmt_execute($stmt);
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if ($password === $hashedPassword) {
                     $user = array(
                         "ADMIN_ID" => $ADMIN_ID,
-                        "ADMIN_Name" => $ADMIN_Name
+                        "ADMIN_Username" => $ADMIN_Username
                     );
 
                     mysqli_stmt_close($stmt);

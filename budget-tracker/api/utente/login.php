@@ -11,8 +11,12 @@ include_once "../config.php";
 $db = new Database();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // prendo i valori dalla richiesta POST
     $mail = isset($_POST["mail"]) ? $_POST["mail"] : null;
     $password = isset($_POST["password"]) ? $_POST["password"] : null;
+
+    // $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     if (!empty($mail) && !empty($password)) {
         try {
@@ -22,20 +26,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new Exception("Connection to the database failed: " . mysqli_connect_error(), 500);
             }
 
-            $query = "SELECT UTENTE_Nome, UTENTE_Password FROM utente WHERE UTENTE_MAIL = ?";
+            $query = "SELECT UTENTE_Username, UTENTE_Password FROM utente WHERE UTENTE_Mail = ?";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, 's', $mail);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_store_result($stmt);
 
+            // controllo se l'email esiste nel database
+
             if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $UTENTE_Nome, $hashedPassword);
+                mysqli_stmt_bind_result($stmt, $UTENTE_Username, $hashedPassword);
                 mysqli_stmt_fetch($stmt);
+
+                // controllo se la password è corretta 
 
                 if ($password === $hashedPassword) {
                     $user = array(
-                        "mail" => $UTENTE_Mail,
-                        "nome" => $UTENTE_Nome,
+                        "UTENTE_Mail" => $UTENTE_Mail,
+                        "UTENTE_Username" => $UTENTE_Username,
                     );
 
                     mysqli_stmt_close($stmt);

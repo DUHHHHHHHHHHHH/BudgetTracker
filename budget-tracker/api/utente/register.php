@@ -1,6 +1,6 @@
 <?php
 
-// register, post per creare l'utente con MAIL, NOME, PASSWORD.
+// register, post per creare l'utente con MAIL, USERNAME, PASSWORD.
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: OPTIONS, POST");
@@ -12,11 +12,11 @@ include_once "../config.php";
 $db = new Database();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $UTENTE_Mail = isset($_POST['UTENTE_Mail']) ? $_POST['UTENTE_Mail'] : null;
-    $UTENTE_Nome = isset($_POST['UTENTE_Nome']) ? $_POST['UTENTE_Nome'] : null;
-    $UTENTE_Password = isset($_POST['UTENTE_Password']) ? $_POST['UTENTE_Password'] : null;
+    $mail = isset($_POST['mail']) ? $_POST['mail'] : null;
+    $username = isset($_POST['username']) ? $_POST['username'] : null;
+    $password = isset($_POST['password']) ? $_POST['password'] : null;
 
-    if (!empty($UTENTE_Mail) && !empty($UTENTE_Nome) && !empty($UTENTE_Password)) {
+    if (!empty($mail) && !empty($username) && !empty($password)) {
         try {
             $conn = mysqli_connect($db->host, $db->user, $db->password, $db->db_name);
 
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $check_query = "SELECT UTENTE_Mail FROM utente WHERE UTENTE_Mail = ?";
             $check_stmt = mysqli_prepare($conn, $check_query);
-            mysqli_stmt_bind_param($check_stmt, 's', $UTENTE_Mail);
+            mysqli_stmt_bind_param($check_stmt, 's', $mail);
             mysqli_stmt_execute($check_stmt);
             mysqli_stmt_store_result($check_stmt);
 
@@ -34,9 +34,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new Exception("La mail inserita è già presente nel database.", 401);
             }
 
-            $insert_query = "INSERT INTO utente (UTENTE_Mail, UTENTE_Nome, UTENTE_Password) VALUES (?, ?, ?, ?, ?)";
+            $insert_query = "INSERT INTO utente (UTENTE_Mail, UTENTE_Username, UTENTE_Password) VALUES (?, ?, ?, ?, ?)";
             $insert_stmt = mysqli_prepare($conn, $insert_query);
-            mysqli_stmt_bind_param($insert_stmt, 'sssss', $UTENTE_Mail, $UTENTE_Nome, $UTENTE_Password);
+            mysqli_stmt_bind_param($insert_stmt, 'sssss', $mail, $nome, $password);
 
             if (!mysqli_stmt_execute($insert_stmt)) {
                 throw new Exception("Errore durante l'inserimento dei dati: " . mysqli_error($conn));
