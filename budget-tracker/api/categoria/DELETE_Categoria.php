@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
                 throw new Exception("Connection to the database failed: " . mysqli_connect_error());
             }
 
-            $query = "DELETE FROM categoria WHERE UTENTE_ID = ? AND CATEGORIA_Nome = ?";
+            $query = "DELETE FROM categoria WHERE UTENTE_FK_ID = ? AND CATEGORIA_Nome = ?";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, 'is', $utente_id, $nome_categoria);
 
