@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Nov 26, 2024 alle 16:42
+-- Creato il: Nov 27, 2024 alle 12:45
 -- Versione del server: 10.4.32-MariaDB
 -- Versione PHP: 8.0.30
 
@@ -81,7 +81,7 @@ CREATE TABLE `report` (
   `REPORT_ID` int(11) NOT NULL,
   `REPORT_Nome` varchar(100) NOT NULL,
   `REPORT_DataGenerazione` datetime DEFAULT current_timestamp(),
-  `REPORT_FileExport` varchar(255) DEFAULT NULL,
+  `REPORT_FileExport` blob DEFAULT NULL,
   `UTENTE_FK_ID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
