@@ -1,7 +1,5 @@
 <?php
 
-// get categorie, restituisce tutte le categorie di un utente
-
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: OPTIONS, GET");
@@ -20,31 +18,47 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $conn = mysqli_connect($db->host, $db->user, $db->password, $db->db_name);
 
             if (!$conn) {
-                throw new Exception("Connection to the database failed: " . mysqli_connect_error());
+                throw new Exception("Connessione al database fallita: " . mysqli_connect_error());
             }
 
-            $query = "SELECT * FROM categoria WHERE UTENTE_FK_ID = ?";
+            $query = "SELECT 
+                        c.CATEGORIA_ID, 
+                        c.CATEGORIA_Nome, 
+                        c.CATEGORIA_Descrizione, 
+                        c.CATEGORIA_Budget, 
+                        c.TIPOLOGIA_FK_ID, 
+                        c.UTENTE_FK_ID, 
+                        t.TIPOLOGIA_Nome 
+                      FROM 
+                        categoria c
+                      JOIN 
+                        tipologia t 
+                      ON 
+                        c.TIPOLOGIA_FK_ID = t.TIPOLOGIA_ID
+                      WHERE 
+                        c.UTENTE_FK_ID = ?";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, 'i', $utente_id);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
 
             $categorie = [];
-            while (mysqli_stmt_fetch($stmt)) {
+            while ($row = mysqli_fetch_assoc($result)) {
                 $categorie[] = array(
-                    "CATEGORIA_ID" => $CATEGORIA_ID,
-                    "CATEGORIA_Nome" => $CATEGORIA_Nome,
-                    "CATEGORIA_Descrizione" => $CATEGORIA_Descrizione,
-                    "CATEGORIA_Budget" => $CATEGORIA_Budget,
-                    "TIPOLOGIA_FK_ID" => $TIPOLOGIA_FK_ID,
-                    "UTENTE_FK_ID" => $UTENTE_FK_ID
+                    "CATEGORIA_ID" => $row["CATEGORIA_ID"],
+                    "CATEGORIA_Nome" => $row["CATEGORIA_Nome"],
+                    "CATEGORIA_Descrizione" => $row["CATEGORIA_Descrizione"],
+                    "CATEGORIA_Budget" => $row["CATEGORIA_Budget"],
+                    "TIPOLOGIA_FK_ID" => $row["TIPOLOGIA_FK_ID"],
+                    "UTENTE_FK_ID" => $row["UTENTE_FK_ID"],
+                    "TIPOLOGIA_Nome" => $row["TIPOLOGIA_Nome"]
                 );
             }
 
+            echo json_encode($categorie);
+
             mysqli_stmt_close($stmt);
             mysqli_close($conn);
-
-            echo json_encode($categorie);
         } catch (Exception $e) {
             http_response_code(500);
             echo json_encode(array("message" => $e->getMessage()));
