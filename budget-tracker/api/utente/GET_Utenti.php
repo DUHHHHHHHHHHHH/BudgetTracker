@@ -20,9 +20,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $query = "SELECT UTENTE_ID, UTENTE_Mail, UTENTE_Username FROM utente";
         $result = mysqli_query($conn, $query);
 
-        $users = array();
-        while ($row = mysqli_fetch_assoc($result)) {
-            $users[] = $row;
+        $users = [];
+        while (mysqli_stmt_fetch($stmt)) {
+            $users[] = array(
+                "UTENTE_ID" => $UTENTE_ID,
+                "UTENTE_Mail" => $UTENTE_Mail,
+                "UTENTE_Username" => $UTENTE_Username
+            );
         }
 
         mysqli_close($conn);

@@ -14,9 +14,9 @@ UTENTE
 CATEGORIA
     POST_Categoria              [sviluppata, non debuggata]     permette ad un utente di creare una categoria affiliata ad una tipologia
     GET_Categoria               [sviluppata, non debuggata]     permette di ottenere una specifica categoria creata da un utente tramite il nome
-    GET_Categorie               [W.I.P.]     permette di ottenere tutte le categorie create da un utente
-    PUT_Categoria               [W.I.P.]     permette di modificare i dati di una categoria creata da un utente
-    DELETE_Categoria            [W.I.P.]     permette di eliminare una categoria creata da un utente tramite il suo nome
+    GET_Categorie               [sviluppata, non debuggata]     permette di ottenere tutte le categorie create da un utente
+    PUT_Categoria               [sviluppata, non debuggata]     permette di modificare i dati di una categoria creata da un utente
+    DELETE_Categoria            [sviluppata, non debuggata]     permette di eliminare una categoria creata da un utente tramite il suo nome
 
 TIPOLOGIA
     POST_Tipologia              [W.I.P.]       permette ad un admin di creare una tipologia, il nome della tipologia deve essere UNIVOCO
@@ -27,20 +27,20 @@ TIPOLOGIA
 
 TRANSAZIONE
     POST_Transazione            [W.I.P.]        permette ad un utente di creare una transazione su una categoria creata dallo stesso utente
-    GET_Transazione             [W.I.P.]        permette di ottenere i dati di una transazione fatta da un utente tramite il suo nome
+    GET_Transazione             [sviluppata, non debuggata]        permette di ottenere i dati di una transazione fatta da un utente tramite il suo nome
     GET_Transazioni             [W.I.P.]        permette di ottenere tutte le transazioni fatte da un utente, serve per fare il load della pagina
     PUT_Transazione             [W.I.P.]        permette di modificare i dati di una transazione fatta da un utente tramite il suo nome
     DELETE_Transazione          [W.I.P.]        permette di eliminare una transazione fatta da un utente tramite il suo id
 
 REPORT
     POST_Report                 [W.I.P.]        permette ad un utente di creare un report su una categoria fatta dallo stesso utente
-    GET_Report                  [W.I.P.]        permette di ottenere i dati di un report fatta da un utente tramite il suo id e nome
+    GET_Report                  [sviluppata, non debuggata]        permette di ottenere i dati di un report fatta da un utente tramite il suo id e nome
     GET_Reports                 [W.I.P.]        permette di ottenere tutti i report fatta da un utente, serve per fare il load della pagina
     DELETE_Report               [W.I.P.]        permette di eliminare un report fatta da un utente tramite il suo id e nome
 
 MILESTONE 
     POST_Milestone              [W.I.P.]        permette ad un utente di creare un milestone su una categoria fatta dallo stesso utente
-    GET_Milestone               [W.I.P.]        permette di ottenere i dati di un milestone fatta da un utente tramite il suo id e nome
+    GET_Milestone               [sviluppata, non debuggata]        permette di ottenere i dati di un milestone fatta da un utente tramite il suo id e nome
     GET_Milestones              [W.I.P.]        permette di ottenere tutti i milestones fatta da un utente, serve per fare il load della pagina
     DELETE_Milestone            [W.I.P.]        permette di eliminare un milestone fatta da un utente tramite il suo id e nome
     PUT_Milestone               [W.I.P.]        permette di modificare i dati di un milestone fatta da un utente tramite il suo id e nome
