@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $conn = mysqli_connect($db->host, $db->user, $db->password, $db->db_name);
 
             if (!$conn) {
-                throw new Exception("Connessione al database fallita: " . mysqli_connect_error());
+                echo json_encode(["message" => "Connessione al database fallita: " . mysqli_connect_error()]);
             }
 
         // ESISTE LA TIPOLOGIA PUBBLICA ALLEGATA?
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_stmt_store_result($check_tipologia_stmt);
 
         if (mysqli_stmt_num_rows($check_tipologia_stmt) == 0) {
-            throw new Exception("Tipologia non esistente");
+            echo json_encode(["message" => "Tipologia non esistente"]);
         }
 
         // OTTENIMENTO DELL'ID DELLA TIPOLOGIA
