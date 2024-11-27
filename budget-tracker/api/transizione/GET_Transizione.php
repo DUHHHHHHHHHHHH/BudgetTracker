@@ -26,14 +26,48 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 throw new Exception("Connection to the database failed: " . mysqli_connect_error());
             }
 
-            $query = "SELECT * FROM transazione WHERE UTENTE_FK_ID = ? AND TRANSAZIONE_Nome = ? AND TRANSAZIONE_Data = ? AND CATEGORIA_Nome = ?";
+            // Query con JOIN tra transazione e categoria
+            $query = "
+                SELECT 
+                    t.TRANSIZIONE_ID, 
+                    t.TRANSIZIONE_Nome, 
+                    t.TRANSIZIONE_Data, 
+                    t.TRANSIZIONE_DataGenerazione, 
+                    t.TRANSIZIONE_QTA, 
+                    t.TRANSIZIONE_Tipo, 
+                    t.UTENTE_FK_ID, 
+                    t.CATEGORIA_FK_ID
+                FROM 
+                    transazione t
+                JOIN 
+                    categoria c 
+                ON 
+                    t.CATEGORIA_FK_ID = c.CATEGORIA_ID
+                WHERE 
+                    t.UTENTE_FK_ID = ? 
+                    AND t.TRANSIZIONE_Nome = ? 
+                    AND t.TRANSIZIONE_Data = ? 
+                    AND c.CATEGORIA_Nome = ?
+            ";
+
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, 'isss', $utente_id, $nome_transazione, $data_transazione, $nome_categoria);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_store_result($stmt);
 
             if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $TRANSIZIONE_ID, $TRANSIZIONE_Nome, $TRANSIZIONE_Data, $TRANSIZIONE_DataGenerazione, $TRANSIZIONE_QTA, $TRANSIZIONE_Tipo, $UTENTE_FK_ID, $CATEGORIA_FK_ID);
+                mysqli_stmt_bind_result(
+                    $stmt,
+                    $TRANSIZIONE_ID, 
+                    $TRANSIZIONE_Nome, 
+                    $TRANSIZIONE_Data, 
+                    $TRANSIZIONE_DataGenerazione, 
+                    $TRANSIZIONE_QTA, 
+                    $TRANSIZIONE_Tipo, 
+                    $UTENTE_FK_ID, 
+                    $CATEGORIA_FK_ID
+                );
+
                 mysqli_stmt_fetch($stmt);
 
                 $transazione = array(

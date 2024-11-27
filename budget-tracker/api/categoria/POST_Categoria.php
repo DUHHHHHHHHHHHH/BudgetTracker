@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_stmt_fetch($check_tipologia_stmt);
 
         // CONTROLLO SE ESISTE GIA' UNA CATEGORIA CON LO STESSO NOME PER QUESTA TIPOLOGIA, I NOMI DEVONO ESSERE UNICI.
-        $check_categoria_query = "SELECT COUNT(*) FROM categoria WHERE CATEGORIA_Nome = ? AND TIPOLOGIA_FK = ?";
+        $check_categoria_query = "SELECT COUNT(*) FROM categoria WHERE CATEGORIA_Nome = ? AND TIPOLOGIA_FK_ID = ?";
         $check_categoria_stmt = mysqli_prepare($conn, $check_categoria_query);
         mysqli_stmt_bind_param($check_categoria_stmt, 'si', $nome, $tipologia_id);
         mysqli_stmt_execute($check_categoria_stmt);
@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         // INSERIMENTO DELLA CATEGORIA
-        $insert_query = "INSERT INTO categoria (CATEGORIA_Nome, CATEGORIA_Descrizione, CATEGORIA_Budget, UTENTE_FK, TIPOLOGIA_FK) VALUES (?, ?, ?, ?, ?)";
+        $insert_query = "INSERT INTO categoria (CATEGORIA_Nome, CATEGORIA_Descrizione, CATEGORIA_Budget, UTENTE_FK_ID, TIPOLOGIA_FK_ID) VALUES (?, ?, ?, ?, ?)";
         $insert_stmt = mysqli_prepare($conn, $insert_query);
         mysqli_stmt_bind_param($insert_stmt, 'ssdii', $nome, $descrizione, $budget, $username, $tipologia_id);
         mysqli_stmt_execute($insert_stmt);

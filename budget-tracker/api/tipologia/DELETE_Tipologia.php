@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
                 throw new Exception("Connessione al database fallita: " . mysqli_connect_error());
             }
 
-            $query = "DELETE FROM tipologia WHERE nome = ?";
+            $query = "DELETE FROM tipologia WHERE TIPOLOGIA_Nome = ?";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, 's', $nome_tipologia);
             mysqli_stmt_execute($stmt);

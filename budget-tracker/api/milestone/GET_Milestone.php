@@ -22,17 +22,48 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             $conn = mysqli_connect($db->host, $db->user, $db->password, $db->db_name);
 
             if (!$conn) {
-                throw new Exception("Connection to the database failed: " . mysqli_connect_error());
+                throw new Exception("Connessione al database fallita: " . mysqli_connect_error());
             }
 
-            $query = "SELECT * FROM milestone WHERE UTENTE_FK_ID = ? AND CATEGORIA_Nome = ? AND MILESTONE_Nome = ?";
+            // Query con JOIN tra milestone e categoria
+            $query = "
+                SELECT 
+                    m.MILESTONE_ID, 
+                    m.MILESTONE_DataInizio, 
+                    m.MILESTONE_DataFine, 
+                    m.MILESTONE_Nome, 
+                    m.MILESTONE_Descrizione, 
+                    m.UTENTE_FK_ID, 
+                    m.CATEGORIA_FK_ID
+                FROM 
+                    milestone m
+                JOIN 
+                    categoria c 
+                ON 
+                    m.CATEGORIA_FK_ID = c.CATEGORIA_ID
+                WHERE 
+                    m.UTENTE_FK_ID = ? 
+                    AND c.CATEGORIA_Nome = ? 
+                    AND m.MILESTONE_Nome = ?
+            ";
+
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, 'iss', $utente_id, $nome_categoria, $nome_milestone);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_store_result($stmt);
 
             if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $MILESTONE_ID, $MILESTONE_DataInizio, $MILESTONE_DataFine, $MILESTONE_Nome, $MILESTONE_Descrizione, $UTENTE_FK_ID, $CATEGORIA_FK_ID);
+                mysqli_stmt_bind_result(
+                    $stmt,
+                    $MILESTONE_ID, 
+                    $MILESTONE_DataInizio, 
+                    $MILESTONE_DataFine, 
+                    $MILESTONE_Nome, 
+                    $MILESTONE_Descrizione, 
+                    $UTENTE_FK_ID, 
+                    $CATEGORIA_FK_ID
+                );
+
                 mysqli_stmt_fetch($stmt);
 
                 $milestone = array(
