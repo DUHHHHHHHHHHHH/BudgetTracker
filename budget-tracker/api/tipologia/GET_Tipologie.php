@@ -18,22 +18,24 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             throw new Exception("Connessione al database fallita: " . mysqli_connect_error());
         }
 
-        $query = "SELECT * FROM tipologia";
+        $query = "SELECT t.TIPOLOGIA_ID, t.TIPOLOGIA_Nome, t.TIPOLOGIA_Descrizione, t.ADMIN_FK_ID, a.ADMIN_Nome 
+                  FROM tipologia t 
+                  JOIN admin a ON t.ADMIN_FK_ID = a.ADMIN_ID";
         $result = mysqli_query($conn, $query);
 
         $tipologie = [];
-        while (mysqli_stmt_fetch($stmt)){
-            $tipologie = array(
-                "TIPOLOGIA_ID" => $TIPOLOGIA_ID,
-                "TIPOLOGIA_Nome" => $TIPOLOGIA_Nome,
-                "TIPOLOGIA_Descrizione" => $TIPOLOGIA_Descrizione,
-                "ADMIN_FK_ID" => $ADMIN_FK_ID
+        while ($row = mysqli_fetch_assoc($result)) {
+            $tipologie[] = array(
+                "TIPOLOGIA_ID" => $row["TIPOLOGIA_ID"],
+                "TIPOLOGIA_Nome" => $row["TIPOLOGIA_Nome"],
+                "TIPOLOGIA_Descrizione" => $row["TIPOLOGIA_Descrizione"],
+                "ADMIN_FK_ID" => $row["ADMIN_FK_ID"],
+                "ADMIN_Nome" => $row["ADMIN_Nome"]
             );
         }
 
         mysqli_close($conn);
         echo json_encode($tipologie);
-        
     } catch (Exception $e) {
         http_response_code(500);
         echo json_encode(array("message" => $e->getMessage()));
@@ -42,5 +44,4 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     http_response_code(405);
     echo json_encode(array("message" => "Metodo non consentito."));
 }
-
 ?>
