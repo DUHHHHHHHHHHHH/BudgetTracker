@@ -15,11 +15,12 @@ $db = new Database();
 if ($_SERVER["REQUEST_METHOD"] == "PUT") {
     $data = json_decode(file_get_contents("php://input"), true);
 
-    $nome = isset($_POST['nome']) ? $_POST['nome'] : null;                                                      
+    $nome = isset($_POST['nome']) ? $_POST['nome'] : null;
+    $nomeVecchio = isset($_POST['nomeVecchio']) ? $_POST['nomeVecchio'] : null;                                                
     $descrizione = isset($_POST['descrizione']) ? $_POST['descrizione'] : null;
     $utente_id = isset($_POST['utente_id']) ? $_POST['utente_id'] : null;
 
-    if (!empty($nome) && !empty($descrizione) && !empty($utente_id)) {
+    if (!empty($nome) && !empty($utente_id) && !empty($nomeVecchio)) {
         try {
             $conn = mysqli_connect($db->host, $db->user, $db->password, $db->db_name);
 
@@ -46,9 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] == "PUT") {
             }
 
         // Se non ci sono errori, PROCEDO CON L'UPDATE DEI CAMPI.
-            $query = "UPDATE categoria SET CATEGORIA_Nome = ?, CATEGORIA_Descrizione = ? WHERE UTENTE_FK_ID = ?";
+            $query = "UPDATE categoria SET CATEGORIA_Nome = ?, CATEGORIA_Descrizione = ? WHERE UTENTE_FK_ID = ? AND CATEGORIA_Nome = ?";
             $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, 'ssi', $nome, $descrizione, $utente_id);
+            mysqli_stmt_bind_param($stmt, 'ssiS', $nome, $descrizione, $utente_id, $nomeVecchio);
             mysqli_stmt_execute($stmt);
 
             if (mysqli_stmt_affected_rows($stmt) > 0) {

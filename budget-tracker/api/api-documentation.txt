@@ -19,7 +19,7 @@ CATEGORIA
     DELETE_Categoria            [sviluppata, non debuggata]     permette di eliminare una categoria creata da un utente tramite il suo nome
 
 TIPOLOGIA
-    POST_Tipologia              [W.I.P.]       permette ad un admin di creare una tipologia, il nome della tipologia deve essere UNIVOCO
+    POST_Tipologia              [sviluppata, non debuggata]       permette ad un admin di creare una tipologia, il nome della tipologia deve essere UNIVOCO
     GET_Tipologia               [sviluppata, non debuggata]       permette di ottenere i dati di una tipologia tramite il suo nome
     GET_Tipologie               [W.I.P.]       permette di ottenere tutte le tipologie pubbliche
     DELETE_Tipologia            [W.I.P.]       permette di eliminare una tipologia tramite il suo nome

@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new Exception("Connessione al database fallita: " . mysqli_connect_error());
             }
 
-            // Controlla se esiste già una tipologia con lo stesso nome
+        // CONTROLLO SE ESISTE GIA UNA TIPOLOGIA CON LO STESSO NOME
             $check_query = "SELECT COUNT(*) FROM TIPOLOGIA WHERE TIPOLOGIA_Nome = ?";
             $check_stmt = mysqli_prepare($conn, $check_query);
             mysqli_stmt_bind_param($check_stmt, "s", $nome);
@@ -35,14 +35,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($count > 0) {
             // Esiste già una tipologia con lo stesso nome
             echo json_encode(array("message" => "Esiste già una tipologia con lo stesso nome."));
+            mysqli_stmt_close($check_stmt);
+            mysqli_close($conn);
             exit;
             }
 
-            // creazione della tipologia
+        // SE non ho problemi prima, inserisco la nuova TIPOLOGIA
             $insert_query = "INSERT INTO TIPOLOGIA (TIPOLOGIA_Nome, TIPOLOGIA_Descrizione) VALUES (?, ?)";
             $insert_stmt = mysqli_prepare($conn, $insert_query);
             mysqli_stmt_bind_param($insert_stmt, "ss", $nome, $descrizione);
-
 
             if (!mysqli_stmt_execute($insert_stmt)) {
                 throw new Exception("Errore durante l'inserimento dei dati: " . mysqli_error($conn));

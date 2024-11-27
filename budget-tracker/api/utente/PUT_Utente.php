@@ -15,10 +15,11 @@ $db = new Database();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mail = isset($_POST["mail"]) ? $_POST["mail"] : null;
+    $utente_id = isset($_POST["utente_id"]) ? $_POST["utente_id"] : null;
     $username = isset($_POST["nome"]) ? $_POST["nome"] : null;
     $password = isset($_POST["password"]) ? $_POST["password"] : null;
 
-    if (!empty($mail) && !empty($username) && !empty($password)){
+    if (!empty($mail) && !empty($username) && !empty($password) && !empty($utente_id)){
         try {
             $conn = mysqli_connect($db->host, $db->user, $db->password, $db->db_name);
 
@@ -66,14 +67,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Se non ci sono errori, PROCEDO CON L'UPDATE
 
-            $update_query = "UPDATE utente SET UTENTE_Username = ?, UTENTE_Mail = ? WHERE UTENTE_Mail = ?";
+            $update_query = "UPDATE utente SET UTENTE_Username = ?, UTENTE_Mail = ? WHERE UTENTE_ID = ?";
             $update_stmt = mysqli_prepare($conn, $update_query);
 
-            mysqli_stmt_bind_param($update_stmt, 'sss', $username, $mail, $mail);
+            mysqli_stmt_bind_param($update_stmt, 'ssi', $username, $mail, $utente_id);
             mysqli_stmt_execute($update_stmt);
 
             if (mysqli_stmt_affected_rows($update_stmt) > 0) {
-                echo json_encode(array("message" => "Utente modificato con successo."));
+                echo json_encode(array("message" => "Utente modificato con successo, QTA: " . mysqli_stmt_affected_rows($update_stmt)));
             } else {
                 echo json_encode(array("message" => "Nessuna modifica fatta o l'utente non è stato trovato."));
             }
