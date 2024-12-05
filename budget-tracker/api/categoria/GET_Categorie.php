@@ -2,7 +2,7 @@
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: OPTIONS, GET");
+header("Access-Control-Allow-Methods: OPTIONS, POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
@@ -10,8 +10,8 @@ include_once "../config.php";
 
 $db = new Database();
 
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    $utente_id = isset($_GET["utente_id"]) ? $_GET["utente_id"] : null;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $utente_id = isset($_POST["UTENTE_ID"]) ? $_POST["UTENTE_ID"] : null;
 
     if (!empty($utente_id)) {
         try {

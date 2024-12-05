@@ -4,7 +4,7 @@
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: OPTIONS, DELETE");
+header("Access-Control-Allow-Methods: OPTIONS, POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
@@ -12,11 +12,10 @@ include_once "../config.php";
 
 $db = new Database();
 
-if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
-    $data = json_decode(file_get_contents("php://input"), true);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $utente_id = isset($data["utente_id"]) ? $data["utente_id"] : null;
-    $nome_categoria = isset($data["nome_categoria"]) ? $data["nome_categoria"] : null;
+    $utente_id = isset($_POST["UTENTE_ID"]) ? $_POST["UTENTE_ID"] : null;
+    $nome_categoria = isset($_POST["CATEGORIA_Nome"]) ? $_POST["CATEGORIA_Nome"] : null;
 
     if (!empty($utente_id) && !empty($nome_categoria)) {
         try {
@@ -26,14 +25,29 @@ if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
                 throw new Exception("Connection to the database failed: " . mysqli_connect_error());
             }
 
+            // CONTROLLO SE la categoria che cerco ESISTE
+            $check_query = "SELECT COUNT(*) FROM categoria WHERE UTENTE_FK_ID = ? AND CATEGORIA_Nome = ?";
+            $check_stmt = mysqli_prepare($conn, $check_query);
+            mysqli_stmt_bind_param($check_stmt, 'is', $utente_id, $nome_categoria);
+            mysqli_stmt_execute($check_stmt);
+            mysqli_stmt_bind_result($check_stmt, $count);
+            mysqli_stmt_fetch($check_stmt);
+            mysqli_stmt_close($check_stmt);
+
+            if ($count == 0) {
+                echo json_encode(array("message" => "La categoria non esiste.", "code" => 404));
+                exit();
+            }
+
             $query = "DELETE FROM categoria WHERE UTENTE_FK_ID = ? AND CATEGORIA_Nome = ?";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, 'is', $utente_id, $nome_categoria);
 
             if (mysqli_stmt_execute($stmt)) {
-                echo json_encode(array("message" => "Categoria eliminata con successo."));
+                echo json_encode(array("message" => "Categoria eliminata con successo.", "code" => 200));
             } else {
-                throw new Exception("Errore nell'eliminazione della categoria.");
+                echo json_encode(array("message" => "Errore durante l'eliminazione della categoria." , "code" => 500));
+                exit();
             }
 
             mysqli_stmt_close($stmt);

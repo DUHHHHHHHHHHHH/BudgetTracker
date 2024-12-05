@@ -17,11 +17,11 @@ UTENTE
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 CATEGORIA
-    POST_Categoria              [sviluppata, non debuggata]     permette ad un utente di creare una categoria affiliata ad una tipologia
-    GET_Categoria               [sviluppata, non debuggata]     permette di ottenere una specifica categoria creata da un utente.
-    GET_Categorie               [sviluppata, non debuggata]     permette di ottenere tutte le categorie create da un utente.
-    PUT_Categoria               [sviluppata, non debuggata]     permette di modificare i dati di una categoria creata da un utente.
-    DELETE_Categoria            [sviluppata, non debuggata]     permette di eliminare una categoria creata da un utente.
+    POST_Categoria              [sviluppata, funzionante]   (POST)  permette ad un utente di creare una categoria affiliata ad una tipologia
+    GET_Categoria               [sviluppata, funzionante]   (POST)  permette di ottenere una specifica categoria creata da un utente.
+    GET_Categorie               [sviluppata, funzionante]   (POST)  permette di ottenere tutte le categorie create da un utente.
+    PUT_Categoria               [sviluppata, funzionante]   (POST)  permette di modificare i dati di una categoria creata da un utente.
+    DELETE_Categoria            [sviluppata, funzionante]   (POST)  permette di eliminare una categoria creata da un utente.
 
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 

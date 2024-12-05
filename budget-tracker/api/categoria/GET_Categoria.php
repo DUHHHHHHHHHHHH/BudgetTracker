@@ -2,7 +2,7 @@
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: OPTIONS, GET");
+header("Access-Control-Allow-Methods: OPTIONS, POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
@@ -10,9 +10,9 @@ include_once "../config.php";
 
 $db = new Database();
 
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    $nome_categoria = isset($_POST["nome_categoria"]) ? $_POST["nome_categoria"] : null;
-    $utente_id = isset($_POST["utente_id"]) ? $_POST["utente_id"] : null;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nome_categoria = isset($_POST["CATEGORIA_Nome"]) ? $_POST["CATEGORIA_Nome"] : null;
+    $utente_id = isset($_POST["UTENTE_ID"]) ? $_POST["UTENTE_ID"] : null;
 
     if (!empty($nome_categoria) && !empty($utente_id)) {
         try {
@@ -69,11 +69,9 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             echo json_encode(array("message" => $e->getMessage()));
         }
     } else {
-        http_response_code(400);
-        echo json_encode(array("message" => "Tutti i campi sono richiesti."));
+        echo json_encode(array("message" => "Tutti i campi sono richiesti.", "code" => 400));
     }
 } else {
-    http_response_code(405);
-    echo json_encode(array("message" => "Metodo non consentito."));
+    echo json_encode(array("message" => "Metodo non consentito.", "code" => 405));
 }
 ?>
