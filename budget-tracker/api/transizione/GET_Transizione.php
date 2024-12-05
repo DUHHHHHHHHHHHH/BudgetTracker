@@ -13,12 +13,12 @@ include_once "../config.php";
 $db = new Database();
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    $utente_id = isset($_POST["utente_id"]) ? $_POST["utente_id"] : null;
-    $nome_transazione = isset($_POST["nome_transazione"]) ? $_POST["nome_transazione"] : null;
-    $data_transazione = isset($_POST["data_transazione"]) ? $_POST["data_transazione"] : null;
-    $nome_categoria = isset($_POST["nome_categoria"]) ? $_POST["nome_categoria"] : null;
+    $UTENTE_ID = isset($_POST["UTENTE_ID"]) ? $_POST["UTENTE_ID"] : null;
+    $TRANSIZIONE_Nome = isset($_POST["TRANSIZIONE_Nome"]) ? $_POST["TRANSIZIONE_Nome"] : null;
+    $TRANSIZIONE_Data = isset($_POST["TRANSIZIONE_Data"]) ? $_POST["TRANSIZIONE_Data"] : null;
+    $CATEGORIA_Nome = isset($_POST["CATEGORIA_Nome"]) ? $_POST["CATEGORIA_Nome"] : null;
 
-    if (!empty($utente_id) && !empty($nome_transazione) && !empty($data_transazione) && !empty($nome_categoria)) {
+    if (!empty($UTENTE_ID) && !empty($TRANSIZIONE_Nome) && !empty($TRANSIZIONE_Data) && !empty($CATEGORIA_Nome)) {
         try {
             $conn = mysqli_connect($db->host, $db->user, $db->password, $db->db_name);
 
@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                     t.UTENTE_FK_ID, 
                     t.CATEGORIA_FK_ID
                 FROM 
-                    transazione t
+                    transizione t
                 JOIN 
                     categoria c 
                 ON 
@@ -48,10 +48,11 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                     AND t.TRANSIZIONE_Nome = ? 
                     AND t.TRANSIZIONE_Data = ? 
                     AND c.CATEGORIA_Nome = ?
-            ";
+                    AND t.TRANSIZIONE_DataGenerazione IS NOT NULL
+                LIMIT 1            ";
 
             $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, 'isss', $utente_id, $nome_transazione, $data_transazione, $nome_categoria);
+            mysqli_stmt_bind_param($stmt, 'isss', $UTENTE_ID, $TRANSIZIONE_Nome, $TRANSIZIONE_Data, $CATEGORIA_Nome);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_store_result($stmt);
 

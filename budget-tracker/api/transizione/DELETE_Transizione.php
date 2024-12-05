@@ -2,7 +2,7 @@
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: DELETE");
+header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
@@ -10,28 +10,28 @@ include_once "../config.php";
 
 $db = new Database();
 
-if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
-    $data = json_decode(file_get_contents("php://input"), true);
-    $utente_id = isset($data["utente_id"]) ? $data["utente_id"] : null;
-    $transazione_id = isset($data["transazione_id"]) ? $data["transazione_id"] : null;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $utente_id = isset($_POST["UTENTE_ID"]) ? $_POST["UTENTE_ID"] : null;
+    $transizione_id = isset($_POST["TRANSIZIONE_ID"]) ? $_POST["TRANSIZIONE_ID"] : null;
+    $categoria_id = isset($_POST["CATEGORIA_ID"]) ? $_POST["CATEGORIA_ID"] : null;
 
-    if (!empty($utente_id) && !empty($transazione_id)) {
+    if (!empty($utente_id) && !empty($transizione_id) && !empty($categoria_id)) {
         try {
             $conn = mysqli_connect($db->host, $db->user, $db->password, $db->db_name);
 
             if (!$conn) {
-                throw new Exception("Connessione al database fallita: " . mysqli_connect_error());
+                echo json_encode(array("message" => "Connessione al database fallita: " . mysqli_connect_error(), "code" => 500));
             }
 
-            $query = "DELETE FROM transazione WHERE UTENTE_FK_ID = ? AND TRANSAZIONE_ID = ?";
+            $query = "DELETE FROM transizione WHERE UTENTE_FK_ID = ? AND TRANSIZIONE_ID = ? AND CATEGORIA_FK_ID = ?";
             $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, 'ii', $utente_id, $transazione_id);
+            mysqli_stmt_bind_param($stmt, 'iii', $utente_id, $transizione_id, $categoria_id);
             mysqli_stmt_execute($stmt);
 
             if (mysqli_stmt_affected_rows($stmt) > 0) {
-                echo json_encode(array("message" => "Transazione eliminata con successo."));
+                echo json_encode(array("message" => "Transazione eliminata con successo.", "code" => 200));
             } else {
-                echo json_encode(array("message" => "Transazione non trovata o non eliminata."));
+                echo json_encode(array("message" => "Transazione non trovata o non eliminata.", "code" => 400));
             }
 
             mysqli_stmt_close($stmt);

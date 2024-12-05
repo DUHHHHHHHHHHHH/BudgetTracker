@@ -11,16 +11,15 @@ include_once "../config.php";
 $db = new Database();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $data = json_decode(file_get_contents("php://input"), true);
+    
+    $utente_id = isset($_POST["UTENTE_ID"]) ? $_POST["UTENTE_ID"] : null;
+    $CATEGORIA_Nome = isset($_POST["CATEGORIA_Nome"]) ? $_POST["CATEGORIA_Nome"] : null;
+    $TRANSIZIONE_Nome = isset($_POST["TRANSIZIONE_Nome"]) ? $_POST["TRANSIZIONE_Nome"] : null;
+    $TRANSIZIONE_Data = isset($_POST["TRANSIZIONE_Data"]) ? $_POST["TRANSIZIONE_Data"] : null;
+    $TRANSIZIONE_Tipo = isset($_POST["TRANSIZIONE_Tipo"]) ? $_POST["TRANSIZIONE_Tipo"] : null;
+    $TRANSIZIONE_QTA = isset($_POST["TRANSIZIONE_QTA"]) ? $_POST["TRANSIZIONE_QTA"] : null;
 
-    $utente_id = isset($data["utente_id"]) ? $data["utente_id"] : null;
-    $categoria_nome = isset($data["categoria_nome"]) ? $data["categoria_nome"] : null;
-    $transazione_nome = isset($data["transazione_nome"]) ? $data["transazione_nome"] : null;
-    $transizione_data = isset($data["transizione_data"]) ? $data["transizione_data"] : null;
-    $transizione_tipo = isset($data["transizione_tipo"]) ? $data["transizione_tipo"] : null;
-    $importo = isset($data["importo"]) ? $data["importo"] : null;
-
-    if (!empty($utente_id) && !empty($categoria_nome) && !empty($transazione_nome) && !empty($transizione_data) && !empty($transizione_tipo) && !empty($importo)) {
+    if (!empty($utente_id) && !empty($CATEGORIA_Nome) && !empty($TRANSIZIONE_Nome) && !empty($TRANSIZIONE_Data) && !empty($TRANSIZIONE_Tipo) && !empty($TRANSIZIONE_QTA)) {
         try {
             $conn = mysqli_connect($db->host, $db->user, $db->password, $db->db_name);
 
@@ -28,29 +27,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new Exception("Connessione al database fallita: " . mysqli_connect_error());
             }
 
+            // CONVERSIONE DELLA DATA in qualcosa di decente
+            // $dataSecondi = date("d-m-Y", strtotime($TRANSIZIONE_Data));
+            // $TRANSIZIONE_Data = date("d-m-Y", $dataSecondi);
+            
+
             // LA CATEGORIA è ASSOCIATA ALL'UTENTE?
                 $query_verifica = "SELECT CATEGORIA_ID FROM categoria WHERE UTENTE_FK_ID = ? AND CATEGORIA_Nome = ?";
                 $stmt_verifica = mysqli_prepare($conn, $query_verifica);
-                mysqli_stmt_bind_param($stmt_verifica, 'is', $utente_id, $categoria_nome);
+                mysqli_stmt_bind_param($stmt_verifica, 'is', $utente_id, $CATEGORIA_Nome);
                 mysqli_stmt_execute($stmt_verifica);
                 mysqli_stmt_bind_result($stmt_verifica, $categoria_id);
                 mysqli_stmt_fetch($stmt_verifica);
 
-            if ($categoria_id) {
+            if (!empty($categoria_id)) {
                 mysqli_stmt_close($stmt_verifica);
 
-            // INSERIMENTO DELLA TRANSAZIONE
-                $query = "INSERT INTO transazione (TRANSIZIONE_Nome, TRANSIZIONE_Data, TRANSIZIONE_QTA, TRANSIZIONE_Tipo, CATEGORIA_FK_ID, UTENTE_FK_ID) VALUES (?, ?, ?, ?, ?)";
+                // INSERIMENTO DELLA TRANSAZIONE
+                $query = "INSERT INTO transizione (TRANSIZIONE_Nome, TRANSIZIONE_Data, TRANSIZIONE_QTA, TRANSIZIONE_Tipo, CATEGORIA_FK_ID, UTENTE_FK_ID) VALUES (?, ?, ?, ?, ?, ?)";
                 $stmt = mysqli_prepare($conn, $query);
-                mysqli_stmt_bind_param($stmt, 'ssdsii', $transazione_nome, $transizione_data, $importo, $transizione_tipo, $categoria_id, $utente_id);
+                echo json_encode("tutti i parametri: " . $TRANSIZIONE_Nome . " " . $TRANSIZIONE_Data . " " . $TRANSIZIONE_QTA . " " . $TRANSIZIONE_Tipo . " " . $categoria_id . " " . $utente_id);
+                mysqli_stmt_bind_param($stmt, 'ssdsii', $TRANSIZIONE_Nome, $TRANSIZIONE_Data, $TRANSIZIONE_QTA, $TRANSIZIONE_Tipo, $categoria_id, $utente_id);
                 mysqli_stmt_execute($stmt);
 
-                echo json_encode(array("message" => "Transazione creata con successo."));
+                // Aggiorno il budget della categoria con un'unica query JOIN, se il tipo è ENTRATA = aggiungo al budget, altrimenti SPESA = sottraggo al budget
+                $query_update = "UPDATE categoria c 
+                               SET c.CATEGORIA_Budget = CASE 
+                                   WHEN ? = 'ENTRATA' THEN c.CATEGORIA_Budget + ?       
+                                   ELSE c.CATEGORIA_Budget - ?
+                               END 
+                               WHERE c.CATEGORIA_ID = ?";
+                $stmt_update = mysqli_prepare($conn, $query_update);
+                if ($stmt_update === false) {
+                    throw new Exception("Errore nella preparazione della query di aggiornamento: " . mysqli_error($conn));
+                }
+                mysqli_stmt_bind_param($stmt_update, 'sddi', $TRANSIZIONE_Tipo, $TRANSIZIONE_QTA, $TRANSIZIONE_QTA, $categoria_id);
+                mysqli_stmt_execute($stmt_update);
+                mysqli_stmt_close($stmt_update);
+                mysqli_stmt_close($stmt);
+
+                echo json_encode(array("message" => "Transazione creata con successo.", "code" => 201));
             } else {
-                echo json_encode(array("message" => "Categoria non trovata o non appartiene all'utente."));
+                echo json_encode(array("message" => "Categoria non trovata o non appartiene all'utente.", "code" => 400, "categoria_id" => $categoria_id));
             }
 
-            mysqli_stmt_close($stmt);
+            // mysqli_stmt_close($stmt);
             mysqli_close($conn);
         } catch (Exception $e) {
             http_response_code(500);

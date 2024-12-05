@@ -35,17 +35,17 @@ TIPOLOGIA
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 TRANSAZIONE
-    POST_Transazione            [sviluppata, non debuggata]     permette ad un utente di creare una transazione su una categoria creata dallo stesso utente
-    GET_Transazione             [sviluppata, non debuggata]     permette di ottenere i dati di una transazione fatta da un utente tramite il suo nome
-    GET_Transazioni             [sviluppata, non debuggata]     permette di ottenere tutte le transazioni fatte da un utente, serve per fare il load della pagina. La chiamata ha un parametro per specificare se ritornare tutte le transazioni o solo le transazioni inerenti di una categoria.
-    PUT_Transazione             [sviluppata, non debuggata]        permette di modificare i dati di una transazione fatta da un utente tramite il suo nome
+    POST_Transazione            [sviluppata, funzionante]   (POST)     permette ad un utente di creare una transazione su una categoria creata dallo stesso utente
+    GET_Transazione             [sviluppata, INUTILE]
+    GET_Transazioni             [sviluppata, funzionante]   (POST)     permette di ottenere tutte le transazioni fatte da un utente, serve per fare il load della pagina. La chiamata ha un parametro per specificare se ritornare tutte le transazioni o solo le transazioni inerenti di una categoria.
+    PUT_Transazione             [sviluppata, funzionante]   (POST)     permette di modificare i dati di una transazione fatta da un utente tramite il suo nome
     DELETE_Transazione          [sviluppata, non debuggata]     permette di eliminare una transazione fatta da un utente tramite il suo id
 
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 REPORT
     POST_Report                 [sviluppata, non debuggata]     permette ad un utente di creare un report su una categoria fatta dallo stesso utente.
-    GET_Report                  [sviluppata, non debuggata]     permette di ottenere i dati di un report fatta da un utente.
+    GET_Report                  [sviluppata, INUTILE]
     GET_Reports                 [sviluppata, non debuggata]     permette di ottenere tutti i report fatta da un utente, serve per fare il load della pagina. 
     DELETE_Report               [sviluppata, non debuggata]     permette di eliminare un report fatta da un utente.
 
@@ -53,7 +53,7 @@ REPORT
 
 MILESTONE 
     POST_Milestone              [sviluppata, non debuggata]     permette ad un utente di creare un milestone su una categoria fatta dallo stesso.
-    GET_Milestone               [sviluppata, non debuggata]     permette di ottenere i dati di un milestone fatta da un utente.
+    GET_Milestone               [sviluppata, INUTILE]
     GET_Milestones              [sviluppata, non debuggata]     permette di ottenere tutti i milestones fatta da un utente, serve per fare il load della pagina. La chiamata ha un parametro per specificare se ritornare tutte le milestone o solo le milestone inerenti di una categoria.
     DELETE_Milestone            [sviluppata, non debuggata]     permette di eliminare un milestone fatta da un utente.
     PUT_Milestone               [sviluppata, non debuggata]     permette di modificare i dati di un milestone fatta da un utente.
