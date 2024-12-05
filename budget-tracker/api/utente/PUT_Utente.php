@@ -5,7 +5,7 @@
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: OPTIONS, PUT");
+header("Access-Control-Allow-Methods: OPTIONS, POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
@@ -14,12 +14,17 @@ include_once "../config.php";
 $db = new Database();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $mail = isset($_POST["mail"]) ? $_POST["mail"] : null;
-    $utente_id = isset($_POST["utente_id"]) ? $_POST["utente_id"] : null;
-    $username = isset($_POST["nome"]) ? $_POST["nome"] : null;
-    $password = isset($_POST["password"]) ? $_POST["password"] : null;
 
-    if (!empty($mail) && !empty($username) && !empty($password) && !empty($utente_id)){
+    // utente passato dal front end.
+    $utente_id = isset($_POST["UTENTE_ID"]) ? $_POST["UTENTE_ID"] : null;
+    $password = isset($_POST["UTENTE_Password"]) ? $_POST["UTENTE_Password"] : null;
+
+    // elementi modificabili
+    $newUsername = isset($_POST["UTENTE_NewUsername"]) ? $_POST["UTENTE_NewUsername"] : null;
+    $newMail = isset($_POST["UTENTE_NewMail"]) ? $_POST["UTENTE_NewMail"] : null;
+    $newPassword = isset($_POST["UTENTE_NewPassword"]) ? $_POST["UTENTE_NewPassword"] : null;
+
+    if (!empty($utente_id)){
         try {
             $conn = mysqli_connect($db->host, $db->user, $db->password, $db->db_name);
 
@@ -27,30 +32,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new Exception("Connection to the database failed: " . mysqli_connect_error());
             }
 
-        // CONTROLLO SE LA PASSWORD INSERITA E' GIUSTA.
+        // OTTENGO DATI UTENTE
 
-            $check_query = "SELECT * FROM utente WHERE UTENTE_Mail = ? AND UTENTE_Password = ?";
-            $check_stmt2 = mysqli_prepare($conn, $check_query);
-            mysqli_stmt_bind_param($check_stmt2, 'ss', $mail, $password);
-            mysqli_stmt_execute($check_stmt2);
-            $result = mysqli_stmt_get_result($check_stmt2);
+        $query = "SELECT * FROM utente WHERE UTENTE_ID = ?";
+        $stmt = mysqli_prepare($conn, $query);
+        mysqli_stmt_bind_param($stmt, 'i', $utente_id);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
 
-            if (mysqli_num_rows($result) == 0) {
-                echo json_encode(array("message" => "Password errata."));
-                http_response_code(401);
-                mysqli_stmt_close($check_stmt);
-                mysqli_close($conn);
-                exit;
-            }
+        if (!$row) {
+            echo json_encode(array("message" => "Utente non trovato.", "code" => 404));
+            mysqli_close($conn);
+            exit;
+        }
 
-            mysqli_stmt_close($check_stmt2);
 
+                // CONTROLLO SE LA PASSWORD INSERITA E' GIUSTA.
+
+                $check_query = "SELECT * FROM utente WHERE UTENTE_ID = ? AND UTENTE_Password = ?";
+                $check_stmt2 = mysqli_prepare($conn, $check_query);
+                mysqli_stmt_bind_param($check_stmt2, 'is', $utente_id, $password);
+                mysqli_stmt_execute($check_stmt2);
+                $result = mysqli_stmt_get_result($check_stmt2);
+
+                if (mysqli_num_rows($result) == 0) {
+                    echo json_encode(array("message" => "Password errata.", "code" => 401));
+                    mysqli_stmt_close($check_stmt);
+                    mysqli_close($conn);
+                    exit;
+                }
+
+                mysqli_stmt_close($check_stmt2);
+                
         // CONTROLLO SE USERNAME nuovo o MAIL nuovo sono già utilizzati.
+
+        if(!empty($newUsername) && !empty($newMail)) {
 
             $check_query = "SELECT * FROM utente WHERE (UTENTE_Username = ? OR UTENTE_Mail = ?) AND UTENTE_Mail != ?";
             $check_stmt3 = mysqli_prepare($conn, $check_query);
 
-            mysqli_stmt_bind_param($check_stmt, 'sss', $username, $mail, $mail);
+            mysqli_stmt_bind_param($check_stmt3, 'sss', $UTENTE_NewUsername, $UTENTE_NewMail, $UTENTE_NewMail);
             mysqli_stmt_execute($check_stmt3);
             $result = mysqli_stmt_get_result($check_stmt3);
 
@@ -64,31 +87,67 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             mysqli_stmt_close($check_stmt3);
+        }
 
         // Se non ci sono errori, PROCEDO CON L'UPDATE
 
-            $update_query = "UPDATE utente SET UTENTE_Username = ?, UTENTE_Mail = ? WHERE UTENTE_ID = ?";
-            $update_stmt = mysqli_prepare($conn, $update_query);
+                    $update_fields = array();
+                    $param_types = '';
+                    $param_values = array();
 
-            mysqli_stmt_bind_param($update_stmt, 'ssi', $username, $mail, $utente_id);
-            mysqli_stmt_execute($update_stmt);
+                    if (!empty($newUsername)) {
+                        $update_fields[] = "UTENTE_Username = ?";
+                        $param_types .= 's';
+                        $param_values[] = $newUsername;
+                    }
 
-            if (mysqli_stmt_affected_rows($update_stmt) > 0) {
-                echo json_encode(array("message" => "Utente modificato con successo, QTA: " . mysqli_stmt_affected_rows($update_stmt)));
+                    if (!empty($newMail)) {
+                        $update_fields[] = "UTENTE_Mail = ?";
+                        $param_types .= 's';
+                        $param_values[] = $newMail;
+                    }
+
+                    if (!empty($newPassword)) {
+                        $update_fields[] = "UTENTE_Password = ?";
+                        $param_types .= 's';
+                        $param_values[] = $newPassword;
+                    }
+
+            if (!empty($update_fields)) {
+                $update_query = "UPDATE utente SET " . implode(', ', $update_fields) . " WHERE UTENTE_ID = ?";
+                $update_stmt = mysqli_prepare($conn, $update_query);
+
+                $param_types .= 'i';
+                $param_values[] = $utente_id;
+
+                mysqli_stmt_bind_param($update_stmt, $param_types, ...$param_values);
+                mysqli_stmt_execute($update_stmt);
+
+                if (mysqli_stmt_affected_rows($update_stmt) > 0) {
+                                    echo json_encode(array(
+                                        "message" => "Utente modificato con successo",
+                                        "code" => 200,
+                                        "modifiche" => array(
+                                            "righe_modificate" => mysqli_stmt_affected_rows($update_stmt),
+                                            "campi_aggiornati" => $update_fields
+                                        )
+                                    ));
+                } else {
+                    echo json_encode(array("message" => "Nessuna modifica fatta o l'utente non è stato trovato.", "code" => 404));
+                }
+
+                mysqli_stmt_close($update_stmt);
             } else {
-                echo json_encode(array("message" => "Nessuna modifica fatta o l'utente non è stato trovato."));
+                echo json_encode(array("message" => "Nessun campo da aggiornare specificato."));
             }
-
-            mysqli_stmt_close($update_stmt);
-            mysqli_close($conn);
-        } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(array("message" => $e->getMessage()));
+            
+                    mysqli_close($conn);        
+                } catch (Exception $e) {
+            echo json_encode(array("message" => $e->getMessage(), "code" => 500));
         }
         
     } else {
-        http_response_code(400);
-        echo json_encode(array("message" => "Mancano dati."));
+        echo json_encode(array("message" => "Mancano dati.", "code" => 400));
     }
 } else {
     http_response_code(405);

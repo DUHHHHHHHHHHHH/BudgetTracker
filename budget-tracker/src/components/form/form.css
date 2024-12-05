@@ -1,0 +1,23 @@
+.form-table-container {
+  display: flex;
+  max-width: 600px;
+  margin: 0 auto;
+  justify-items: center;
+  flex-wrap: wrap;
+  flex-direction: row-reverse;
+  justify-content: space-evenly;
+}
+
+.form-table-row {
+  display: flex;
+  width: 100%;
+}
+
+.form-table-cell {
+  display: grid;
+  padding: 15px;
+  vertical-align: middle;
+  grid-column: 1;
+  width: 50%;
+  margin: 0 auto;
+}

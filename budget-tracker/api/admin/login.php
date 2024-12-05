@@ -9,8 +9,8 @@ include_once "../config.php";
 $db = new Database();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = isset($_POST["name"]) ? $_POST["name"] : null;
-    $password = isset($_POST["password"]) ? $_POST["password"] : null;
+    $name = isset($_POST["ADMIN_Username"]) ? $_POST["ADMIN_Username"] : null;
+    $password = isset($_POST["ADMIN_Password"]) ? $_POST["ADMIN_Password"] : null;
 
     if (!empty($name) && !empty($password)) {
         try {
@@ -20,30 +20,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new Exception("Connection to the database failed: " . mysqli_connect_error(), 500);
             }
 
-            $query = "SELECT ADMIN_Username, ADMIN_Password FROM ADMIN WHERE ADMIN_Name = ?";
+            $query = "SELECT ADMIN_ID, ADMIN_Username FROM ADMIN WHERE ADMIN_Username = ? AND ADMIN_Password = ?";
             $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, 's', $name);
+            mysqli_stmt_bind_param($stmt, 'ss', $name, $password);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_store_result($stmt);
 
             if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $nome, $hashedPassword);
+                mysqli_stmt_bind_result($stmt, $ADMIN_ID, $ADMIN_Username);
                 mysqli_stmt_fetch($stmt);
+                
+                $user = array(
 
-                if ($password === $hashedPassword) {
-                    $user = array(
-                        "ADMIN_ID" => $ADMIN_ID,
-                        "ADMIN_Username" => $ADMIN_Username
-                    );
+                    "message" => "Credenziali Valide.",
+                    "code" => 200,
+                    "ADMIN_ID" => $ADMIN_ID,
+                    "ADMIN_Username" => $ADMIN_Username
+                    
+                );
 
-                    mysqli_stmt_close($stmt);
+                mysqli_stmt_close($stmt);
                     mysqli_close($conn);
 
                     echo json_encode($user);
-                } else {
-                    http_response_code(401);
-                    echo json_encode(array("message" => "Credenziali non valide.", "code" => 401));
-                }
             } else {
                 http_response_code(404);
                 echo json_encode(array("message" => "Email non trovata.", "code" => 404));

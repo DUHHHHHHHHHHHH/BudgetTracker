@@ -12,9 +12,9 @@ include_once "../config.php";
 $db = new Database();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $mail = isset($_POST['mail']) ? $_POST['mail'] : null;
-    $username = isset($_POST['username']) ? $_POST['username'] : null;
-    $password = isset($_POST['password']) ? $_POST['password'] : null;
+    $mail = isset($_POST['UTENTE_Mail']) ? $_POST['UTENTE_Mail'] : null;
+    $username = isset($_POST['UTENTE_Username']) ? $_POST['UTENTE_Username'] : null;
+    $password = isset($_POST['UTENTE_Password']) ? $_POST['UTENTE_Password'] : null;
 
     if (!empty($mail) && !empty($username) && !empty($password)) {
         try {
@@ -31,32 +31,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_stmt_store_result($check_stmt);
 
             if (mysqli_stmt_num_rows($check_stmt) > 0) {
-                throw new Exception("La mail inserita è già presente nel database.", 401);
+                echo json_encode(array("message" => "La mail inserita è già presente nel database.", "code" => 401));
+                exit;
             }
 
-            $insert_query = "INSERT INTO utente (UTENTE_Mail, UTENTE_Username, UTENTE_Password) VALUES (?, ?, ?, ?, ?)";
+            // CONTROLLO SE L'UTENTE ESISTE GIA' 
+
+            $check_query2 = "SELECT UTENTE_Username FROM utente WHERE UTENTE_Username = ?";
+            $check_stmt2 = mysqli_prepare($conn, $check_query2);
+            mysqli_stmt_bind_param($check_stmt2, 's', $username);
+            mysqli_stmt_execute($check_stmt2);
+            mysqli_stmt_store_result($check_stmt2);
+
+            if (mysqli_stmt_num_rows($check_stmt2) > 0) {
+                echo json_encode(array("message" => "L'username inserito è già presente nel database.", "code" => 401));
+                exit;
+            }
+            
+
+            $insert_query = "INSERT INTO utente (UTENTE_Mail, UTENTE_Username, UTENTE_Password) VALUES (?, ?, ?)";
             $insert_stmt = mysqli_prepare($conn, $insert_query);
-            mysqli_stmt_bind_param($insert_stmt, 'sssss', $mail, $nome, $password);
+            mysqli_stmt_bind_param($insert_stmt, 'sss', $mail, $username, $password);
 
             if (!mysqli_stmt_execute($insert_stmt)) {
-                throw new Exception("Errore durante l'inserimento dei dati: " . mysqli_error($conn));
+                echo json_encode(array("message" => "Errore durante l'inserimento dei dati.", "code" => 404));
             }
 
             mysqli_stmt_close($insert_stmt);
             mysqli_close($conn);
 
-            echo json_encode(array("message" => "Dati inseriti con successo."));
+            echo json_encode(array("message" => "Dati inseriti con successo.", "code" => 200));
         } catch (Exception $e) {
-            http_response_code(500);
-            echo json_encode(array("message" => $e->getMessage()));
+            echo json_encode(array("message" => $e->getMessage(), "code" => 500));
         }
     } else {
-        http_response_code(400);
-        echo json_encode(array("message" => "Tutti i campi sono richiesti."));
+        echo json_encode(array("message" => "Tutti i campi sono richiesti.", "code" => 400));
     }
 } else {
     // Metodo non consentito
-    http_response_code(405);
-    echo json_encode(array("message" => "Metodo non consentito."));
+    echo json_encode(array("message" => "Metodo non consentito.", "code" => 405));
 }
 ?>

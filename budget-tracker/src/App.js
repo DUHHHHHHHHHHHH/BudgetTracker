@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "app.css";
 
 // IMPORTS
 import _404 from "./pages/_404/_404"; // pagina nn esistente.

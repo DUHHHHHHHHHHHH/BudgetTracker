@@ -1,18 +1,18 @@
 DOCUMENTAZIONE API:
 
 ADMIN
-    login                       [sviluppata, non debuggata]     permette di fare il login per un admin. (POST)
+    login                       [sviluppata, funzionante]     permette di fare il login per un admin. (POST)
     // gli admin posso essere creati unicamente dal database.
 
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 UTENTE
-    login                       [sviluppata, non debuggata]     permette di fare il login per un utente. (POST)
-    register                    [sviluppata, non debuggata]     permette di registrare un nuovo utente al portale. (POST)
-    GET_Utente                  [sviluppata, non debuggata]     permette di ottenere le informazioni pubbliche di uno specifico utente.
-    GET_Utenti                  [sviluppata, non debuggata]     permette di ottenere le informazioni pubbliche di tutti gli utenti.
-    PUT_Utente                  [sviluppata, non debuggata]     permette di modificare i dati di un utente.
-    DELETE_Utente               [sviluppata, non debuggata]     permette di eliminare un utente.
+    login                       [sviluppata, funzionante]   (POST)     permette di fare il login per un utente.
+    register                    [sviluppata, funzionante]   (POST)     permette di registrare un nuovo utente al portale.
+    GET_Utente                  [sviluppata, funzionante]   (GET)      permette di ottenere le informazioni pubbliche di uno specifico utente.
+    GET_Utenti                  [sviluppata, funzionante]   (POST)     permette di ottenere le informazioni pubbliche di tutti gli utenti.
+    PUT_Utente                  [sviluppata, funzionante]   (POST)     permette di modificare i dati di un utente.
+    DELETE_Utente               [sviluppata, funzionante]   (POST)     permette di eliminare un utente.
 
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
@@ -66,8 +66,8 @@ MILESTONE
 
 /admin/login.php
     [POST]
-    input: {"name", "password"}
-    output: {"name"}
+    input: {"ADMIN_Username", "ADMIN_Password"}
+    output: {"ADMIN_ID", "ADMIN_Username"}
 
     //  permette di far accedere all'admin alla parte privata amministrativa dell'applicazione.
 

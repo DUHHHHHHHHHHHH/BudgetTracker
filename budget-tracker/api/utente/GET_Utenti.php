@@ -18,25 +18,36 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         }
 
         $query = "SELECT UTENTE_ID, UTENTE_Mail, UTENTE_Username FROM utente";
-        $result = mysqli_query($conn, $query);
+        $stmt = mysqli_prepare($conn, $query);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+
+        mysqli_stmt_bind_result($stmt, $UTENTE_ID, $UTENTE_Mail, $UTENTE_Username);
 
         $users = [];
         while (mysqli_stmt_fetch($stmt)) {
             $users[] = array(
                 "UTENTE_ID" => $UTENTE_ID,
                 "UTENTE_Mail" => $UTENTE_Mail,
-                "UTENTE_Username" => $UTENTE_Username
-            );
+                "UTENTE_Username" => $UTENTE_Username    
+        );
+
+        if (empty($users)) {
+            echo json_encode(array("message" => "Nessun Utente registrato nel DB", "code" => 200));
+            exit();
+        }        
+
         }
 
         mysqli_close($conn);
 
-        echo json_encode($users);
-    } catch (Exception $e) {
+        echo json_encode(array("QTA Utenti:" => count($users), "code" => 200, "data" => $users,));    }
+        
+        catch (Exception $e) {
         http_response_code(500);
         echo json_encode(array("error" => $e->getMessage()));
     }
 } else {
     http_response_code(405);
-    echo json_encode(array("message" => "Metodo non consentito"));
+    echo json_encode(array("message" => "Metodo non consentito", "code" => 405));
 }

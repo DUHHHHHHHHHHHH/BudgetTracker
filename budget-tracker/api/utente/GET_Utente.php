@@ -4,7 +4,7 @@
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: OPTIONS, GET");
+header("Access-Control-Allow-Methods: OPTIONS, POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
@@ -12,8 +12,8 @@ include_once "../config.php";
 
 $db = new Database();
 
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    $mail = isset($_POST["mail"]) ? $_POST["mail"] : null;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $mail = isset($_POST["UTENTE_Mail"]) ? $_POST["UTENTE_Mail"] : null;
 
     if (!empty($mail)) {
         try {
@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 throw new Exception("Connection to the database failed: " . mysqli_connect_error());
             }
 
-            $query = "SELECT * FROM utente WHERE UTENTE_Mail = ?";
+            $query = "SELECT UTENTE_ID, UTENTE_Username, UTENTE_Mail FROM utente WHERE UTENTE_Mail = ?";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, 's', $mail);
             mysqli_stmt_execute($stmt);
@@ -34,9 +34,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 mysqli_stmt_fetch($stmt);
 
                 $user = array(
+
+                    "message" => "utente trovato con successo!",
+                    "code" => 200,
                     "UTENTE_Mail" => $UTENTE_Mail,
                     "UTENTE_Username" => $UTENTE_Username,
                     "UTENTE_ID" => $UTENTE_ID
+                    
                 );
 
                 mysqli_stmt_close($stmt);
