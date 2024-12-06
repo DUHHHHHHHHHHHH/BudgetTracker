@@ -44,10 +44,10 @@ TRANSAZIONE
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 REPORT
-    POST_Report                 [sviluppata, non debuggata]     permette ad un utente di creare un report su una categoria fatta dallo stesso utente.
+    POST_Report                 [sviluppata, funzionante]       permette ad un utente di creare un report su una categoria fatta dallo stesso utente.
     GET_Report                  [sviluppata, INUTILE]
-    GET_Reports                 [sviluppata, non debuggata]     permette di ottenere tutti i report fatta da un utente, serve per fare il load della pagina. 
-    DELETE_Report               [sviluppata, non debuggata]     permette di eliminare un report fatta da un utente.
+    GET_Reports                 [sviluppata, funzionante]     permette di ottenere tutti i report fatta da un utente, serve per fare il load della pagina. 
+    DELETE_Report               [sviluppata, funzionante]     permette di eliminare un report fatta da un utente.
 
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 

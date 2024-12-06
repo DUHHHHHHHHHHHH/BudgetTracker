@@ -2,7 +2,7 @@
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: OPTIONS, GET");
+header("Access-Control-Allow-Methods: OPTIONS, POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
@@ -10,8 +10,8 @@ include_once "../config.php";
 
 $db = new Database();
 
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    $utente_id = isset($_GET["utente_id"]) ? $_GET["utente_id"] : null;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $utente_id = isset($_POST["UTENTE_ID"]) ? $_POST["UTENTE_ID"] : null;
 
     if (!empty($utente_id)) {
         try {
@@ -32,6 +32,17 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 $reports[] = $row;
             }
 
+            // ESTRAGGO LE RIGHE CHE MI INTERESSANO:
+
+            $reports = array_map(function ($report) {
+                return [
+                    "REPORT_ID" => $report["REPORT_ID"],
+                    "REPORT_Nome" => $report["REPORT_Nome"],
+                    "REPORT_DataGenerazione" => $report["REPORT_DataGenerazione"],
+                    "REPORT_FileExport" => $report["REPORT_FileExport"]
+                ];
+            }, $reports);
+
             echo json_encode($reports);
 
             mysqli_stmt_close($stmt);
@@ -42,10 +53,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         }
     } else {
         http_response_code(400);
-        echo json_encode(["message" => "ID utente richiesto."]);
+        echo json_encode(["message" => "ID utente richiesto.", "code" => 400]);
     }
 } else {
     http_response_code(405);
-    echo json_encode(["message" => "Metodo non consentito."]);
+    echo json_encode(["message" => "Metodo non consentito.", "code" => 405]);
 }
 ?>

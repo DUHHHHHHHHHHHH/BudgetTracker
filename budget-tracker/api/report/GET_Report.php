@@ -13,8 +13,8 @@ include_once "../config.php";
 $db = new Database();
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    $utente_id = isset($_POST["utente_id"]) ? $_POST["utente_id"] : null;
-    $nome_report = isset($_POST["nome_report"]) ? $_POST["nome_report"] : null;
+    $utente_id = isset($_POST["UTENTE_ID"]) ? $_POST["UTENTE_ID"] : null;
+    $nome_report = isset($_POST["REPORT_Nome"]) ? $_POST["REPORT_Nome"] : null;
 
     if (!empty($utente_id) && !empty($nome_report)) {
         try {
