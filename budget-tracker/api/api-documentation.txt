@@ -39,7 +39,7 @@ TRANSAZIONE
     GET_Transazione             [sviluppata, INUTILE]
     GET_Transazioni             [sviluppata, funzionante]   (POST)     permette di ottenere tutte le transazioni fatte da un utente, serve per fare il load della pagina. La chiamata ha un parametro per specificare se ritornare tutte le transazioni o solo le transazioni inerenti di una categoria.
     PUT_Transazione             [sviluppata, funzionante]   (POST)     permette di modificare i dati di una transazione fatta da un utente tramite il suo nome
-    DELETE_Transazione          [sviluppata, non debuggata]     permette di eliminare una transazione fatta da un utente tramite il suo id
+    DELETE_Transazione          [sviluppata, funzionante]   (POST)     permette di eliminare una transazione fatta da un utente tramite il suo id
 
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 

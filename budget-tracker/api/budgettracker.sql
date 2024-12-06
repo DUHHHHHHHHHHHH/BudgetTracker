@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Nov 27, 2024 alle 12:45
+-- Creato il: Dic 06, 2024 alle 15:24
 -- Versione del server: 10.4.32-MariaDB
 -- Versione PHP: 8.0.30
 
@@ -55,6 +55,13 @@ CREATE TABLE `categoria` (
   `TIPOLOGIA_FK_ID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dump dei dati per la tabella `categoria`
+--
+
+INSERT INTO `categoria` (`CATEGORIA_ID`, `CATEGORIA_Nome`, `CATEGORIA_Descrizione`, `CATEGORIA_Budget`, `UTENTE_FK_ID`, `TIPOLOGIA_FK_ID`) VALUES
+(1, 'Verdura', 'Verdurereeerere', -177, 1, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -80,10 +87,19 @@ CREATE TABLE `milestone` (
 CREATE TABLE `report` (
   `REPORT_ID` int(11) NOT NULL,
   `REPORT_Nome` varchar(100) NOT NULL,
+  `REPORT_Descrizione` text DEFAULT NULL,
   `REPORT_DataGenerazione` datetime DEFAULT current_timestamp(),
-  `REPORT_FileExport` blob DEFAULT NULL,
+  `REPORT_FileExport` varchar(1000) DEFAULT NULL,
   `UTENTE_FK_ID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `report`
+--
+
+INSERT INTO `report` (`REPORT_ID`, `REPORT_Nome`, `REPORT_Descrizione`, `REPORT_DataGenerazione`, `REPORT_FileExport`, `UTENTE_FK_ID`) VALUES
+(1, 'TEST_Inglese', 'tester Inglese doc', '0000-00-00 00:00:00', 'DB/DB_Reports/6753082d1ebb41.66313141.potx', 1),
+(2, 'TEST_Inglese', 'tester Inglese doc', '0000-00-00 00:00:00', 'DB/DB_Reports/67530895ea1610.34123375.potx', 1);
 
 -- --------------------------------------------------------
 
@@ -98,6 +114,13 @@ CREATE TABLE `tipologia` (
   `ADMIN_FK_ID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dump dei dati per la tabella `tipologia`
+--
+
+INSERT INTO `tipologia` (`TIPOLOGIA_ID`, `TIPOLOGIA_Nome`, `TIPOLOGIA_Descrizione`, `ADMIN_FK_ID`) VALUES
+(1, 'Spesa', 'Test tEST', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -109,11 +132,19 @@ CREATE TABLE `transizione` (
   `TRANSIZIONE_Nome` varchar(100) NOT NULL,
   `TRANSIZIONE_Data` datetime NOT NULL,
   `TRANSIZIONE_DataGenerazione` datetime DEFAULT current_timestamp(),
-  `TRANSIZIONE_QTA` int(11) NOT NULL,
+  `TRANSIZIONE_QTA` double NOT NULL,
   `TRANSIZIONE_Tipo` varchar(50) NOT NULL,
   `UTENTE_FK_ID` int(11) DEFAULT NULL,
   `CATEGORIA_FK_ID` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `transizione`
+--
+
+INSERT INTO `transizione` (`TRANSIZIONE_ID`, `TRANSIZIONE_Nome`, `TRANSIZIONE_Data`, `TRANSIZIONE_DataGenerazione`, `TRANSIZIONE_QTA`, `TRANSIZIONE_Tipo`, `UTENTE_FK_ID`, `CATEGORIA_FK_ID`) VALUES
+(19, 'AAAAAAAAAAsfsa', '2024-12-18 06:27:48', '2024-12-05 17:20:22', 1111, 'ENTRATA', 1, 1),
+(24, 'AAAAAAAAAAsfsa', '0000-00-00 00:00:00', '2024-12-05 17:42:51', 44, 'SPESA', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -127,6 +158,13 @@ CREATE TABLE `utente` (
   `UTENTE_Mail` varchar(100) NOT NULL,
   `UTENTE_Password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dump dei dati per la tabella `utente`
+--
+
+INSERT INTO `utente` (`UTENTE_ID`, `UTENTE_Username`, `UTENTE_Mail`, `UTENTE_Password`) VALUES
+(1, 'tester', 'tester@gmail.com', '8888');
 
 --
 -- Indici per le tabelle scaricate
@@ -196,31 +234,31 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT per la tabella `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `CATEGORIA_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `CATEGORIA_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT per la tabella `report`
 --
 ALTER TABLE `report`
-  MODIFY `REPORT_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `REPORT_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT per la tabella `tipologia`
 --
 ALTER TABLE `tipologia`
-  MODIFY `TIPOLOGIA_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `TIPOLOGIA_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT per la tabella `transizione`
 --
 ALTER TABLE `transizione`
-  MODIFY `TRANSIZIONE_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `TRANSIZIONE_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT per la tabella `utente`
 --
 ALTER TABLE `utente`
-  MODIFY `UTENTE_ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `UTENTE_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Limiti per le tabelle scaricate
