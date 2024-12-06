@@ -2,7 +2,7 @@
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: DELETE");
+header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
@@ -10,10 +10,9 @@ include_once "../config.php";
 
 $db = new Database();
 
-if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
-    $data = json_decode(file_get_contents("php://input"), true);
-    $utente_id = isset($data["utente_id"]) ? $data["utente_id"] : null;
-    $milestone_id = isset($data["milestone_id"]) ? $data["milestone_id"] : null;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $utente_id = isset($_POST["UTENTE_ID"]) ? $_POST["UTENTE_ID"] : null;
+    $milestone_id = isset($_POST["MILESTONE_ID"]) ? $_POST["MILESTONE_ID"] : null;
 
     if (!empty($utente_id) && !empty($milestone_id)) {
         try {
@@ -29,9 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
             mysqli_stmt_execute($stmt);
 
             if (mysqli_stmt_affected_rows($stmt) > 0) {
-                echo json_encode(array("message" => "Milestone eliminata con successo."));
+                echo json_encode(array("message" => "Milestone eliminata con successo.", "code" => 200));;
             } else {
-                echo json_encode(array("message" => "Milestone non trovata o non eliminata."));
+                echo json_encode(array("message" => "Milestone non trovata o non eliminata.", "code" => 404));
             }
 
             mysqli_stmt_close($stmt);

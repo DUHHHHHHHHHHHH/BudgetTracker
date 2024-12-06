@@ -24,9 +24,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             // OTTENGO L'ID DELLA CATEGORIA
-            $queryCategoria = "SELECT CATEGORIA_ID FROM categoria WHERE CATEGORIA_Nome = ?";
+            $queryCategoria = "SELECT CATEGORIA_ID FROM categoria WHERE CATEGORIA_Nome = ? AND UTENT_FK_ID = ?";
             $stmtCategoria = mysqli_prepare($conn, $queryCategoria);
-            mysqli_stmt_bind_param($stmtCategoria, 's', $CATEGORIA_Nome);
+            mysqli_stmt_bind_param($stmtCategoria, 'si', $CATEGORIA_Nome, $UTENTE_ID);
             mysqli_stmt_execute($stmtCategoria);
             mysqli_stmt_store_result($stmtCategoria);
 
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_stmt_bind_result($stmtCategoria, $CATEGORIA_ID);
                 mysqli_stmt_fetch($stmtCategoria);
             } else {
-                echo json_encode(array("message" => "Categoria non trovata", "code" => 404));
+                echo json_encode(array("message" => "Categoria non trovata", "code" => 404, "post" => $_POST));
                 mysqli_stmt_close($stmtCategoria);
                 mysqli_close($conn);
                 exit;
@@ -106,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                     echo json_encode($transizioni);
                 } else {
-                    echo json_encode(array("message" => "Nessuna transizione trovata."));
+                    echo json_encode(array("message" => "Nessuna transizione trovata.", "code" => 404));
                 }
 
                 mysqli_stmt_close($stmt);

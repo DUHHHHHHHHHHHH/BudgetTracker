@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Creato il: Dic 06, 2024 alle 15:24
+-- Creato il: Dic 06, 2024 alle 16:47
 -- Versione del server: 10.4.32-MariaDB
 -- Versione PHP: 8.0.30
 
@@ -74,6 +74,7 @@ CREATE TABLE `milestone` (
   `MILESTONE_DataFine` date DEFAULT NULL,
   `MILESTONE_Nome` varchar(20) DEFAULT NULL,
   `MILESTONE_Descrizione` text DEFAULT NULL,
+  `MILESTONE_Completata` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1 = completata\r\n0 = non completata',
   `UTENTE_FK_ID` int(11) DEFAULT NULL,
   `CATEGORIA_FK_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -98,8 +99,7 @@ CREATE TABLE `report` (
 --
 
 INSERT INTO `report` (`REPORT_ID`, `REPORT_Nome`, `REPORT_Descrizione`, `REPORT_DataGenerazione`, `REPORT_FileExport`, `UTENTE_FK_ID`) VALUES
-(1, 'TEST_Inglese', 'tester Inglese doc', '0000-00-00 00:00:00', 'DB/DB_Reports/6753082d1ebb41.66313141.potx', 1),
-(2, 'TEST_Inglese', 'tester Inglese doc', '0000-00-00 00:00:00', 'DB/DB_Reports/67530895ea1610.34123375.potx', 1);
+(4, 'TEST_Inglese', 'tester Inglese doc', '0000-00-00 00:00:00', 'DB/DB_Reports/67530dbe1a6bc5.57164292.potx', 1);
 
 -- --------------------------------------------------------
 
@@ -237,10 +237,16 @@ ALTER TABLE `categoria`
   MODIFY `CATEGORIA_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT per la tabella `milestone`
+--
+ALTER TABLE `milestone`
+  MODIFY `MILESTONE_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT per la tabella `report`
 --
 ALTER TABLE `report`
-  MODIFY `REPORT_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `REPORT_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT per la tabella `tipologia`

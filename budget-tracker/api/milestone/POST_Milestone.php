@@ -11,14 +11,13 @@ include_once "../config.php";
 $db = new Database();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $data = json_decode(file_get_contents("php://input"), true);
 
-    $utente_id = isset($data["utente_id"]) ? $data["utente_id"] : null;
-    $categoria_nome = isset($data["categoria_nome"]) ? $data["categoria_nome"] : null;
-    $milestone_nome = isset($data["milestone_nome"]) ? $data["milestone_nome"] : null;
-    $milestone_DataInizio = isset($data["milestone_DataInizio"]) ? $data["milestone_DataInizio"] : null;
-    $milestone_DataFine = isset($data["milestone_DataFine"]) ? $data["milestone_DataFine"] : null;
-    $milestone_Descrizione = isset($data["milestone_Descrizione"]) ? $data["milestone_Descrizione"] : null;
+    $utente_id = isset($_POST["UTENTE_ID"]) ? $_POST["UTENTE_ID"] : null;
+    $categoria_nome = isset($_POST["CATEGORIA_Nome"]) ? $_POST["CATEGORIA_Nome"] : null;
+    $milestone_nome = isset($_POST["MILESTONE_Nome"]) ? $_POST["MILESTONE_Nome"] : null;
+    $milestone_DataInizio = isset($_POST["MILESTONE_DataInizio"]) ? $_POST["MILESTONE_DataInizio"] : null;
+    $milestone_DataFine = isset($_POST["MILESTONE_DataFine"]) ? $_POST["MILESTONE_DataFine"] : null;
+    $milestone_Descrizione = isset($_POST["MILESTONE_Descrizione"]) ? $_POST["MILESTONE_Descrizione"] : null;
 
     if (!empty($utente_id) && 
         !empty($categoria_nome) && 
@@ -39,22 +38,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt_verifica = mysqli_prepare($conn, $query_verifica);
                 mysqli_stmt_bind_param($stmt_verifica, 'is', $utente_id, $categoria_nome);
                 mysqli_stmt_execute($stmt_verifica);
-                mysqli_stmt_bind_result($stmt_verifica, $categoria_id);
+                mysqli_stmt_bind_result($stmt_verifica, $categoria_id);     //ottengo categoria ID
                 mysqli_stmt_fetch($stmt_verifica);
 
-            if ($categoria_id) {
+            if (!empty($categoria_id)) {
                 mysqli_stmt_close($stmt_verifica);
 
                 // Inserisci la milestone
-                $query = "INSERT INTO milestone (MILESTONE_Nome, MILESTONE_Data, CATEGORIA_FK_ID, UTENTE_FK_ID) VALUES (?, ?, ?, ?)";
+                $query = "INSERT INTO milestone (MILESTONE_Nome, MILESTONE_DataInizio, MILESTONE_DataFine, MILESTONE_Descrizione, CATEGORIA_FK_ID, UTENTE_FK_ID) VALUES (?, ?, ?, ?, ?, ?)";
                 $stmt = mysqli_prepare($conn, $query);
-                mysqli_stmt_bind_param($stmt, 'ssii', $milestone_nome, $data_milestone, $categoria_id, $utente_id);
+                mysqli_stmt_bind_param($stmt, 'ssssii', $milestone_nome, $milestone_DataInizio, $milestone_DataFine, $milestone_Descrizione ,$categoria_id, $utente_id);
                 mysqli_stmt_execute($stmt);
 
                 if (mysqli_stmt_affected_rows($stmt) > 0) {
-                    echo json_encode(array("message" => "Milestone creata con successo."));
+                    echo json_encode(array("message" => "Milestone creata con successo.", "code" => 201, "post" => $_POST));
                 } else {
-                    throw new Exception("Errore durante la creazione della milestone.");
+                    echo json_encode(array("message" => "Errore durante la creazione della milestone.", "code" => 400));
                 }
 
                 mysqli_stmt_close($stmt);

@@ -26,11 +26,11 @@ CATEGORIA
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 TIPOLOGIA
-    POST_Tipologia              [sviluppata, non debuggata]     permette ad un admin di creare una tipologia col nome univoco.
-    GET_Tipologia               [sviluppata, non debuggata]     permette di ottenere i dati di una tipologia.
-    GET_Tipologie               [sviluppata, non debuggata]     permette di ottenere tutte le tipologie pubbliche.
-    DELETE_Tipologia            [sviluppata, non debuggata]     permette di eliminare una tipologia.
-    PUT_Tipologia               [sviluppata, non debuggata]     permette di modificare i dati di una tipologia.
+    POST_Tipologia              [sviluppata, non debuggata] (POST)     permette ad un admin di creare una tipologia col nome univoco.
+    GET_Tipologia               [sviluppata, INUTILE]                  permette di ottenere i dati di una tipologia.
+    GET_Tipologie               [sviluppata, non debuggata] (GET)      permette di ottenere tutte le tipologie pubbliche.
+    DELETE_Tipologia            [sviluppata, non debuggata] (POST)     permette di eliminare una tipologia.
+    PUT_Tipologia               [sviluppata, non debuggata] (POST)     permette di modificare i dati di una tipologia.
 
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
@@ -44,19 +44,19 @@ TRANSAZIONE
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 REPORT
-    POST_Report                 [sviluppata, funzionante]       permette ad un utente di creare un report su una categoria fatta dallo stesso utente.
+    POST_Report                 [sviluppata, funzionante]   (POST)     permette ad un utente di creare un report su una categoria fatta dallo stesso utente.
     GET_Report                  [sviluppata, INUTILE]
-    GET_Reports                 [sviluppata, funzionante]     permette di ottenere tutti i report fatta da un utente, serve per fare il load della pagina. 
-    DELETE_Report               [sviluppata, funzionante]     permette di eliminare un report fatta da un utente.
+    GET_Reports                 [sviluppata, funzionante]   (POST)     permette di ottenere tutti i report fatta da un utente, serve per fare il load della pagina. 
+    DELETE_Report               [sviluppata, funzionante]   (POST)     permette di eliminare un report fatta da un utente.
 
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 MILESTONE 
-    POST_Milestone              [sviluppata, non debuggata]     permette ad un utente di creare un milestone su una categoria fatta dallo stesso.
+    POST_Milestone              [sviluppata, funzionante] (POST)     permette ad un utente di creare un milestone su una categoria fatta dallo stesso.
     GET_Milestone               [sviluppata, INUTILE]
-    GET_Milestones              [sviluppata, non debuggata]     permette di ottenere tutti i milestones fatta da un utente, serve per fare il load della pagina. La chiamata ha un parametro per specificare se ritornare tutte le milestone o solo le milestone inerenti di una categoria.
-    DELETE_Milestone            [sviluppata, non debuggata]     permette di eliminare un milestone fatta da un utente.
-    PUT_Milestone               [sviluppata, non debuggata]     permette di modificare i dati di un milestone fatta da un utente.
+    GET_Milestones              [sviluppata, funzionante] (POST)     permette di ottenere tutti i milestones fatta da un utente, serve per fare il load della pagina. La chiamata ha un parametro per specificare se ritornare tutte le milestone o solo le milestone inerenti di una categoria.
+    DELETE_Milestone            [sviluppata, funzionante] (POST)     permette di eliminare un milestone fatta da un utente.
+    PUT_Milestone               [sviluppata, funzionante] (POST)     permette di modificare i dati di un milestone fatta da un utente.
 
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
