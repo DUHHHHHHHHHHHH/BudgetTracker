@@ -275,20 +275,20 @@ ALTER TABLE `utente`
 --
 ALTER TABLE `categoria`
   ADD CONSTRAINT `fk_categoria_tipologia` FOREIGN KEY (`TIPOLOGIA_FK_ID`) REFERENCES `tipologia` (`TIPOLOGIA_ID`),
-  ADD CONSTRAINT `fk_categoria_utente` FOREIGN KEY (`UTENTE_FK_ID`) REFERENCES `utente` (`UTENTE_ID`);
+  ADD CONSTRAINT `fk_categoria_utente` FOREIGN KEY (`UTENTE_FK_ID`) REFERENCES `utente` (`UTENTE_ID`) ON DELETE CASCADE;
 
 --
 -- Limiti per la tabella `milestone`
 --
 ALTER TABLE `milestone`
   ADD CONSTRAINT `fk_milestone_categoria` FOREIGN KEY (`CATEGORIA_FK_ID`) REFERENCES `categoria` (`CATEGORIA_ID`),
-  ADD CONSTRAINT `milestone_ibfk_1` FOREIGN KEY (`UTENTE_FK_ID`) REFERENCES `utente` (`UTENTE_ID`);
+  ADD CONSTRAINT `milestone_ibfk_1` FOREIGN KEY (`UTENTE_FK_ID`) REFERENCES `utente` (`UTENTE_ID`) ON DELETE CASCADE;
 
 --
 -- Limiti per la tabella `report`
 --
 ALTER TABLE `report`
-  ADD CONSTRAINT `report_ibfk_1` FOREIGN KEY (`UTENTE_FK_ID`) REFERENCES `utente` (`UTENTE_ID`);
+  ADD CONSTRAINT `report_ibfk_1` FOREIGN KEY (`UTENTE_FK_ID`) REFERENCES `utente` (`UTENTE_ID`) ON DELETE CASCADE;
 
 --
 -- Limiti per la tabella `tipologia`
@@ -301,7 +301,7 @@ ALTER TABLE `tipologia`
 --
 ALTER TABLE `transizione`
   ADD CONSTRAINT `fk_transizione_categoria` FOREIGN KEY (`CATEGORIA_FK_ID`) REFERENCES `categoria` (`CATEGORIA_ID`),
-  ADD CONSTRAINT `transizione_ibfk_1` FOREIGN KEY (`UTENTE_FK_ID`) REFERENCES `utente` (`UTENTE_ID`);
+  ADD CONSTRAINT `transizione_ibfk_1` FOREIGN KEY (`UTENTE_FK_ID`) REFERENCES `utente` (`UTENTE_ID`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
