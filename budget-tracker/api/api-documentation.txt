@@ -26,11 +26,11 @@ CATEGORIA
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 TIPOLOGIA
-    POST_Tipologia              [sviluppata, non debuggata] (POST)     permette ad un admin di creare una tipologia col nome univoco.
+    POST_Tipologia              [sviluppata, funzionante] (POST)       permette ad un admin di creare una tipologia col nome univoco.
     GET_Tipologia               [sviluppata, INUTILE]                  permette di ottenere i dati di una tipologia.
-    GET_Tipologie               [sviluppata, non debuggata] (GET)      permette di ottenere tutte le tipologie pubbliche.
-    DELETE_Tipologia            [sviluppata, non debuggata] (POST)     permette di eliminare una tipologia.
-    PUT_Tipologia               [sviluppata, non debuggata] (POST)     permette di modificare i dati di una tipologia.
+    GET_Tipologie               [sviluppata, funzionante] (GET)        permette di ottenere tutte le tipologie pubbliche.
+    DELETE_Tipologia            [sviluppata, funzionante] (POST)     permette di eliminare una tipologia.
+    PUT_Tipologia               [sviluppata, funzionante] (POST)     permette di modificare i dati di una tipologia.
 
 -||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 

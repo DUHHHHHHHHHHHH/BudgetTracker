@@ -2,7 +2,7 @@
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: DELETE");
+header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
@@ -10,9 +10,9 @@ include_once "../config.php";
 
 $db = new Database();
 
-if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
-    $data = json_decode(file_get_contents("php://input"), true);
-    $nome_tipologia = isset($data["nome"]) ? $data["nome"] : null;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $nome_tipologia = isset($_POST["TIPOLOGIA_Nome"]) ? $_POST["TIPOLOGIA_Nome"] : null;
 
     if (!empty($nome_tipologia)) {
         try {
@@ -28,9 +28,9 @@ if ($_SERVER["REQUEST_METHOD"] == "DELETE") {
             mysqli_stmt_execute($stmt);
 
             if (mysqli_stmt_affected_rows($stmt) > 0) {
-                echo json_encode(array("message" => "Tipologia eliminata con successo."));
+                echo json_encode(array("message" => "Tipologia eliminata con successo.", "code" => 200));
             } else {
-                echo json_encode(array("message" => "Tipologia non trovata o non eliminata."));
+                echo json_encode(array("message" => "Tipologia non trovata o non eliminata.", "code" => 400));
             }
 
             mysqli_stmt_close($stmt);
