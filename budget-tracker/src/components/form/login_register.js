@@ -9,7 +9,7 @@ const AuthForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [formData, setFormData] = useState({
+  const [DATA, setFormData] = useState({
     UTENTE_Username: "",
     UTENTE_Mail: "",
     UTENTE_Password: "",
@@ -29,7 +29,7 @@ const AuthForm = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...DATA, [name]: value });
 
     if (name === "UTENTE_Mail" && !value.includes("@")) {
       setShowDomainSuggestions(true);
@@ -54,12 +54,12 @@ const AuthForm = () => {
     setLoading(true);
 
     const newErrors = {};
-    if (!validateEmail(formData.UTENTE_Mail))
+    if (!validateEmail(DATA.UTENTE_Mail))
       newErrors.UTENTE_Mail = "Email non valida";
-    if (!validatePassword(formData.UTENTE_Password))
+    if (!validatePassword(DATA.UTENTE_Password))
       newErrors.UTENTE_Password =
         "La password deve essere almeno di 3 caratteri";
-    if (!isLogin && !formData.UTENTE_Username.trim())
+    if (!isLogin && !DATA.UTENTE_Username.trim())
       newErrors.UTENTE_Username = "L'username è obbligatorio";
 
     if (Object.keys(newErrors).length > 0) {
@@ -71,9 +71,10 @@ const AuthForm = () => {
     try {
       if (isLogin) {
         const formData = new FormData();
+        formData.append("UTENTE_Mail", DATA.UTENTE_Mail);
+        formData.append("UTENTE_Password", DATA.UTENTE_Password);
+
         console.log(formData);
-        formData.append("UTENTE_Mail", formData.UTENTE_Mail);
-        formData.append("UTENTE_Password", formData.UTENTE_Password);
 
         axios
           .post(baseurl + "/utente/login.php", formData, {
@@ -82,6 +83,7 @@ const AuthForm = () => {
             },
           })
           .then((res) => {
+            console.log(res.data);
             localStorage.setItem("login", true);
             localStorage.setItem("UTENTE_Mail", res.data.mail);
             localStorage.setItem("UTENTE_ID", res.data.id);
@@ -109,9 +111,9 @@ const AuthForm = () => {
           });
       } else {
         const formData = new FormData();
-        formData.append("UTENTE_Username", formData.UTENTE_Username);
-        formData.append("UTENTE_Mail", formData.UTENTE_Mail);
-        formData.append("UTENTE_Password", formData.UTENTE_Password);
+        formData.append("UTENTE_Username", DATA.UTENTE_Username);
+        formData.append("UTENTE_Mail", DATA.UTENTE_Mail);
+        formData.append("UTENTE_Password", DATA.UTENTE_Password);
 
         axios
           .post(baseurl + "/utente/register.php", formData, {
@@ -153,8 +155,8 @@ const AuthForm = () => {
 
   const handleDomainSelect = (domain) => {
     setFormData({
-      ...formData,
-      UTENTE_Mail: formData.UTENTE_Mail.split("@")[0] + domain,
+      ...DATA,
+      UTENTE_Mail: DATA.UTENTE_Mail.split("@")[0] + domain,
     });
     setShowDomainSuggestions(false);
   };
@@ -203,7 +205,7 @@ const AuthForm = () => {
                     id="UTENTE_Username"
                     name="UTENTE_Username"
                     type="text"
-                    value={formData.UTENTE_Username}
+                    value={DATA.UTENTE_Username}
                     onChange={handleInputChange}
                     placeholder="Username"
                     style={{ width: "100%" }}
@@ -231,7 +233,7 @@ const AuthForm = () => {
                   id="UTENTE_Mail"
                   name="UTENTE_Mail"
                   type="email"
-                  value={formData.UTENTE_Mail}
+                  value={DATA.UTENTE_Mail}
                   onChange={handleInputChange}
                   placeholder="Email address"
                   style={{ width: "100%" }}
@@ -246,7 +248,7 @@ const AuthForm = () => {
                         onClick={() => handleDomainSelect(domain)}
                         style={{ width: "100%" }}
                       >
-                        {formData.UTENTE_Mail.split("@")[0] + domain}
+                        {DATA.UTENTE_Mail.split("@")[0] + domain}
                       </button>
                     ))}
                   </div>
@@ -273,7 +275,7 @@ const AuthForm = () => {
                     id="UTENTE_Password"
                     name="UTENTE_Password"
                     type={showPassword ? "text" : "password"}
-                    value={formData.UTENTE_Password}
+                    value={DATA.UTENTE_Password}
                     onChange={handleInputChange}
                     placeholder="Password"
                     style={{ width: "100%" }}

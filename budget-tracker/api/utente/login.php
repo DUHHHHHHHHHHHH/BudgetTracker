@@ -1,11 +1,11 @@
 <?php
 // login, permette di accedere alla parte privata tramite MAIL e PASSWORD.
 
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: OPTIONS, POST");
+header("Access-Control-Allow-Methods: OPTIONS, POST, GET");
+header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-
 include_once "../config.php";
 
 $db = new Database();
@@ -69,6 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 } else {
     http_response_code(405);
-    echo json_encode(array("message" => "Method not allowed.", "code" => 405));
+    echo json_encode(array("message" => "Accesso non consentito.", "code" => 405, "method" => $_SERVER["REQUEST_METHOD"]));
 }
 ?>
