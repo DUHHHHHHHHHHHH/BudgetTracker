@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash, FaSpinner } from "react-icons/fa";
+import axios from "axios";
+
+const baseurl = process.env.REACT_APP_BASE_URL;
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    username: "",
-    fullName: "",
-  });
-  const [errors, setErrors] = useState({});
 
+  const [formData, setFormData] = useState({
+    UTENTE_Username: "",
+    UTENTE_Mail: "",
+    UTENTE_Password: "",
+  });
+
+  const [errors, setErrors] = useState({});
   const commonDomains = [
     "@gmail.com",
     "@yahoo.com",
@@ -21,31 +24,25 @@ const AuthForm = () => {
   ];
   const [showDomainSuggestions, setShowDomainSuggestions] = useState(false);
 
-  const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  };
-
-  const validatePassword = (password) => {
-    return password.length >= 8;
-  };
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validatePassword = (password) => password.length >= 3;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    if (name === "email" && !value.includes("@")) {
+    if (name === "UTENTE_Mail" && !value.includes("@")) {
       setShowDomainSuggestions(true);
     } else {
       setShowDomainSuggestions(false);
     }
 
-    // Real-time validation
     const newErrors = { ...errors };
-    if (name === "email" && !validateEmail(value)) {
-      newErrors.email = "Invalid email format";
-    } else if (name === "password" && !validatePassword(value)) {
-      newErrors.password = "Password must be at least 8 characters long";
+    if (name === "UTENTE_Mail" && !validateEmail(value)) {
+      newErrors.UTENTE_Mail = "L'email è invalida";
+    } else if (name === "UTENTE_Password" && !validatePassword(value)) {
+      newErrors.UTENTE_Password =
+        "La password deve essere almeno di 3 caratteri";
     } else {
       delete newErrors[name];
     }
@@ -56,16 +53,14 @@ const AuthForm = () => {
     e.preventDefault();
     setLoading(true);
 
-    // Validate form
     const newErrors = {};
-    if (!validateEmail(formData.email))
-      newErrors.email = "Invalid email format";
-    if (!validatePassword(formData.password))
-      newErrors.password = "Password must be at least 8 characters long";
-    if (!isLogin && !formData.username.trim())
-      newErrors.username = "Username is required";
-    if (!isLogin && !formData.fullName.trim())
-      newErrors.fullName = "Full name is required";
+    if (!validateEmail(formData.UTENTE_Mail))
+      newErrors.UTENTE_Mail = "Email non valida";
+    if (!validatePassword(formData.UTENTE_Password))
+      newErrors.UTENTE_Password =
+        "La password deve essere almeno di 3 caratteri";
+    if (!isLogin && !formData.UTENTE_Username.trim())
+      newErrors.UTENTE_Username = "L'username è obbligatorio";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -73,194 +68,241 @@ const AuthForm = () => {
       return;
     }
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      if (isLogin) {
+        const formData = new FormData();
+        console.log(formData);
+        formData.append("UTENTE_Mail", formData.UTENTE_Mail);
+        formData.append("UTENTE_Password", formData.UTENTE_Password);
+
+        axios
+          .post(baseurl + "/utente/login.php", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((res) => {
+            localStorage.setItem("login", true);
+            localStorage.setItem("UTENTE_Mail", res.data.mail);
+            localStorage.setItem("UTENTE_ID", res.data.id);
+            window.location.href = "/Home";
+          })
+          .catch((error) => {
+            if (error.status) {
+              switch (error.status) {
+                case 401:
+                  setErrors({ submit: "Credenziali errate" });
+                  break;
+                case 400:
+                  setErrors({ submit: "Credenziali non valide" });
+                  break;
+                case 404:
+                  setErrors({ submit: "Email specificata non esiste" });
+                  break;
+                default:
+                  setErrors({
+                    submit: "Qualcosa è andato storto, riprova più tardi",
+                  });
+                  break;
+              }
+            }
+          });
+      } else {
+        const formData = new FormData();
+        formData.append("UTENTE_Username", formData.UTENTE_Username);
+        formData.append("UTENTE_Mail", formData.UTENTE_Mail);
+        formData.append("UTENTE_Password", formData.UTENTE_Password);
+
+        axios
+          .post(baseurl + "/utente/register.php", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+          .then((response) => {
+            console.log(response.data);
+            localStorage.setItem("login", true);
+            localStorage.setItem("UTENTE_Mail", formData.UTENTE_Mail);
+            window.location.href = "/";
+          })
+          .catch((error) => {
+            if (error.status) {
+              switch (error.status) {
+                case 401:
+                  setErrors({ submit: "Credenziali errate" });
+                  break;
+                case 400:
+                  setErrors({ submit: "Credenziali non valide" });
+                  break;
+                case 404:
+                  setErrors({ submit: "Email specificata non esiste" });
+                  break;
+                default:
+                  setErrors({
+                    submit: "Qualcosa è andato storto, riprova più tardi",
+                  });
+                  break;
+              }
+            }
+          });
+      }
+    } finally {
       setLoading(false);
-      // Handle success
-    }, 1500);
+    }
   };
 
   const handleDomainSelect = (domain) => {
-    setFormData({ ...formData, email: formData.email.split("@")[0] + domain });
+    setFormData({
+      ...formData,
+      UTENTE_Mail: formData.UTENTE_Mail.split("@")[0] + domain,
+    });
     setShowDomainSuggestions(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg transition-all duration-300">
-        <div className="text-center">
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-            {isLogin ? "Sign in to your account" : "Create your account"}
-          </h2>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <div style={{ width: "400px", textAlign: "center" }}>
+        <div>
+          <h2 style={{}}>{isLogin ? "Accedi" : "Registrati"}</h2>
         </div>
 
-        <div className="mt-8 space-y-6">
-          <div className="flex justify-center space-x-4 mb-8">
-            <button
-              onClick={() => setIsLogin(true)}
-              className={`px-4 py-2 rounded-md transition-all duration-300 ${
-                isLogin ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
-              }`}
-              aria-label="Switch to login mode"
-            >
-              Login
-            </button>
-            <button
-              onClick={() => setIsLogin(false)}
-              className={`px-4 py-2 rounded-md transition-all duration-300 ${
-                !isLogin
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-              aria-label="Switch to register mode"
-            >
-              Register
-            </button>
+        <div>
+          <div className="flex">
+            <button onClick={() => setIsLogin(true)}>Login</button>
+            <button onClick={() => setIsLogin(false)}>Register</button>
           </div>
 
-          <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          <form
+            onSubmit={handleSubmit}
+            className="flex"
+            style={{ flexDirection: "column", width: "100%" }}
+          >
             {!isLogin && (
-              <div className="space-y-4">
-                <div>
-                  <label htmlFor="username" className="sr-only">
+              <div style={{ width: "100%" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100%",
+                  }}
+                >
+                  <label
+                    htmlFor="UTENTE_Username"
+                    style={{ width: "100%", textAlign: "left" }}
+                  >
                     Username
                   </label>
                   <input
-                    id="username"
-                    name="username"
+                    id="UTENTE_Username"
+                    name="UTENTE_Username"
                     type="text"
-                    autoComplete="username"
-                    value={formData.username}
+                    value={formData.UTENTE_Username}
                     onChange={handleInputChange}
-                    className={`appearance-none rounded-md relative block w-full px-3 py-2 border ${
-                      errors.username ? "border-red-500" : "border-gray-300"
-                    } placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm transition-all duration-300`}
                     placeholder="Username"
-                    aria-label="Username input"
+                    style={{ width: "100%" }}
                   />
-                  {errors.username && (
-                    <p className="mt-2 text-sm text-red-600" role="alert">
-                      {errors.username}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label htmlFor="fullName" className="sr-only">
-                    Full Name
-                  </label>
-                  <input
-                    id="fullName"
-                    name="fullName"
-                    type="text"
-                    autoComplete="name"
-                    value={formData.fullName}
-                    onChange={handleInputChange}
-                    className={`appearance-none rounded-md relative block w-full px-3 py-2 border ${
-                      errors.fullName ? "border-red-500" : "border-gray-300"
-                    } placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm transition-all duration-300`}
-                    placeholder="Full Name"
-                    aria-label="Full name input"
-                  />
-                  {errors.fullName && (
-                    <p className="mt-2 text-sm text-red-600" role="alert">
-                      {errors.fullName}
-                    </p>
-                  )}
+                  {errors.UTENTE_Username && <p>{errors.UTENTE_Username}</p>}
                 </div>
               </div>
             )}
 
-            <div className="relative">
-              <label htmlFor="email" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className={`appearance-none rounded-md relative block w-full px-3 py-2 border ${
-                  errors.email ? "border-red-500" : "border-gray-300"
-                } placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm transition-all duration-300`}
-                placeholder="Email address"
-                aria-label="Email input"
-              />
-              {errors.email && (
-                <p className="mt-2 text-sm text-red-600" role="alert">
-                  {errors.email}
-                </p>
-              )}
-              {showDomainSuggestions && (
-                <div className="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg">
-                  {commonDomains.map((domain) => (
-                    <button
-                      key={domain}
-                      type="button"
-                      onClick={() => handleDomainSelect(domain)}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none"
-                    >
-                      {formData.email.split("@")[0] + domain}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="relative">
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                autoComplete="current-password"
-                value={formData.password}
-                onChange={handleInputChange}
-                className={`appearance-none rounded-md relative block w-full px-3 py-2 border ${
-                  errors.password ? "border-red-500" : "border-gray-300"
-                } placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm pr-10 transition-all duration-300`}
-                placeholder="Password"
-                aria-label="Password input"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                aria-label={showPassword ? "Hide password" : "Show password"}
+            <div style={{ width: "100%" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                }}
               >
-                {showPassword ? (
-                  <FaEyeSlash className="text-gray-400" />
-                ) : (
-                  <FaEye className="text-gray-400" />
+                <label
+                  htmlFor="UTENTE_Mail"
+                  style={{ width: "100%", textAlign: "left" }}
+                >
+                  Email address
+                </label>
+                <input
+                  id="UTENTE_Mail"
+                  name="UTENTE_Mail"
+                  type="email"
+                  value={formData.UTENTE_Mail}
+                  onChange={handleInputChange}
+                  placeholder="Email address"
+                  style={{ width: "100%" }}
+                />
+                {errors.UTENTE_Mail && <p>{errors.UTENTE_Mail}</p>}
+                {showDomainSuggestions && (
+                  <div style={{ width: "100%" }}>
+                    {commonDomains.map((domain) => (
+                      <button
+                        key={domain}
+                        type="button"
+                        onClick={() => handleDomainSelect(domain)}
+                        style={{ width: "100%" }}
+                      >
+                        {formData.UTENTE_Mail.split("@")[0] + domain}
+                      </button>
+                    ))}
+                  </div>
                 )}
-              </button>
-              {errors.password && (
-                <p className="mt-2 text-sm text-red-600" role="alert">
-                  {errors.password}
-                </p>
-              )}
+              </div>
             </div>
 
-            <div>
+            <div style={{ width: "100%" }}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  width: "100%",
+                }}
+              >
+                <label
+                  htmlFor="UTENTE_Password"
+                  style={{ width: "100%", textAlign: "left" }}
+                >
+                  Password
+                </label>
+                <div style={{ display: "flex", width: "100%" }}>
+                  <input
+                    id="UTENTE_Password"
+                    name="UTENTE_Password"
+                    type={showPassword ? "text" : "password"}
+                    value={formData.UTENTE_Password}
+                    onChange={handleInputChange}
+                    placeholder="Password"
+                    style={{ width: "100%" }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+                {errors.UTENTE_Password && <p>{errors.UTENTE_Password}</p>}
+              </div>
+            </div>
+
+            <div style={{ width: "100%" }}>
               <button
                 type="submit"
                 disabled={loading}
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 disabled:opacity-50"
-                aria-label={
-                  loading ? "Loading" : isLogin ? "Sign in" : "Register"
-                }
+                style={{ width: "100%" }}
               >
                 {loading ? (
-                  <FaSpinner className="animate-spin h-5 w-5" />
+                  <FaSpinner />
                 ) : (
                   <span>{isLogin ? "Sign in" : "Register"}</span>
                 )}
               </button>
             </div>
+            {errors.submit && <p>{errors.submit}</p>}
           </form>
         </div>
       </div>
