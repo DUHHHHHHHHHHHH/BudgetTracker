@@ -5,8 +5,6 @@ import Sidebar from "../../components/sidebar/sidebar";
 import axios from "axios";
 
 function Home() {
-  console.log("home");
-
   const navigate = useNavigate();
   const [username, setUsername] = React.useState("");
   const [utenteId, setUtenteId] = React.useState(0);
@@ -56,7 +54,7 @@ function Home() {
 
   return (
     <div>
-      <Sidebar username={username} UID={utenteId} />
+      <Sidebar username={username} UID={utenteId} Pagina={"Home"} />
     </div>
   );
 }

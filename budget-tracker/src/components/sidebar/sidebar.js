@@ -1,6 +1,6 @@
 import React from "react";
 
-const Sidebar = ({ username, UID }) => {
+const Sidebar = ({ username, UID, Pagina }) => {
   return (
     <div className="sidebar">
       {/* Titolo */}
@@ -13,10 +13,11 @@ const Sidebar = ({ username, UID }) => {
       {/* Messaggio di benvenuto */}
       <div style={{ marginBottom: "20px" }}>
         <p>
-          Benvenuto <strong>{username}</strong> nella tua zona privata.
+          Benvenuto nella pagina <strong>{Pagina}</strong>, utente{" "}
+          <strong>{username}</strong>.
         </p>
         <p>
-          Sei il <strong>{UID}</strong>* utente sulla piattaforma!
+          Sei il <strong>{UID}</strong>° utente sulla piattaforma!
         </p>
       </div>
 
@@ -25,14 +26,17 @@ const Sidebar = ({ username, UID }) => {
       {/* Link di navigazione */}
       <nav>
         <ul style={{ listStyle: "none", padding: 0 }}>
-          <li style={{ marginBottom: "10px" }}>
-            <a href="/profilo">Profilo</a>
+          <li>
+            <a href="/Home">Home</a>
           </li>
           <li style={{ marginBottom: "10px" }}>
-            <a href="/categorie">Categoria</a>
+            <a href="/Profilo">Profilo</a>
           </li>
           <li>
-            <a href="/report">Report</a>
+            <a href="/Categorie">Categorie</a>
+          </li>
+          <li>
+            <a href="/Report">Report</a>
           </li>
           <li>
             <a href="/">Logout</a>

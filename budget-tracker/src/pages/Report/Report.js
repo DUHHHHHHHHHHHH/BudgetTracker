@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import Sidebar from "../../components/sidebar/sidebar";
 import axios from "axios";
 
-function Categorie() {
+function Report() {
   const navigate = useNavigate();
   const [username, setUsername] = React.useState("");
   const [utenteId, setUtenteId] = React.useState(0);
@@ -25,9 +25,9 @@ function Categorie() {
 
   return (
     <div>
-      <Sidebar username={username} UID={utenteId} Pagina={"Categorie"} />
+      <Sidebar username={username} UID={utenteId} Pagina={"Report"} />
     </div>
   );
 }
 
-export default Categorie;
+export default Report;
