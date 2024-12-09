@@ -25,7 +25,16 @@ function Categorie() {
 
   return (
     <div>
-      <Sidebar username={username} UID={utenteId} Pagina={"Categorie"} />
+      <div style={{ display: "flex", width: "100%" }}>
+        <Sidebar username={username} UID={utenteId} Pagina={"Categorie"} />
+        <div className="container">
+          <div className="chart-container"></div>
+          <div className="data-container">
+            <div className="transactions"></div>
+            <div className="milestones"></div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

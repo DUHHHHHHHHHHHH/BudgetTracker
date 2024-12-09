@@ -42,6 +42,12 @@ const Sidebar = ({ username, UID, Pagina }) => {
             <a href="/">Logout</a>
           </li>
         </ul>
+
+        <hr></hr>
+        <hr></hr>
+        <hr></hr>
+
+        <p>©2024 ICT WEB2</p>
       </nav>
     </div>
   );
