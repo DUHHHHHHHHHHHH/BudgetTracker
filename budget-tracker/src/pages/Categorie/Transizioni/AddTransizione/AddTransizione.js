@@ -119,13 +119,10 @@ function AddTransizione({ CATEGORIA_Nome }) {
             </select>
           </div>
 
-          <button className="modal-btn-primary" type="submit">
-            Salva
-          </button>
+          <button type="submit">Salva</button>
         </form>
       </Modal>
     </div>
   );
 }
-
 export default AddTransizione;

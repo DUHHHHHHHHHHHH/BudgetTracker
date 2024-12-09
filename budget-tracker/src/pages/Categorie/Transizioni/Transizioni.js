@@ -3,6 +3,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import AddTransizione from "./AddTransizione/AddTransizione";
+import EditTransizione from "./AddTransizione/EditTransizione";
+import Modal from "../../../components/modal/modal";
 
 function Transizioni({
   boolSelected,
@@ -13,6 +15,9 @@ function Transizioni({
 }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [selectedTransizione, setSelectedTransizione] = useState(null);
+
   const navigate = useNavigate();
 
   // Funzione per eliminare una transizione
@@ -24,8 +29,6 @@ function Transizioni({
       formData.append("UTENTE_ID", utenteId);
       formData.append("CATEGORIA_ID", categoriaid);
 
-      console.log("dati da inviare:", formData);
-
       await axios.post(
         `${baseurl}/transizione/DELETE_Transizione.php`,
         formData,
@@ -36,20 +39,35 @@ function Transizioni({
         }
       );
 
-      // Aggiorna la lista delle transizioni senza causare loop infiniti
       setTransactions((prevTransactions) =>
         prevTransactions.filter((t) => t.TRANSIZIONE_ID !== transizioneId)
       );
 
-      // Aggiorna le transizioni nel componente genitore
       onTransizioniUpdate(
         transactions.filter((t) => t.TRANSIZIONE_ID !== transizioneId)
       );
-
-      console.log("Transizioni dopo l'eliminazione:", transactions);
     } catch (error) {
       console.error("Errore durante l'eliminazione della transizione:", error);
     }
+  };
+
+  // Funzione per aprire il modal di modifica
+  const handleEditClick = (transizione) => {
+    setSelectedTransizione(transizione);
+    setShowEditModal(true);
+  };
+
+  // Funzione per aggiornare una transizione dopo la modifica
+  const handleUpdate = (updatedTransizione) => {
+    setTransactions((prevTransactions) =>
+      prevTransactions.map((t) =>
+        t.TRANSIZIONE_ID === updatedTransizione.TRANSIZIONE_ID
+          ? updatedTransizione
+          : t
+      )
+    );
+    onTransizioniUpdate(transactions);
+    setShowEditModal(false);
   };
 
   // Effettua la fetch delle transizioni
@@ -60,23 +78,11 @@ function Transizioni({
         const utenteIdLocal = utenteId || localStorage.getItem("UTENTE_ID");
 
         if (categoriaNome === "default-dev") {
-          console.error(
-            "categoriaNome default",
-            utenteIdLocal,
-            categoriaNome,
-            boolSelected
-          );
           setLoading(false);
           return;
         }
 
         if (!boolSelected) {
-          console.error(
-            "boolSelected non definito.",
-            utenteIdLocal,
-            categoriaNome,
-            boolSelected
-          );
           setLoading(false);
           return;
         }
@@ -125,7 +131,6 @@ function Transizioni({
     }
   }, [boolSelected, categoriaNome, utenteId, onTransizioniUpdate]);
 
-  // Condizioni di rendering
   if (loading || categoriaNome === "default-dev") {
     return (
       <div
@@ -193,6 +198,7 @@ function Transizioni({
               <th>Quantità</th>
               <th>Tipo</th>
               <th>Data Generazione</th>
+              <th>Azioni</th>
             </tr>
           </thead>
           <tbody>
@@ -207,6 +213,7 @@ function Transizioni({
                 </td>
                 <td>
                   <button
+                    onClick={() => handleEditClick(transaction)}
                     style={{
                       backgroundColor: "#4CAF50",
                       color: "white",
@@ -220,8 +227,6 @@ function Transizioni({
                   >
                     ✎
                   </button>
-                </td>
-                <td>
                   <button
                     onClick={() =>
                       handleDeleteTransizione(transaction.TRANSIZIONE_ID)
@@ -252,6 +257,15 @@ function Transizioni({
           onTransizioniUpdate={onTransizioniUpdate}
         />
       </div>
+
+      {showEditModal && selectedTransizione && (
+        <EditTransizione
+          transizione={selectedTransizione}
+          onUpdate={handleUpdate}
+          onClose={() => setShowEditModal(false)}
+          show={showEditModal}
+        />
+      )}
     </>
   );
 }
