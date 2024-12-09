@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import Sidebar from "../../components/sidebar/sidebar";
 import axios from "axios";
 
+import ChartJSs from "./ChartJS/ChartJS";
+
 function Categorie() {
   const navigate = useNavigate();
   const [username, setUsername] = React.useState("");
@@ -28,7 +30,10 @@ function Categorie() {
       <div style={{ display: "flex", width: "100%" }}>
         <Sidebar username={username} UID={utenteId} Pagina={"Categorie"} />
         <div className="container">
-          <div className="chart-container"></div>
+          <div className="chart-container">
+            {" "}
+            <ChartJSs />
+          </div>
           <div className="data-container">
             <div className="transactions"></div>
             <div className="milestones"></div>
