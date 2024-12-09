@@ -2,12 +2,10 @@
 
 // get utente, fornisce un specifico utente tramite L'EMAIL
 
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: OPTIONS, POST");
-header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Methods: OPTIONS, POST, GET");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-
 include_once "../config.php";
 
 $db = new Database();
@@ -30,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_stmt_store_result($stmt);
 
             if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $UTENTE_Mail, $UTENTE_Username, $UTENTE_ID);
+                mysqli_stmt_bind_result($stmt, $UTENTE_ID, $UTENTE_Username, $UTENTE_Mail);
                 mysqli_stmt_fetch($stmt);
 
                 $user = array(
@@ -48,7 +46,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 echo json_encode($user);
             } else {
-                throw new Exception("Nome utente non valido.");
+                http_response_code(404); // Usa il codice 404 per "non trovato"
+                echo json_encode(array("message" => "Utente non trovato."));
             }
         } catch (Exception $e) {
             http_response_code(401);

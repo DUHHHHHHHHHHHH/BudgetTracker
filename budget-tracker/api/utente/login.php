@@ -4,7 +4,6 @@
 header("Access-Control-Allow-Origin: http://localhost:3000");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Methods: OPTIONS, POST, GET");
-header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 include_once "../config.php";
 
@@ -26,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new Exception("Connection to the database failed: " . mysqli_connect_error(), 500);
             }
 
-            $query = "SELECT UTENTE_Username, UTENTE_Mail FROM utente WHERE UTENTE_Mail = ?";
+            $query = "SELECT UTENTE_Username, UTENTE_Mail, UTENTE_ID FROM utente WHERE UTENTE_Mail = ?";
             $stmt = mysqli_prepare($conn, $query);
             mysqli_stmt_bind_param($stmt, 's', $mail);
             mysqli_stmt_execute($stmt);
@@ -35,18 +34,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // controllo se l'email esiste nel database
 
             if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $UTENTE_Username, $UTENTE_Mail);
+                mysqli_stmt_bind_result($stmt, $UTENTE_Username, $UTENTE_Mail, $UTENTE_ID);
                 mysqli_stmt_fetch($stmt);
 
                 // controllo se la password è corretta 
 
-                
                     $user = array(
 
                         "message" => "Credenziali Valide.",
                         "code" => 200,
                         "UTENTE_Mail" => $UTENTE_Mail,
                         "UTENTE_Username" => $UTENTE_Username,
+                        "UTENTE_ID" => $UTENTE_ID
 
                     );
 
