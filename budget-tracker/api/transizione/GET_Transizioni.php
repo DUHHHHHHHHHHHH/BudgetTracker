@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             // OTTENGO L'ID DELLA CATEGORIA
-            $queryCategoria = "SELECT CATEGORIA_ID FROM categoria WHERE CATEGORIA_Nome = ? AND UTENT_FK_ID = ?";
+            $queryCategoria = "SELECT CATEGORIA_ID FROM categoria WHERE CATEGORIA_Nome = ? AND UTENTE_FK_ID = ?";
             $stmtCategoria = mysqli_prepare($conn, $queryCategoria);
             mysqli_stmt_bind_param($stmtCategoria, 'si', $CATEGORIA_Nome, $UTENTE_ID);
             mysqli_stmt_execute($stmtCategoria);

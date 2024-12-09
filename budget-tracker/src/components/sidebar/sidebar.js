@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-const Sidebar = ({ username, UID, Pagina }) => {
+const Sidebar = ({ username, UID, Pagina, onCategoriaSelect }) => {
   const [categorie, setCategorie] = useState([]); // Stato per le categorie
   const [categoriaSelezionata, setCategoriaSelezionata] = useState(null); // Stato per la categoria selezionata
 
@@ -33,7 +33,7 @@ const Sidebar = ({ username, UID, Pagina }) => {
           console.log("Risultati API Categorie:", res.data);
           setCategorie(Array.isArray(res.data) ? res.data : []); // Verifica che res.data sia un array prima di impostarlo
 
-          console.log("Categorie:", categorie);
+          // console.log("Categorie:", categorie);
         })
         .catch((error) => {
           console.error("Errore nel recupero delle categorie:", error);
@@ -43,21 +43,35 @@ const Sidebar = ({ username, UID, Pagina }) => {
   }, [Pagina]);
 
   const handleSelezionaCategoria = (e) => {
-    const categoriaId = e.target.value;
+    const categoriaNome = e.target.value; // Ottieni il nome della categoria
+    const utenteId = localStorage.getItem("UTENTE_ID");
 
-    if (!categoriaId) {
-      setCategoriaSelezionata(null); // Nessuna categoria selezionata
+    if (categoriaNome === "") {
+      setCategoriaSelezionata(null);
+      onCategoriaSelect(utenteId, "default-dev", true, null, 0); // Modificato per inviare il valore di default
       return;
     }
 
     // Trova la categoria selezionata nell'elenco
-    const categoria = categorie.find(
-      (cat) => cat.CATEGORIA_ID === parseInt(categoriaId)
-    );
+    const categoria = categorie.find((cat) => {
+      console.log("Confronto:", cat.CATEGORIA_Nome, categoriaNome); // Debug
+      return cat.CATEGORIA_Nome === categoriaNome;
+    });
 
+    console.log("Categorie disponibili:", categorie); // Debug
     console.log("Categoria selezionata:", categoria);
 
-    setCategoriaSelezionata(categoria); // Salva i dettagli della categoria selezionata
+    //console.log("categoria budget:", categoria.CATEGORIA_Budget);
+    // console.log("categoria id:", categoria.CATEGORIA_ID);
+
+    setCategoriaSelezionata(categoria);
+    onCategoriaSelect(
+      utenteId,
+      categoria.CATEGORIA_Nome,
+      true,
+      categoria.CATEGORIA_ID,
+      categoria.CATEGORIA_Budget
+    ); // Aggiunto CATEGORIA_ID
   };
 
   return (
@@ -76,7 +90,7 @@ const Sidebar = ({ username, UID, Pagina }) => {
           <strong>{username}</strong>.
         </p>
         <p>
-          Sei il <strong>{UID}</strong>° utente sulla piattaforma!
+          Sei l'utente numero <strong>{UID}</strong>° sulla piattaforma!
         </p>
       </div>
 
@@ -105,8 +119,15 @@ const Sidebar = ({ username, UID, Pagina }) => {
         <hr />
         <hr />
         <hr />
-
-        {"QTA° " + categorie.length + " categorie create"}
+        <div
+          style={{
+            textAlign: "center",
+            marginBottom: "10px",
+            marginTop: "10px",
+          }}
+        >
+          {`trovate ${categorie.length}* categorie`}
+        </div>
         {Pagina === "Categorie" && Array.isArray(categorie) && (
           <select
             style={{
@@ -121,7 +142,7 @@ const Sidebar = ({ username, UID, Pagina }) => {
             {categorie.map((categoria) => (
               <option
                 key={categoria.CATEGORIA_ID}
-                value={categoria.CATEGORIA_ID}
+                value={categoria.CATEGORIA_Nome}
               >
                 {categoria.CATEGORIA_Nome} ({categoria.TIPOLOGIA_Nome})
               </option>
