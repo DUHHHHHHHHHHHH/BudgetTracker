@@ -80,6 +80,8 @@ function Categoria() {
           }
         );
 
+        console.log("Categorie:", response.data);
+
         const categorieArray = Array.isArray(response.data)
           ? response.data.map((categoria) => ({
               CATEGORIA_ID: categoria.CATEGORIA_ID,
