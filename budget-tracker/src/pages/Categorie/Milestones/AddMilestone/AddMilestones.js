@@ -56,6 +56,23 @@ function AddMilestone({ categoriaNome, onMilestonesUpdate }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Calcola le date limite
+  const today = new Date();
+  const minDate = new Date(
+    today.getFullYear() - 10,
+    today.getMonth(),
+    today.getDate()
+  )
+    .toISOString()
+    .split("T")[0];
+  const maxDate = new Date(
+    today.getFullYear() + 10,
+    today.getMonth(),
+    today.getDate()
+  )
+    .toISOString()
+    .split("T")[0];
+
   return (
     <div className="modal-container">
       <button className="modal-btn-primary" onClick={handleShow}>
@@ -96,6 +113,8 @@ function AddMilestone({ categoriaNome, onMilestonesUpdate }) {
               name="MILESTONE_DataInizio"
               value={formData.MILESTONE_DataInizio}
               onChange={handleChange}
+              min={minDate}
+              max={maxDate}
               required
             />
           </div>
@@ -107,6 +126,8 @@ function AddMilestone({ categoriaNome, onMilestonesUpdate }) {
               name="MILESTONE_DataFine"
               value={formData.MILESTONE_DataFine}
               onChange={handleChange}
+              min={minDate}
+              max={maxDate}
               required
             />
           </div>

@@ -217,8 +217,6 @@ function Milestones({
                   >
                     ✎
                   </button>
-                </td>
-                <td>
                   <button
                     onClick={() =>
                       handleDeleteMilestone(milestone.MILESTONE_ID)

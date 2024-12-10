@@ -131,6 +131,17 @@ canvas {
 
 .modal-body {
   padding: 20px 0;
+  justify-content: center;
+  display: flex;
+}
+
+.modal-body form {
+  width: 90%;
+}
+
+.modal-body textarea {
+  width: 90%;
+  height: 150px;
 }
 
 .modal-form-group {

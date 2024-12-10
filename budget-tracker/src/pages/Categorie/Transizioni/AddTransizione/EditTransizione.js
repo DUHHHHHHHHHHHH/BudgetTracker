@@ -51,7 +51,7 @@ function EditTransizione({ transizione, onUpdate, onClose, show }) {
 
   return (
     <Modal show={show} onClose={onClose} title="Modifica Nome Transizione">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{ width: "90%" }}>
         <div className="modal-form-group">
           <label>Nome Transizione</label>
           <input

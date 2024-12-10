@@ -19,6 +19,7 @@ function EditMilestone({ milestone, onUpdate, onClose, show }) {
       updateData.append("MILESTONE_ID", milestone.MILESTONE_ID);
       updateData.append("UTENTE_ID", utenteId);
       updateData.append("MILESTONE_Completata", milestone.MILESTONE_Completata);
+
       Object.keys(formData).forEach((key) =>
         updateData.append(key, formData[key])
       );
@@ -32,6 +33,8 @@ function EditMilestone({ milestone, onUpdate, onClose, show }) {
           },
         }
       );
+
+      console.log(response.data);
 
       if (response.data.code === 200) {
         onUpdate({ ...milestone, ...formData });
@@ -49,7 +52,7 @@ function EditMilestone({ milestone, onUpdate, onClose, show }) {
 
   return (
     <Modal show={show} onClose={onClose} title="Modifica Milestone">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{ width: "90%" }}>
         <div className="modal-form-group">
           <label>Nome Milestone</label>
           <input
@@ -70,20 +73,19 @@ function EditMilestone({ milestone, onUpdate, onClose, show }) {
           />
         </div>
         <div className="modal-form-group">
-          <label>
-            Completata:
-            <input
-              type="checkbox"
-              name="MILESTONE_Completata"
-              checked={formData.MILESTONE_Completata}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  MILESTONE_Completata: e.target.checked,
-                })
-              }
-            />
-          </label>
+          <label>Completata:</label>
+          <input
+            type="checkbox"
+            name="MILESTONE_Completata"
+            checked={formData.MILESTONE_Completata}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                MILESTONE_Completata: e.target.checked,
+              })
+            }
+            style={{ width: "auto" }}
+          />
         </div>
         <button type="submit">Salva Modifiche</button>
       </form>

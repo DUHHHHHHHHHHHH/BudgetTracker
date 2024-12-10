@@ -42,10 +42,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $params[] = $MILESTONE_Descrizione;
             }
 
-            if (!is_null($MILESTONE_Completata)) {
+            if (isset($MILESTONE_Completata)) {
                 $updateFields[] = "MILESTONE_Completata = ?";
                 $types .= 'i';
-                $params[] = (int)$MILESTONE_Completata;
+                $params[] = ($MILESTONE_Completata === "true" || $MILESTONE_Completata === "1" || $MILESTONE_Completata === true) ? 1 : 0;
             }
 
             if (count($updateFields) > 0) {

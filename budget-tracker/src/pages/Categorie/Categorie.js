@@ -57,7 +57,7 @@ function Categorie() {
   const handleMilestonesUpdate = (milestones) => {
     // Gestisce l'aggiornamento delle milestones
     // nel mio caso non serve perchè non li passo a nessun altro componente.
-    // creata la funzione perchè potrebbe essere usata in futuro.
+    // ho creato la funzione perchè potrebbe essere usata in futuro.
   };
 
   return (
