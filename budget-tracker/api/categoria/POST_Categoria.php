@@ -20,12 +20,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $budget = isset($_POST['CATEGORIA_Budget']) ? $_POST['CATEGORIA_Budget'] : 0;                               // budget è impostato a 0 se non modificato
     $nomeTipologiaAllegata = isset($_POST['nomeTipologiaAllegata']) ? $_POST['nomeTipologiaAllegata'] : null;   // tipologia allegata alla categoria
 
-    if (!empty($userID) && !empty($nome) && !empty($descrizione) && !empty($budget) && !empty($nomeTipologiaAllegata)) {
+    if (!empty($userID) && !empty($nome) && !empty($descrizione) && !empty($nomeTipologiaAllegata)) {
         try {
             $conn = mysqli_connect($db->host, $db->user, $db->password, $db->db_name);
 
             if (!$conn) {
                 echo json_encode(["message" => "Connessione al database fallita: " . mysqli_connect_error(), "code" => 500]);
+                // http_response_code(500);
+                exit();
             }
 
         // ESISTE LA TIPOLOGIA PUBBLICA ALLEGATA?
@@ -37,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (mysqli_stmt_num_rows($check_tipologia_stmt) == 0) {
             echo json_encode(["message" => "Tipologia non esistente", "code" => 400]);
+            http_response_code(400);
             mysqli_stmt_close($check_tipologia_stmt);
             mysqli_close($conn);
             exit();
@@ -48,18 +51,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_stmt_close($check_tipologia_stmt);
 
         // CONTROLLO SE ESISTE GIA' UNA CATEGORIA CON LO STESSO NOME PER QUESTA TIPOLOGIA, I NOMI DEVONO ESSERE UNICI.
-        $check_categoria_query = "SELECT COUNT(*) FROM categoria WHERE CATEGORIA_Nome = ? AND TIPOLOGIA_FK_ID = ?";
+        $check_categoria_query = "SELECT COUNT(*) FROM categoria WHERE CATEGORIA_Nome = ? AND TIPOLOGIA_FK_ID = ? AND UTENTE_FK_ID = ?";
         $check_categoria_stmt = mysqli_prepare($conn, $check_categoria_query);
-        mysqli_stmt_bind_param($check_categoria_stmt, 'si', $nome, $tipologia_id);
+        mysqli_stmt_bind_param($check_categoria_stmt, 'sii', $nome, $tipologia_id, $userID);
         mysqli_stmt_execute($check_categoria_stmt);
         mysqli_stmt_bind_result($check_categoria_stmt, $categoria_count);
         mysqli_stmt_fetch($check_categoria_stmt);
         mysqli_stmt_close($check_categoria_stmt);
 
         if ($categoria_count > 0) {
-            echo json_encode(["message" => "Esiste già una categoria con questo nome per la tipologia selezionata", "code" => 400]);
+            http_response_code(255);
+            echo json_encode(["message" => "Esiste già una categoria con questo nome per la tipologia selezionata", "code" => 255]);
             mysqli_close($conn);
             exit();
+            
         }
 
         // INSERIMENTO DELLA CATEGORIA
@@ -70,15 +75,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (mysqli_stmt_affected_rows($insert_stmt) > 0) {
             echo json_encode(array("message" => "Categoria creata con successo", "code" => 200));
+            http_response_code(200);
         } else {
-            echo json_encode(["message" => "Errore durante la creazione della categoria", "code" => 500]);
+            echo json_encode(["message" => "Errore durante la creazione della categoria", "code" => 696]);
+            http_response_code(696);
+            mysqli_stmt_close($insert_stmt);
+            mysqli_close($conn);
+            exit();
         }
 
         mysqli_stmt_close($insert_stmt);
         mysqli_close($conn);
 
         } catch (Exception $e) {
-            http_response_code(500);
             echo json_encode(array("message" => $e->getMessage()));
         }
     } else {

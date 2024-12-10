@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Modal from "../../../components/modal/modal";
 
@@ -7,6 +7,7 @@ function EditCategoria({ categoria, onUpdate, onClose, show }) {
     CATEGORIA_newNome: categoria.CATEGORIA_Nome || "",
     CATEGORIA_newDescrizione: categoria.CATEGORIA_Descrizione || "",
   });
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({
@@ -44,11 +45,19 @@ function EditCategoria({ categoria, onUpdate, onClose, show }) {
       }
     } catch (error) {
       console.error("Error updating categoria:", error);
+      setError(
+        "Si è verificato un errore durante l'aggiornamento della categoria."
+      );
     }
   };
 
   return (
-    <Modal show={show} onClose={onClose} title="Modifica Categoria">
+    <Modal
+      show={show}
+      onClose={onClose}
+      title="Modifica Categoria"
+      error={error}
+    >
       <form onSubmit={handleSubmit}>
         <div>
           <label>Nome Categoria</label>

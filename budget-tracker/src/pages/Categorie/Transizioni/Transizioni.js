@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 import AddTransizione from "./AddTransizione/AddTransizione";
 import EditTransizione from "./AddTransizione/EditTransizione";
-import Modal from "../../../components/modal/modal";
 
 function Transizioni({
   boolSelected,

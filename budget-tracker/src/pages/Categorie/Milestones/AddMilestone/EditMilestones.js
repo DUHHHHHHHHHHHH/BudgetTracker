@@ -3,6 +3,7 @@ import axios from "axios";
 import Modal from "../../../../components/modal/modal";
 
 function EditMilestone({ milestone, onUpdate, onClose, show }) {
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     MILESTONE_Nome: milestone.MILESTONE_Nome,
     MILESTONE_Descrizione: milestone.MILESTONE_Descrizione,
@@ -42,6 +43,9 @@ function EditMilestone({ milestone, onUpdate, onClose, show }) {
       }
     } catch (error) {
       console.error("Errore nell'aggiornamento della milestone:", error);
+      setError(
+        "Si è verificato un errore durante l'aggiornamento della milestone"
+      );
     }
   };
 
@@ -53,6 +57,7 @@ function EditMilestone({ milestone, onUpdate, onClose, show }) {
   return (
     <Modal show={show} onClose={onClose} title="Modifica Milestone">
       <form onSubmit={handleSubmit} style={{ width: "90%" }}>
+        {error && <div className="error-message">{error}</div>}
         <div className="modal-form-group">
           <label>Nome Milestone</label>
           <input

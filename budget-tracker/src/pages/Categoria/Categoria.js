@@ -146,7 +146,7 @@ function Categoria() {
     <div>
       <div style={{ display: "flex", width: "100%" }}>
         <Sidebar username={username} UID={utenteId} Pagina="Categoria" />
-        <div className="container">
+        <div className="container" style={{ backgroundColor: "#566a4f" }}>
           <h2 style={{ width: "100%", textAlign: "center" }}>
             Categorie create dall'Utente
           </h2>
@@ -222,6 +222,7 @@ function Categoria() {
             <AddCategoria
               onClose={() => setShowAddCategoria(false)}
               utenteId={utenteId}
+              color={{ backgroundColor: "#87a47d" }}
             />
           </div>
 

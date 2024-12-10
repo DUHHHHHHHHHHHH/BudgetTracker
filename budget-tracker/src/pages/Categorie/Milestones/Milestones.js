@@ -30,6 +30,7 @@ function Milestones({
         const formData = new FormData();
         formData.append("UTENTE_ID", utenteIdLocal);
         formData.append("CATEGORIA_Nome", categoriaNome);
+        formData.append("flagTipoGet", "1");
 
         const response = await axios.post(
           `${baseurl}/milestone/GET_Milestones.php`,

@@ -1,6 +1,6 @@
 import React from "react";
 
-function Modal({ show, onClose, title, children }) {
+function Modal({ show, onClose, title, children, error }) {
   if (!show) return null;
 
   return (
@@ -13,6 +13,14 @@ function Modal({ show, onClose, title, children }) {
               ×
             </button>
           </div>
+          {error && (
+            <div
+              className="modal-error"
+              style={{ color: "red", padding: "10px" }}
+            >
+              {error}
+            </div>
+          )}
           <div className="modal-body">{children}</div>
         </div>
       </div>

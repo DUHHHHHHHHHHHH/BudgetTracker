@@ -4,6 +4,7 @@ import Modal from "../../../../components/modal/modal";
 
 function AddMilestone({ categoriaNome, onMilestonesUpdate }) {
   const [show, setShow] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     MILESTONE_Nome: "",
     MILESTONE_Descrizione: "",
@@ -11,7 +12,10 @@ function AddMilestone({ categoriaNome, onMilestonesUpdate }) {
     MILESTONE_DataFine: "",
   });
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setError("");
+  };
   const handleShow = () => setShow(true);
 
   const handleSubmit = async (e) => {
@@ -23,7 +27,7 @@ function AddMilestone({ categoriaNome, onMilestonesUpdate }) {
     const dataFine = new Date(formData.MILESTONE_DataFine);
 
     if (dataInizio > dataFine) {
-      alert("La data di inizio non può essere successiva alla data di fine");
+      setError("La data di inizio non può essere successiva alla data di fine");
       return;
     }
 
@@ -57,6 +61,7 @@ function AddMilestone({ categoriaNome, onMilestonesUpdate }) {
       }
     } catch (error) {
       console.error("Errore nell'aggiunta della milestone:", error);
+      setError("Si è verificato un errore durante l'aggiunta della milestone");
     }
   };
 
@@ -91,6 +96,7 @@ function AddMilestone({ categoriaNome, onMilestonesUpdate }) {
         show={show}
         onClose={handleClose}
         title={`POST Milestone per ${categoriaNome}`}
+        error={error}
       >
         <form onSubmit={handleSubmit}>
           <div className="modal-form-group">

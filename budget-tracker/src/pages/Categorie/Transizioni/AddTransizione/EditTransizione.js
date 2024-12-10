@@ -6,6 +6,7 @@ function EditTransizione({ transizione, onUpdate, onClose, show }) {
   const [formData, setFormData] = useState({
     TRANSIZIONE_Nome: transizione.TRANSIZIONE_Nome || "",
   });
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({
@@ -46,11 +47,19 @@ function EditTransizione({ transizione, onUpdate, onClose, show }) {
       }
     } catch (error) {
       console.error("Error updating transaction:", error);
+      setError(
+        "Si è verificato un errore durante l'aggiornamento della transizione."
+      );
     }
   };
 
   return (
-    <Modal show={show} onClose={onClose} title="Modifica Nome Transizione">
+    <Modal
+      show={show}
+      onClose={onClose}
+      title="Modifica Nome Transizione"
+      error={error}
+    >
       <form onSubmit={handleSubmit} style={{ width: "90%" }}>
         <div className="modal-form-group">
           <label>Nome Transizione</label>

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Modal from "../../../components/modal/modal";
 
-function AddCategoria({ onClose, utenteId }) {
+function AddCategoria({ onClose, utenteId, color }) {
   const [show, setShow] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     CATEGORIA_Nome: "",
     CATEGORIA_Descrizione: "",
@@ -15,6 +16,7 @@ function AddCategoria({ onClose, utenteId }) {
 
   const handleClose = () => {
     setShow(false);
+    setError("");
     onClose();
   };
   const handleShow = () => setShow(true);
@@ -29,6 +31,7 @@ function AddCategoria({ onClose, utenteId }) {
         setTipologie(response.data || []);
       } catch (error) {
         console.error("Error fetching tipologie:", error);
+        setError("Errore nel caricamento delle tipologie");
       }
     };
     fetchTipologie();
@@ -63,21 +66,40 @@ function AddCategoria({ onClose, utenteId }) {
         }
       );
 
-      if (response.data.code === 201) {
+      if (response.data.code === 200) {
         handleClose();
       }
+
+      if (response.data.code === 500) {
+        setError("La categoria esiste già col nome inserito");
+      }
     } catch (error) {
-      console.error("Error adding categoria:", error);
+      console.error(
+        "Errore nell'aggiungere la categoria, [TO-DO mettere l'errore per quando il nome categoria è uguale] :",
+        error
+      );
+      setError(
+        "Errore nell'aggiungere la categoria, Nome categoria già esistente"
+      );
     }
   };
 
   return (
     <div className="modal-container">
-      <button className="modal-btn-primary" onClick={handleShow}>
+      <button
+        className="modal-btn-primary"
+        onClick={handleShow}
+        style={{ backgroundColor: color || "#ccc" }}
+      >
         +
       </button>
 
-      <Modal show={show} onClose={handleClose} title="Aggiungi Categoria">
+      <Modal
+        show={show}
+        onClose={handleClose}
+        title="Aggiungi Categoria"
+        error={error}
+      >
         <form onSubmit={handleSubmit}>
           <div className="modal-form-group">
             <label>Nome Categoria</label>

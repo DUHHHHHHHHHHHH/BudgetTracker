@@ -4,6 +4,7 @@ import Modal from "../../../../components/modal/modal";
 
 function AddTransizione({ CATEGORIA_Nome }) {
   const [show, setShow] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     TRANSIZIONE_Nome: "",
     TRANSIZIONE_Data: "",
@@ -11,7 +12,10 @@ function AddTransizione({ CATEGORIA_Nome }) {
     TRANSIZIONE_Tipo: "SPESA",
   });
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false);
+    setError("");
+  };
   const handleShow = () => setShow(true);
 
   const handleSubmit = async (e) => {
@@ -49,6 +53,9 @@ function AddTransizione({ CATEGORIA_Nome }) {
       }
     } catch (error) {
       console.error("Error adding transaction:", error);
+      setError(
+        "Si è verificato un errore durante l'aggiunta della transazione"
+      );
     }
   };
 
@@ -69,6 +76,7 @@ function AddTransizione({ CATEGORIA_Nome }) {
         show={show}
         onClose={handleClose}
         title={`POST Transizione in ${CATEGORIA_Nome}`}
+        error={error}
       >
         <form onSubmit={handleSubmit}>
           <div className="modal-form-group">
