@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Spacer from "../misc/spacer/spacer";
 
 const Sidebar = ({ username, UID, Pagina, onCategoriaSelect }) => {
   const [categorie, setCategorie] = useState([]); // Stato per le categorie
@@ -77,23 +78,37 @@ const Sidebar = ({ username, UID, Pagina, onCategoriaSelect }) => {
   return (
     <div className="sidebar">
       {/* Titolo */}
-      <div style={{ marginBottom: "20px" }}>
-        <h2>Budget Tracker</h2>
-      </div>
 
-      <hr />
+      <div
+        style={{
+          marginBottom: "0px",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <img
+          src={process.env.PUBLIC_URL + "/disgustoso.png"}
+          alt="Logo"
+          style={{ width: "100px", height: "100px" }}
+        />
+        {/* <div style={{ textAlign: "center" }}>Disgustoso! Budget Tracker</div> */}
+      </div>
 
       {/* Messaggio di benvenuto */}
       <div style={{ marginBottom: "20px" }}>
         <p>
-          Benvenuto nella pagina <strong>{Pagina}</strong>, utente{" "}
-          <strong>{username}</strong>.
-        </p>
-        <p>
-          Sei l'utente numero <strong>{UID}</strong> sulla piattaforma!
+          <div style={{ textAlign: "center" }}>
+            <strong>{username}</strong> benvenuto in <strong>{Pagina}</strong>
+          </div>
+          {/*N{UID}!*/}{" "}
+          <div style={{ textAlign: "center", marginTop: "10px" }}>
+            Siamo felici di averti qui come N°<strong>{UID}</strong> utente!.
+          </div>
         </p>
       </div>
 
+      <hr />
+      <hr />
       <hr />
 
       {/* Link di navigazione */}
@@ -120,42 +135,52 @@ const Sidebar = ({ username, UID, Pagina, onCategoriaSelect }) => {
         </ul>
 
         <hr />
-        <hr />
-        <hr />
-        {Pagina === "Gestionale" && Array.isArray(categorie) && (
-          <>
-            <div
-              style={{
-                textAlign: "center",
-                marginBottom: "10px",
-                marginTop: "10px",
-              }}
-            >
-              {`trovate ${categorie.length}* categorie`}
-            </div>
-            <select
-              style={{
-                padding: "8px",
-                borderRadius: "4px",
-                border: "1px solid #ccc",
-                width: "200px",
-              }}
-              onChange={handleSelezionaCategoria}
-            >
-              <option value="">Seleziona una categoria</option>
-              {categorie.map((categoria) => (
-                <option
-                  key={categoria.CATEGORIA_ID}
-                  value={categoria.CATEGORIA_Nome}
-                >
-                  {categoria.CATEGORIA_Nome} ({categoria.TIPOLOGIA_Nome})
-                </option>
-              ))}
-            </select>
-          </>
-        )}
+        <div style={{ textAlign: "center", marginTop: "25px" }}>
+          {Pagina === "Gestionale" && Array.isArray(categorie) && (
+            <>
+              <div
+                style={{
+                  textAlign: "center",
+                  marginBottom: "10px",
+                  marginTop: "10px",
+                }}
+              >
+                {`trovate ${categorie.length}* categorie`}
+              </div>
+              <select
+                style={{
+                  padding: "8px",
+                  borderRadius: "4px",
+                  border: "1px solid #ccc",
+                  width: "200px",
+                }}
+                onChange={handleSelezionaCategoria}
+              >
+                <option value="">Seleziona una categoria</option>
+                {categorie.map((categoria) => (
+                  <option
+                    key={categoria.CATEGORIA_ID}
+                    value={categoria.CATEGORIA_Nome}
+                  >
+                    {categoria.CATEGORIA_Nome} ({categoria.TIPOLOGIA_Nome})
+                  </option>
+                ))}
+              </select>
+            </>
+          )}
+        </div>
 
-        <p>©2024 ICT WEB2</p>
+        <div style={{ textAlign: "center", marginTop: "25px" }}>
+          <hr />
+          <hr />
+          <hr />
+
+          <p>©2024 ICT WEB2, BTD!</p>
+
+          <hr />
+          <hr />
+          <hr />
+        </div>
       </nav>
     </div>
   );
