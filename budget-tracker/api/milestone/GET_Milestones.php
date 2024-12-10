@@ -53,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         m.MILESTONE_Descrizione,
                         m.MILESTONE_DataInizio,
                         m.MILESTONE_DataFine,
+                        m.MILESTONE_Completata,
                         m.UTENTE_FK_ID,
                         m.CATEGORIA_FK_ID
                     FROM 
@@ -92,7 +93,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         MILESTONE_Nome,
                         MILESTONE_Descrizione,
                         MILESTONE_DataInizio,
-                        MILESTONE_DataFine
+                        MILESTONE_DataFine,
+                        MILESTONE_Completata
                     FROM 
                         milestone 
                     WHERE 

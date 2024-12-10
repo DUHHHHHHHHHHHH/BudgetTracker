@@ -100,7 +100,7 @@ function GraficiChartJS({ transizioni, categoriaBudget }) {
     datasets: Object.entries(yearlyMonthlyBalance).map(([year, data]) => ({
       label: `Bilancio ${year}`,
       data: data,
-      borderColor: getColorForKey(year), // Usa un colore unico per l'anno
+      borderColor: getColorForKey(year),
       tension: 0.1,
     })),
   };
@@ -111,7 +111,7 @@ function GraficiChartJS({ transizioni, categoriaBudget }) {
       {
         label: "Numero Transazioni per Mese",
         data: monthlyTransactions,
-        backgroundColor: "rgba(54, 162, 235, 0.5)",
+        backgroundColor: monthNames.map((month) => getColorForKey(month)),
       },
     ],
   };
@@ -121,7 +121,9 @@ function GraficiChartJS({ transizioni, categoriaBudget }) {
     datasets: [
       {
         data: Object.values(typeCount),
-        backgroundColor: ["rgba(75, 192, 192, 0.5)", "rgba(255, 99, 132, 0.5)"],
+        backgroundColor: Object.keys(typeCount).map((type) =>
+          getColorForKey(type)
+        ),
       },
     ],
   };
@@ -154,11 +156,11 @@ function GraficiChartJS({ transizioni, categoriaBudget }) {
         <Line data={datiLinea} options={options} />
       </div>
       <div style={{ marginBottom: "20px", height: "150px", width: "33%" }}>
-        <h2>Tipo + Utilizzato</h2>
+        <h2>Rapporto Quantità Tipo</h2>
         <Pie data={datiTorta} options={options} />
       </div>
       <div style={{ marginBottom: "20px", height: "150px", width: "34%" }}>
-        <h2>QTA Transazioni a MESE</h2>
+        <h2>Quantità Transazioni al MESE</h2>
         <Bar data={datiBarre} options={options} />
       </div>
     </div>

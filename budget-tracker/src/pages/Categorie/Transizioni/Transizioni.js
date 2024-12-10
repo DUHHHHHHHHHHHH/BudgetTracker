@@ -188,6 +188,7 @@ function Transizioni({
           maxHeight: "250px",
           textAlign: "center",
           padding: "10px",
+          display: "block ruby",
         }}
       >
         <table className="table table-striped" style={{ width: "auto" }}>

@@ -5,6 +5,7 @@ import Sidebar from "../../components/sidebar/sidebar";
 
 import ChartJSs from "./ChartJS/ChartJS";
 import Transizioni from "./Transizioni/Transizioni";
+import Milestones from "./Milestones/Milestones";
 
 function Categorie() {
   const navigate = useNavigate();
@@ -53,6 +54,12 @@ function Categorie() {
     setAllTransizioni(transizioni);
   };
 
+  const handleMilestonesUpdate = (milestones) => {
+    // Gestisce l'aggiornamento delle milestones
+    // nel mio caso non serve perchè non li passo a nessun altro componente.
+    // creata la funzione perchè potrebbe essere usata in futuro.
+  };
+
   return (
     <div>
       <div style={{ display: "flex", width: "100%" }}>
@@ -80,7 +87,15 @@ function Categorie() {
                 onTransizioniUpdate={handleTransizioniUpdate}
               />
             </div>
-            <div className="milestones"></div>
+            <div className="milestones">
+              <Milestones
+                boolSelected={isSelected}
+                categoriaNome={selectedCategoriaNome}
+                categoriaid={selectedCategoriaId}
+                utenteId={utenteId}
+                onMilestonesUpdate={handleMilestonesUpdate}
+              />
+            </div>
           </div>
         </div>
       </div>
