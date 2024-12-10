@@ -3,6 +3,7 @@ import axios from "axios";
 import Modal from "../../../components/modal/modal";
 
 function AddCategoria({ onClose, utenteId }) {
+  const [show, setShow] = useState(false);
   const [formData, setFormData] = useState({
     CATEGORIA_Nome: "",
     CATEGORIA_Descrizione: "",
@@ -12,12 +13,18 @@ function AddCategoria({ onClose, utenteId }) {
 
   const [tipologie, setTipologie] = useState([]);
 
+  const handleClose = () => {
+    setShow(false);
+    onClose();
+  };
+  const handleShow = () => setShow(true);
+
   useEffect(() => {
     const fetchTipologie = async () => {
       try {
         const baseurl = process.env.REACT_APP_BASE_URL;
         const response = await axios.get(
-          `${baseurl}/tipologie/GET_Tipologie.php`
+          `${baseurl}/tipologia/GET_Tipologie.php`
         );
         setTipologie(response.data || []);
       } catch (error) {
@@ -57,7 +64,7 @@ function AddCategoria({ onClose, utenteId }) {
       );
 
       if (response.data.code === 201) {
-        onClose(); // Chiude la modale dopo il successo
+        handleClose();
       }
     } catch (error) {
       console.error("Error adding categoria:", error);
@@ -65,59 +72,71 @@ function AddCategoria({ onClose, utenteId }) {
   };
 
   return (
-    <div>
-      <h3>Aggiungi Categoria</h3>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nome Categoria</label>
-          <input
-            type="text"
-            name="CATEGORIA_Nome"
-            value={formData.CATEGORIA_Nome}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Descrizione</label>
-          <input
-            type="text"
-            name="CATEGORIA_Descrizione"
-            value={formData.CATEGORIA_Descrizione}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Budget</label>
-          <input
-            type="number"
-            name="CATEGORIA_Budget"
-            value={formData.CATEGORIA_Budget}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Tipologia Allegata</label>
-          <select
-            name="nomeTipologiaAllegata"
-            value={formData.nomeTipologiaAllegata}
-            onChange={handleChange}
-            required
-          >
-            {tipologie.map((tipologia) => (
-              <option
-                key={tipologia.TIPOLOGIA_ID}
-                value={tipologia.TIPOLOGIA_Nome}
-              >
-                {tipologia.TIPOLOGIA_Nome}
-              </option>
-            ))}
-          </select>
-        </div>
-        <button type="submit">Salva Categoria</button>
-      </form>
+    <div className="modal-container">
+      <button className="modal-btn-primary" onClick={handleShow}>
+        +
+      </button>
+
+      <Modal show={show} onClose={handleClose} title="Aggiungi Categoria">
+        <form onSubmit={handleSubmit}>
+          <div className="modal-form-group">
+            <label>Nome Categoria</label>
+            <input
+              type="text"
+              name="CATEGORIA_Nome"
+              value={formData.CATEGORIA_Nome}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="modal-form-group">
+            <label>Descrizione</label>
+            <input
+              type="text"
+              name="CATEGORIA_Descrizione"
+              value={formData.CATEGORIA_Descrizione}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="modal-form-group">
+            <label>Budget</label>
+            <input
+              type="number"
+              name="CATEGORIA_Budget"
+              value={formData.CATEGORIA_Budget}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="modal-form-group">
+            <label>Tipologia Allegata</label>
+            <select
+              name="nomeTipologiaAllegata"
+              value={formData.nomeTipologiaAllegata}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Seleziona una tipologia</option>
+              {tipologie && tipologie.length > 0 ? (
+                tipologie.map((tipologia) => (
+                  <option
+                    key={tipologia.TIPOLOGIA_ID}
+                    value={tipologia.TIPOLOGIA_Nome}
+                  >
+                    {tipologia.TIPOLOGIA_Nome}
+                  </option>
+                ))
+              ) : (
+                <option value="" disabled>
+                  Nessuna tipologia disponibile
+                </option>
+              )}
+            </select>
+          </div>
+          <button type="submit">Salva Categoria</button>
+        </form>
+      </Modal>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AddCategoria from "./AddCategoria/AddCategoria";
+import EditCategoria from "./AddCategoria/EditCategoria";
 import Modal from "../../components/modal/modal";
 import Sidebar from "../../components/sidebar/sidebar";
 
@@ -13,6 +14,7 @@ function Categoria() {
   const [loading, setLoading] = useState(true);
   const [showAddCategoria, setShowAddCategoria] = useState(false);
   const [selectedCategoria, setSelectedCategoria] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem("login") === null) {
@@ -25,37 +27,6 @@ function Categoria() {
     setUsername(userData.UTENTE_Username);
     setUtenteId(userData.UTENTE_ID);
   }, [navigate]);
-
-  useEffect(() => {
-    const fetchCategorie = async () => {
-      try {
-        const baseurl = process.env.REACT_APP_BASE_URL;
-        const formData = new FormData();
-        formData.append("UTENTE_ID", utenteId);
-        const response = await axios.post(
-          `${baseurl}/categoria/GET_Categorie.php`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        setCategorie(response.data || []);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-        setCategorie([]);
-        setLoading(false);
-      }
-    };
-    if (utenteId) {
-      fetchCategorie();
-    }
-  }, [utenteId]);
-
-  const handleShowAddCategoria = () => setShowAddCategoria(true);
-  const handleCloseAddCategoria = () => setShowAddCategoria(false);
 
   const handleDeleteCategoria = async (categoriaId) => {
     try {
@@ -70,7 +41,9 @@ function Categoria() {
         },
       });
 
-      setCategorie(categorie.filter((c) => c.CATEGORIA_ID !== categoriaId));
+      setCategorie((prevCategorie) =>
+        prevCategorie.filter((c) => c.CATEGORIA_ID !== categoriaId)
+      );
     } catch (error) {
       console.error("Errore durante l'eliminazione della categoria:", error);
     }
@@ -78,35 +51,124 @@ function Categoria() {
 
   const handleEditClick = (categoria) => {
     setSelectedCategoria(categoria);
-    // Add your edit logic here
+    setShowEditModal(true);
   };
 
+  const handleUpdate = (updatedCategoria) => {
+    setCategorie((prevCategorie) =>
+      prevCategorie.map((c) =>
+        c.CATEGORIA_ID === updatedCategoria.CATEGORIA_ID ? updatedCategoria : c
+      )
+    );
+    setShowEditModal(false);
+  };
+
+  useEffect(() => {
+    const fetchCategorie = async () => {
+      try {
+        const baseurl = process.env.REACT_APP_BASE_URL;
+        const formData = new FormData();
+        formData.append("UTENTE_ID", utenteId);
+
+        const response = await axios.post(
+          `${baseurl}/categoria/GET_Categorie.php`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        const categorieArray = Array.isArray(response.data)
+          ? response.data.map((categoria) => ({
+              CATEGORIA_ID: categoria.CATEGORIA_ID,
+              CATEGORIA_Nome: categoria.CATEGORIA_Nome,
+              CATEGORIA_Descrizione: categoria.CATEGORIA_Descrizione,
+              CATEGORIA_Budget: categoria.CATEGORIA_Budget,
+              TIPOLOGIA_Nome: categoria.TIPOLOGIA_Nome,
+              UTENTE_FK_ID: categoria.UTENTE_FK_ID,
+            }))
+          : [];
+        setCategorie(categorieArray);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        setCategorie([]);
+        setLoading(false);
+      }
+    };
+    if (utenteId) {
+      fetchCategorie();
+    }
+  }, [utenteId]);
+
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div
+        style={{
+          position: "relative",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          textAlign: "center",
+          fontSize: "1.5rem",
+        }}
+      >
+        Loading...
+      </div>
+    );
   }
 
-  const renderContent = () => {
-    if (categorie.length === 0) {
-      return (
-        <div style={{ textAlign: "center" }}>
-          <h3>Nessuna categoria trovata</h3>
-          <button onClick={handleShowAddCategoria}>Aggiungi Categoria</button>
-        </div>
-      );
-    }
-
+  if (categorie.length === 0) {
     return (
-      <div className="container">
-        <div className="containerForB">
-          <h2>Categorie create dall'Utente</h2>
-          <div className="containerForBB">
-            <table>
+      <div style={{ width: "100%", textAlign: "center", marginTop: "25%" }}>
+        <div
+          style={{
+            textAlign: "center",
+            fontSize: "1.5rem",
+            marginTop: "20px",
+          }}
+        >
+          Nessuna categoria trovata
+        </div>
+        <div style={{ marginTop: "20px" }}>
+          <AddCategoria
+            onClose={() => setShowAddCategoria(false)}
+            utenteId={utenteId}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div style={{ display: "flex", width: "100%" }}>
+        <Sidebar username={username} UID={utenteId} Pagina="Categoria" />
+        <div className="container">
+          <h2 style={{ width: "100%", textAlign: "center" }}>
+            Categorie create dall'Utente
+          </h2>
+          <div
+            style={{
+              width: "auto",
+              overflowX: "auto",
+              overflowY: "auto",
+              maxHeight: "250px",
+              textAlign: "center",
+              padding: "10px",
+              display: "block ruby",
+            }}
+          >
+            <table className="table table-striped" style={{ width: "auto" }}>
               <thead>
                 <tr>
                   <th>Nome</th>
                   <th>Descrizione</th>
                   <th>Budget</th>
                   <th>Tipologia Allegata</th>
+                  <th>Azioni</th>
                 </tr>
               </thead>
               <tbody>
@@ -114,7 +176,7 @@ function Categoria() {
                   <tr key={categoria.CATEGORIA_ID}>
                     <td>{categoria.CATEGORIA_Nome}</td>
                     <td>{categoria.CATEGORIA_Descrizione}</td>
-                    <td>{categoria.CATEGORIA_Budget}</td>
+                    <td>{categoria.CATEGORIA_Budget}€</td>
                     <td>{categoria.TIPOLOGIA_Nome}</td>
                     <td>
                       <button
@@ -154,20 +216,24 @@ function Categoria() {
               </tbody>
             </table>
           </div>
+
+          <div style={{ marginTop: "20px", textAlign: "center" }}>
+            <h2>Aggiungi una nuova categoria</h2>
+            <AddCategoria
+              onClose={() => setShowAddCategoria(false)}
+              utenteId={utenteId}
+            />
+          </div>
+
+          {showEditModal && selectedCategoria && (
+            <EditCategoria
+              categoria={selectedCategoria}
+              onUpdate={handleUpdate}
+              onClose={() => setShowEditModal(false)}
+              show={showEditModal}
+            />
+          )}
         </div>
-
-        <Modal show={showAddCategoria} onClose={handleCloseAddCategoria}>
-          <AddCategoria onClose={handleCloseAddCategoria} utenteId={utenteId} />
-        </Modal>
-      </div>
-    );
-  };
-
-  return (
-    <div>
-      <div style={{ display: "flex", width: "100%" }}>
-        <Sidebar username={username} UID={utenteId} Pagina="Categoria" />
-        {renderContent()}
       </div>
     </div>
   );

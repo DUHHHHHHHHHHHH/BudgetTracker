@@ -1,4 +1,0 @@
-sono rimasto a debuggare CATEGORIA.JS per mettere il bottone di aggiungi categoria che non mi appare
-devo riguardare anche l'edit button e il delete button.
-
-poi tutto il resto LMFAO
