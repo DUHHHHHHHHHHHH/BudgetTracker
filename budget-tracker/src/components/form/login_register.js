@@ -143,7 +143,7 @@ function AuthForm() {
           setErrors({ submit: "Credenziali non valide" });
           break;
         case 404:
-          setErrors({ submit: "Email specificata non esiste" });
+          setErrors({ submit: "Credenziali non valide" });
           break;
         default:
           setErrors({

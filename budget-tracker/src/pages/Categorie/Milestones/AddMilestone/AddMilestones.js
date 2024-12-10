@@ -19,6 +19,14 @@ function AddMilestone({ categoriaNome, onMilestonesUpdate }) {
     const baseurl = process.env.REACT_APP_BASE_URL;
     const utenteId = localStorage.getItem("UTENTE_ID");
 
+    const dataInizio = new Date(formData.MILESTONE_DataInizio);
+    const dataFine = new Date(formData.MILESTONE_DataFine);
+
+    if (dataInizio > dataFine) {
+      alert("La data di inizio non può essere successiva alla data di fine");
+      return;
+    }
+
     try {
       const postData = new FormData();
       postData.append("UTENTE_ID", utenteId);
@@ -114,7 +122,7 @@ function AddMilestone({ categoriaNome, onMilestonesUpdate }) {
               value={formData.MILESTONE_DataInizio}
               onChange={handleChange}
               min={minDate}
-              max={maxDate}
+              max={formData.MILESTONE_DataFine || maxDate}
               required
             />
           </div>
@@ -126,7 +134,7 @@ function AddMilestone({ categoriaNome, onMilestonesUpdate }) {
               name="MILESTONE_DataFine"
               value={formData.MILESTONE_DataFine}
               onChange={handleChange}
-              min={minDate}
+              min={formData.MILESTONE_DataInizio || minDate}
               max={maxDate}
               required
             />

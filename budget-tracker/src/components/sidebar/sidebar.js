@@ -119,35 +119,37 @@ const Sidebar = ({ username, UID, Pagina, onCategoriaSelect }) => {
         <hr />
         <hr />
         <hr />
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: "10px",
-            marginTop: "10px",
-          }}
-        >
-          {`trovate ${categorie.length}* categorie`}
-        </div>
         {Pagina === "Categorie" && Array.isArray(categorie) && (
-          <select
-            style={{
-              padding: "8px",
-              borderRadius: "4px",
-              border: "1px solid #ccc",
-              width: "200px",
-            }}
-            onChange={handleSelezionaCategoria}
-          >
-            <option value="">Seleziona una categoria</option>
-            {categorie.map((categoria) => (
-              <option
-                key={categoria.CATEGORIA_ID}
-                value={categoria.CATEGORIA_Nome}
-              >
-                {categoria.CATEGORIA_Nome} ({categoria.TIPOLOGIA_Nome})
-              </option>
-            ))}
-          </select>
+          <>
+            <div
+              style={{
+                textAlign: "center",
+                marginBottom: "10px",
+                marginTop: "10px",
+              }}
+            >
+              {`trovate ${categorie.length}* categorie`}
+            </div>
+            <select
+              style={{
+                padding: "8px",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+                width: "200px",
+              }}
+              onChange={handleSelezionaCategoria}
+            >
+              <option value="">Seleziona una categoria</option>
+              {categorie.map((categoria) => (
+                <option
+                  key={categoria.CATEGORIA_ID}
+                  value={categoria.CATEGORIA_Nome}
+                >
+                  {categoria.CATEGORIA_Nome} ({categoria.TIPOLOGIA_Nome})
+                </option>
+              ))}
+            </select>
+          </>
         )}
 
         <p>©2024 ICT WEB2</p>

@@ -25,9 +25,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new Exception("Connection to the database failed: " . mysqli_connect_error(), 500);
             }
 
-            $query = "SELECT UTENTE_Username, UTENTE_Mail, UTENTE_ID FROM utente WHERE UTENTE_Mail = ?";
+            $query = "SELECT UTENTE_Username, UTENTE_Mail, UTENTE_ID FROM utente WHERE UTENTE_Mail = ? AND UTENTE_Password = ?" ;
             $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, 's', $mail);
+            mysqli_stmt_bind_param($stmt, 'ss', $mail, $password);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_store_result($stmt);
 
@@ -55,8 +55,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     echo json_encode($user);
                 
             } else {
-                http_response_code(404);
-                echo json_encode(array("message" => "Email non trovata.", "code" => 404));
+                http_response_code(416);
+                echo json_encode(array("message" => "Email non trovata.", "code" => 416));
             }
         } catch (Exception $e) {
             http_response_code(500);
