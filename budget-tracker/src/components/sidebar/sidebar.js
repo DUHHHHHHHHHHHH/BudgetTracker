@@ -117,7 +117,7 @@ const Sidebar = ({ username, UID, Pagina, onCategoriaSelect }) => {
           <li>
             <a href="/Home">Home</a>
           </li>
-          <li style={{ marginBottom: "10px" }}>
+          <li style={{}}>
             <a href="/Profilo">Profilo</a>
           </li>
           <li>

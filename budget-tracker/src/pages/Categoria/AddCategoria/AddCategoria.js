@@ -89,7 +89,7 @@ function AddCategoria({ onClose, utenteId, color }) {
       <button
         className="modal-btn-primary"
         onClick={handleShow}
-        style={{ backgroundColor: color || "#ccc" }}
+        style={{ backgroundColor: "#3b3b3b" }}
       >
         +
       </button>

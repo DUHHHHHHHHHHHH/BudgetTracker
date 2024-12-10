@@ -124,21 +124,24 @@ function Categoria() {
 
   if (categorie.length === 0) {
     return (
-      <div style={{ width: "100%", textAlign: "center", marginTop: "25%" }}>
-        <div
-          style={{
-            textAlign: "center",
-            fontSize: "1.5rem",
-            marginTop: "20px",
-          }}
-        >
-          Nessuna categoria trovata
-        </div>
-        <div style={{ marginTop: "20px" }}>
-          <AddCategoria
-            onClose={() => setShowAddCategoria(false)}
-            utenteId={utenteId}
-          />
+      <div style={{ display: "flex", width: "100%" }}>
+        <Sidebar username={username} UID={utenteId} Pagina="Categoria" />
+        <div className="container" style={{ backgroundColor: "#566a4f" }}>
+          <div
+            style={{
+              textAlign: "center",
+              fontSize: "1.5rem",
+              marginTop: "20px",
+            }}
+          >
+            Nessuna categoria trovata
+            <div style={{ marginTop: "20px" }}>
+              <AddCategoria
+                onClose={() => setShowAddCategoria(false)}
+                utenteId={utenteId}
+              />
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -224,7 +227,6 @@ function Categoria() {
             <AddCategoria
               onClose={() => setShowAddCategoria(false)}
               utenteId={utenteId}
-              color={{ backgroundColor: "#87a47d" }}
             />
           </div>
 
