@@ -308,3 +308,18 @@ canvas {
     transform: rotate(360deg);
   }
 }
+
+.containerForB {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 10px;
+  flex-direction: column;
+  text-align: center;
+}
+
+.containerForBB {
+  max-height: 600px;
+  overflow-y: auto;
+}

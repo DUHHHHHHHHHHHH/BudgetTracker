@@ -9,7 +9,7 @@ const Sidebar = ({ username, UID, Pagina, onCategoriaSelect }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (Pagina === "Categorie") {
+    if (Pagina === "Gestionale") {
       const baseurl = process.env.REACT_APP_BASE_URL;
 
       // Recupera l'ID utente dal localStorage
@@ -90,7 +90,7 @@ const Sidebar = ({ username, UID, Pagina, onCategoriaSelect }) => {
           <strong>{username}</strong>.
         </p>
         <p>
-          Sei l'utente numero <strong>{UID}</strong>° sulla piattaforma!
+          Sei l'utente numero <strong>{UID}</strong> sulla piattaforma!
         </p>
       </div>
 
@@ -106,7 +106,10 @@ const Sidebar = ({ username, UID, Pagina, onCategoriaSelect }) => {
             <a href="/Profilo">Profilo</a>
           </li>
           <li>
-            <a href="/Categorie">Categorie</a>
+            <a href="/Categoria">Categoria</a>
+          </li>
+          <li>
+            <a href="/Gestionale">Gestionale</a>
           </li>
           <li>
             <a href="/Report">Report</a>
@@ -119,7 +122,7 @@ const Sidebar = ({ username, UID, Pagina, onCategoriaSelect }) => {
         <hr />
         <hr />
         <hr />
-        {Pagina === "Categorie" && Array.isArray(categorie) && (
+        {Pagina === "Gestionale" && Array.isArray(categorie) && (
           <>
             <div
               style={{

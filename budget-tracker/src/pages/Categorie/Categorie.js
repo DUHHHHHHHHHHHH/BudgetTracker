@@ -66,7 +66,7 @@ function Categorie() {
         <Sidebar
           username={username}
           UID={utenteId}
-          Pagina="Categorie"
+          Pagina="Gestionale"
           onCategoriaSelect={handleCategoriaSelect}
         />
         <div className="container">
