@@ -162,26 +162,26 @@ function AuthForm() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <div style={{ width: "400px", textAlign: "center" }}>
-        <h2>{isLogin ? "Accedi" : "Registrati"}</h2>
-        <div className="flex">
-          <button onClick={() => setIsLogin(true)}>Login</button>
-          <button onClick={() => setIsLogin(false)}>Register</button>
+    <div className="auth-container">
+      <div className="auth-box">
+        <h2 className="auth-title">{isLogin ? "Accedi" : "Registrati"}</h2>
+        <div className="auth-toggle">
+          <button
+            className={`toggle-btn ${isLogin ? "active" : ""}`}
+            onClick={() => setIsLogin(true)}
+          >
+            Login
+          </button>
+          <button
+            className={`toggle-btn ${!isLogin ? "active" : ""}`}
+            onClick={() => setIsLogin(false)}
+          >
+            Register
+          </button>
         </div>
-        <form
-          onSubmit={handleSubmit}
-          style={{ flexDirection: "column", width: "100%" }}
-        >
+        <form onSubmit={handleSubmit} className="auth-form">
           {!isLogin && (
-            <div>
+            <div className="form-group">
               <label>Username</label>
               <input
                 name="UTENTE_Username"
@@ -189,11 +189,14 @@ function AuthForm() {
                 value={DATA.UTENTE_Username}
                 onChange={handleInputChange}
                 placeholder="Username"
+                className="form-input"
               />
-              {errors.UTENTE_Username && <p>{errors.UTENTE_Username}</p>}
+              {errors.UTENTE_Username && (
+                <p className="error-message">{errors.UTENTE_Username}</p>
+              )}
             </div>
           )}
-          <div>
+          <div className="form-group">
             <label>Email address</label>
             <input
               name="UTENTE_Mail"
@@ -201,14 +204,18 @@ function AuthForm() {
               value={DATA.UTENTE_Mail}
               onChange={handleInputChange}
               placeholder="Email address"
+              className="form-input"
             />
-            {errors.UTENTE_Mail && <p>{errors.UTENTE_Mail}</p>}
+            {errors.UTENTE_Mail && (
+              <p className="error-message">{errors.UTENTE_Mail}</p>
+            )}
             {showDomainSuggestions && (
-              <div>
+              <div className="domain-suggestions">
                 {commonDomains.map((domain) => (
                   <button
                     key={domain}
                     onClick={() => handleDomainSelect(domain)}
+                    className="domain-btn"
                   >
                     {DATA.UTENTE_Mail.split("@")[0] + domain}
                   </button>
@@ -216,27 +223,39 @@ function AuthForm() {
               </div>
             )}
           </div>
-          <div>
+          <div className="form-group">
             <label>Password</label>
-            <input
-              name="UTENTE_Password"
-              type={showPassword ? "text" : "password"}
-              value={DATA.UTENTE_Password}
-              onChange={handleInputChange}
-              placeholder="Password"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </button>
-            {errors.UTENTE_Password && <p>{errors.UTENTE_Password}</p>}
+            <div className="password-input-container">
+              <input
+                name="UTENTE_Password"
+                type={showPassword ? "text" : "password"}
+                value={DATA.UTENTE_Password}
+                onChange={handleInputChange}
+                placeholder="Password"
+                className="form-input"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="password-toggle-btn"
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
+            </div>
+            {errors.UTENTE_Password && (
+              <p className="error-message">{errors.UTENTE_Password}</p>
+            )}
           </div>
-          <button type="submit" disabled={loading}>
-            {loading ? <FaSpinner /> : isLogin ? "Sign in" : "Register"}
+          <button type="submit" disabled={loading} className="submit-btn">
+            {loading ? (
+              <FaSpinner className="spinner" />
+            ) : isLogin ? (
+              "Sign in"
+            ) : (
+              "Register"
+            )}
           </button>
-          {errors.submit && <p>{errors.submit}</p>}
+          {errors.submit && <p className="error-message">{errors.submit}</p>}
         </form>
       </div>
     </div>
