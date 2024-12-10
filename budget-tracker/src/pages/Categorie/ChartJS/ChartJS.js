@@ -152,7 +152,7 @@ function GraficiChartJS({ transizioni, categoriaBudget }) {
       }}
     >
       <div style={{ marginBottom: "20px", height: "150px", width: "33%" }}>
-        <h2>Bilancio della Categoria</h2> {categoriaBudget}
+        <h2>Bilancio della Categoria</h2> {categoriaBudget} €
         <Line data={datiLinea} options={options} />
       </div>
       <div style={{ marginBottom: "20px", height: "150px", width: "33%" }}>
