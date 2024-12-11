@@ -66,6 +66,7 @@ function EditMilestone({ milestone, onUpdate, onClose, show }) {
             value={formData.MILESTONE_Nome}
             onChange={handleChange}
             required
+            autoComplete="off"
           />
         </div>
         <div className="modal-form-group">

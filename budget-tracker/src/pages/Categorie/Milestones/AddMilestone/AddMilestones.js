@@ -107,6 +107,7 @@ function AddMilestone({ categoriaNome, onMilestonesUpdate }) {
               value={formData.MILESTONE_Nome}
               onChange={handleChange}
               required
+              autoComplete="off"
             />
           </div>
 
@@ -130,6 +131,7 @@ function AddMilestone({ categoriaNome, onMilestonesUpdate }) {
               min={minDate}
               max={formData.MILESTONE_DataFine || maxDate}
               required
+              autoComplete="off"
             />
           </div>
 
@@ -143,6 +145,7 @@ function AddMilestone({ categoriaNome, onMilestonesUpdate }) {
               min={formData.MILESTONE_DataInizio || minDate}
               max={maxDate}
               required
+              autoComplete="off"
             />
           </div>
 

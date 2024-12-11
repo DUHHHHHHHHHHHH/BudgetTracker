@@ -68,6 +68,7 @@ function EditCategoria({ categoria, onUpdate, onClose, show }) {
             value={formData.CATEGORIA_newNome}
             onChange={handleChange}
             required
+            autoComplete="off"
           />
         </div>
         <div>
@@ -78,6 +79,7 @@ function EditCategoria({ categoria, onUpdate, onClose, show }) {
             value={formData.CATEGORIA_newDescrizione}
             onChange={handleChange}
             required
+            autoComplete="off"
           />
         </div>
         <button type="submit">Salva Modifiche</button>

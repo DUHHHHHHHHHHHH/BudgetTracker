@@ -114,6 +114,7 @@ function Profile() {
                 value={newUsername}
                 onChange={(e) => setNewUsername(e.target.value)}
                 className="form-input"
+                autoComplete="off"
               />
             ) : (
               <span>{username}</span>
@@ -130,6 +131,7 @@ function Profile() {
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
                 className="form-input"
+                autoComplete="off"
               />
             ) : (
               <span>{email}</span>
@@ -147,6 +149,7 @@ function Profile() {
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 className="form-input"
                 placeholder="Password Corrente"
+                autoComplete="off"
               />
             ) : (
               <span>******</span>
@@ -165,6 +168,7 @@ function Profile() {
                   onChange={(e) => setNewPassword(e.target.value)}
                   className="form-input"
                   placeholder="Nuova Password (Opzionale)"
+                  autoComplete="off"
                 />
                 <button
                   type="button"

@@ -87,6 +87,7 @@ function AddTransizione({ CATEGORIA_Nome }) {
               value={formData.TRANSIZIONE_Nome}
               onChange={handleChange}
               required
+              autoComplete="off"
             />
           </div>
 
@@ -111,6 +112,7 @@ function AddTransizione({ CATEGORIA_Nome }) {
               value={formData.TRANSIZIONE_QTA}
               onChange={handleChange}
               required
+              autoComplete="off"
             />
           </div>
 

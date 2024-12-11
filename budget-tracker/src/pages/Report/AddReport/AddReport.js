@@ -179,6 +179,7 @@ function AddReport({ categoriaNome, categoriaid, utenteId }) {
               value={nome}
               onChange={(e) => setNome(e.target.value)}
               required
+              autoComplete="off"
             />
           </div>
 
@@ -188,6 +189,7 @@ function AddReport({ categoriaNome, categoriaid, utenteId }) {
               value={descrizione}
               onChange={(e) => setDescrizione(e.target.value)}
               required
+              autoComplete="off"
             ></textarea>
           </div>
 

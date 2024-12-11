@@ -110,6 +110,7 @@ function AddCategoria({ onClose, utenteId }) {
               value={formData.CATEGORIA_Nome}
               onChange={handleChange}
               required
+              autoComplete="off"
             />
           </div>
           <div className="modal-form-group">
@@ -120,6 +121,7 @@ function AddCategoria({ onClose, utenteId }) {
               value={formData.CATEGORIA_Descrizione}
               onChange={handleChange}
               required
+              autoComplete="off"
             />
           </div>
           <div className="modal-form-group">
@@ -130,6 +132,7 @@ function AddCategoria({ onClose, utenteId }) {
               value={formData.CATEGORIA_Budget}
               onChange={handleChange}
               required
+              autoComplete="off"
             />
           </div>
           <div className="modal-form-group">
