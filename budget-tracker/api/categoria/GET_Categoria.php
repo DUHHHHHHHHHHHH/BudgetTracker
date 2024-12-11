@@ -11,10 +11,10 @@ include_once "../config.php";
 $db = new Database();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nome_categoria = isset($_POST["CATEGORIA_Nome"]) ? $_POST["CATEGORIA_Nome"] : null;
+    $categoria_id = isset($_POST["CATEGORIA_ID"]) ? $_POST["CATEGORIA_ID"] : null;
     $utente_id = isset($_POST["UTENTE_ID"]) ? $_POST["UTENTE_ID"] : null;
 
-    if (!empty($nome_categoria) && !empty($utente_id)) {
+    if (!empty($categoria_id) && !empty($utente_id)) {
         try {
             $conn = mysqli_connect($db->host, $db->user, $db->password, $db->db_name);
 
@@ -37,14 +37,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                       ON 
                         c.TIPOLOGIA_FK_ID = t.TIPOLOGIA_ID
                       WHERE 
-                        c.UTENTE_FK_ID = ? AND c.CATEGORIA_Nome = ?";
+                        c.UTENTE_FK_ID = ? AND c.CATEGORIA_ID = ?";
             $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, 'is', $utente_id, $nome_categoria);
+            mysqli_stmt_bind_param($stmt, 'is', $utente_id, $categoria_id);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_store_result($stmt);
 
             if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $CATEGORIA_ID, $CATEGORIA_Nome, $CATEGORIA_Descrizione, $CATEGORIA_Budget, $TIPOLOGIA_FK_ID, $UTENTE_FK_ID, $TIPOLOGIA_Nome);
+                mysqli_stmt_bind_result($stmt, $CATEGORIA_ID, $CATEGORIA_ID, $CATEGORIA_Descrizione, $CATEGORIA_Budget, $TIPOLOGIA_FK_ID, $UTENTE_FK_ID, $TIPOLOGIA_Nome);
                 mysqli_stmt_fetch($stmt);
 
                 $categoria = array(

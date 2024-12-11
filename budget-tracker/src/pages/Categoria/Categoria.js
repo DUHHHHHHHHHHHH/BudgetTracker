@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AddCategoria from "./AddCategoria/AddCategoria";
 import EditCategoria from "./AddCategoria/EditCategoria";
-import Modal from "../../components/modal/modal";
 import Sidebar from "../../components/sidebar/sidebar";
 
 function Categoria() {

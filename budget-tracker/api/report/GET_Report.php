@@ -31,12 +31,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
             mysqli_stmt_store_result($stmt);
 
             if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $REPORT_ID, $REPORT_Nome, $REPORT_DataGenerazione, $REPORT_FileExport, $UTENTE_FK_ID);
+                mysqli_stmt_bind_result($stmt, $REPORT_ID, $REPORT_Nome, $REPORT_Descrizione, $REPORT_DataGenerazione, $REPORT_FileExport, $UTENTE_FK_ID);
                 mysqli_stmt_fetch($stmt);
 
                 $report = array(
                     "REPORT_ID" => $REPORT_ID,
                     "REPORT_Nome" => $REPORT_Nome,
+                    "REPORT_Descrizione" => $REPORT_Descrizione,
                     "REPORT_DataGenerazione" => $REPORT_DataGenerazione,
                     "REPORT_FileExport" => $REPORT_FileExport,
                     "UTENTE_FK_ID" => $UTENTE_FK_ID

@@ -68,6 +68,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 throw new Exception("Connessione al database fallita: " . mysqli_connect_error());
             }
 
+            // CONTROLLO SE CI SONO ALTRI REPORT CON LO STESSO NOME IN BASE ALL'UTENTE
+            $query = "SELECT REPORT_ID FROM report WHERE UTENTE_FK_ID = ? AND REPORT_Nome = ?";
+            $stmt = mysqli_prepare($conn, $query);
+            mysqli_stmt_bind_param($stmt, 'is', $utente_id, $report_nome);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_bind_result($stmt, $report_id);
+            mysqli_stmt_fetch($stmt);
+            mysqli_stmt_close($stmt);
+            
+            if (!empty($report_id)) {
+                echo json_encode(array("message" => "Esiste già un report con lo stesso nome per questo utente.", "code" => 400));
+                exit;
+            }
+
             // INSERIMENTO DEL REPORT
             $file_path = 'DB/DB_Reports/' . $data_report; // Salviamo il percorso relativo del file
             $query = "INSERT INTO report (REPORT_Nome, REPORT_Descrizione, REPORT_DataGenerazione, REPORT_FileExport, UTENTE_FK_ID) VALUES (?, ?, ?, ?, ?)";

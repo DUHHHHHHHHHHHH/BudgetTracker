@@ -38,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 return [
                     "REPORT_ID" => $report["REPORT_ID"],
                     "REPORT_Nome" => $report["REPORT_Nome"],
+                    "REPORT_Descrizione" => $report["REPORT_Descrizione"],
                     "REPORT_DataGenerazione" => $report["REPORT_DataGenerazione"],
                     "REPORT_FileExport" => $report["REPORT_FileExport"]
                 ];

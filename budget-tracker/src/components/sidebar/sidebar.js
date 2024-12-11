@@ -10,7 +10,9 @@ const Sidebar = ({ username, UID, Pagina, onCategoriaSelect }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (Pagina === "Gestionale") {
+    if (Pagina === "Gestionale" || Pagina === "Report") {
+      // le pagine che necessitano le categorie da visualizzare
+
       const baseurl = process.env.REACT_APP_BASE_URL;
 
       // Recupera l'ID utente dal localStorage
@@ -136,38 +138,39 @@ const Sidebar = ({ username, UID, Pagina, onCategoriaSelect }) => {
 
         <hr />
         <div style={{ textAlign: "center", marginTop: "25px" }}>
-          {Pagina === "Gestionale" && Array.isArray(categorie) && (
-            <>
-              <div
-                style={{
-                  textAlign: "center",
-                  marginBottom: "10px",
-                  marginTop: "10px",
-                }}
-              >
-                {`trovate ${categorie.length}* categorie`}
-              </div>
-              <select
-                style={{
-                  padding: "8px",
-                  borderRadius: "4px",
-                  border: "1px solid #ccc",
-                  width: "200px",
-                }}
-                onChange={handleSelezionaCategoria}
-              >
-                <option value="">Seleziona una categoria</option>
-                {categorie.map((categoria) => (
-                  <option
-                    key={categoria.CATEGORIA_ID}
-                    value={categoria.CATEGORIA_Nome}
-                  >
-                    {categoria.CATEGORIA_Nome} ({categoria.TIPOLOGIA_Nome})
-                  </option>
-                ))}
-              </select>
-            </>
-          )}
+          {(Pagina === "Gestionale" || Pagina === "Report") &&
+            Array.isArray(categorie) && (
+              <>
+                <div
+                  style={{
+                    textAlign: "center",
+                    marginBottom: "10px",
+                    marginTop: "10px",
+                  }}
+                >
+                  {`trovate ${categorie.length}* categorie`}
+                </div>
+                <select
+                  style={{
+                    padding: "8px",
+                    borderRadius: "4px",
+                    border: "1px solid #ccc",
+                    width: "200px",
+                  }}
+                  onChange={handleSelezionaCategoria}
+                >
+                  <option value="">Seleziona una categoria</option>
+                  {categorie.map((categoria) => (
+                    <option
+                      key={categoria.CATEGORIA_ID}
+                      value={categoria.CATEGORIA_Nome}
+                    >
+                      {categoria.CATEGORIA_Nome} ({categoria.TIPOLOGIA_Nome})
+                    </option>
+                  ))}
+                </select>
+              </>
+            )}
         </div>
 
         <div style={{ textAlign: "center", marginTop: "25px" }}>
