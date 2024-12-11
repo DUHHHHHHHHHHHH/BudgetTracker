@@ -69,6 +69,7 @@ function EditTransizione({ transizione, onUpdate, onClose, show }) {
             value={formData.TRANSIZIONE_Nome}
             onChange={handleChange}
             required
+            autoComplete="off"
           />
         </div>
 

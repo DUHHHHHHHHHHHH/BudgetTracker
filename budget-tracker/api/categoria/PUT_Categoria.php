@@ -84,12 +84,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
             // Aggiungo i parametri WHERE
-            $paramTypes .= 'si';
+            $paramTypes .= 'ii';
             $paramValues[] = $utente_id;
-            $paramValues[] = $CATEGORIA_Nome;
+            $paramValues[] = $categoria_id;
 
             if (!empty($updateFields)) {
-                $query3 = "UPDATE categoria SET " . implode(", ", $updateFields) . " WHERE UTENTE_FK_ID = ? AND CATEGORIA_Nome = ?";
+                $query3 = "UPDATE categoria SET " . implode(", ", $updateFields) . " WHERE UTENTE_FK_ID = ? AND CATEGORIA_ID = ?";
                 $stmt3 = mysqli_prepare($conn, $query3);
 
                 // Creo array di riferimenti per bind_param
@@ -110,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         "message" => "Categoria modificata con successo.", 
                         "code" => 200, 
                         "modifiche" => array(
-                            "righe_modificate" => mysqli_stmt_affected_rows($stmt),
+                            "righe_modificate" => mysqli_stmt_affected_rows($stmt3),
                             "campi_aggiornati" => $updateFields
                         )
                     )
@@ -118,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             } else {
                 http_response_code(404);
-                echo json_encode(array( "message" => "Update non effettuato.", "code" => 404, "campi" => $_POST));
+                echo json_encode(array( "message" => "Update non effettuato.", "code" => 404, "campi" => $_POST, "categoria_nome" => $CATEGORIA_Nome) );
             }
 
                 mysqli_stmt_close($stmt3);

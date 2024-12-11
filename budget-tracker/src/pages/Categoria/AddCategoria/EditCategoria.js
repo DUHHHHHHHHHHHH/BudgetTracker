@@ -40,6 +40,7 @@ function EditCategoria({ categoria, onUpdate, onClose, show }) {
         }
       );
 
+      console.log(response.data);
       if (response.data.code === 200) {
         onUpdate({ ...categoria, ...formData });
         onClose();

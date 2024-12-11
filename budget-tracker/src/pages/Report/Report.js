@@ -148,8 +148,16 @@ function Report() {
           onCategoriaSelect={handleCategoriaSelect} // Passa la funzione di selezione categoria
         />
 
-        <div className="container" style={{ backgroundColor: "#566a4f" }}>
-          <h2 style={{ width: "100%", textAlign: "center" }}>I tuoi report</h2>
+        <div
+          className="container"
+          style={{
+            backgroundColor: "#566a4f",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "row-reverse",
+            display: "flex",
+          }}
+        >
           <div
             style={{
               width: "auto",
@@ -160,6 +168,9 @@ function Report() {
               display: "block ruby",
             }}
           >
+            <h2 style={{ width: "100%", textAlign: "center" }}>
+              I tuoi report
+            </h2>
             {reports.length === 0 ? (
               <div
                 style={{
