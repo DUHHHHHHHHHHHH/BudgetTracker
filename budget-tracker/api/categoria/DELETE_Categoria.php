@@ -15,20 +15,23 @@ $db = new Database();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $utente_id = isset($_POST["UTENTE_ID"]) ? $_POST["UTENTE_ID"] : null;
-    $nome_categoria = isset($_POST["CATEGORIA_ID"]) ? $_POST["CATEGORIA_ID"] : null;
+    $categoria_id = isset($_POST["CATEGORIA_ID"]) ? $_POST["CATEGORIA_ID"] : null;
 
-    if (!empty($utente_id) && !empty($nome_categoria)) {
+    if (!empty($utente_id) && !empty($categoria_id)) {
         try {
             $conn = mysqli_connect($db->host, $db->user, $db->password, $db->db_name);
 
             if (!$conn) {
-                throw new Exception("Connection to the database failed: " . mysqli_connect_error());
+                throw new Exception("Connessione al database fallita: " . mysqli_connect_error());
             }
 
             // Controllo se la categoria esiste
             $check_query = "SELECT COUNT(*) FROM categoria WHERE UTENTE_FK_ID = ? AND CATEGORIA_ID = ?";
             $check_stmt = mysqli_prepare($conn, $check_query);
-            mysqli_stmt_bind_param($check_stmt, 'is', $utente_id, $nome_categoria);
+            if (!$check_stmt) {
+                throw new Exception("Errore nella preparazione della query 1: " . mysqli_error($conn));
+            }
+            mysqli_stmt_bind_param($check_stmt, 'ii', $utente_id, $categoria_id);
             mysqli_stmt_execute($check_stmt);
             mysqli_stmt_bind_result($check_stmt, $count);
             mysqli_stmt_fetch($check_stmt);
@@ -36,52 +39,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($count == 0) {
                 echo json_encode(array("message" => "La categoria non esiste.", "code" => 404));
-                exit();
-            }
-
-            // Verifica se la categoria è associata a transazioni o milestones
-            $check_associations_query = "SELECT COUNT(*) FROM transazioni WHERE CATEGORIA_ID = ? AND UTENTE_FK_ID = ?";
-            $check_associations_stmt = mysqli_prepare($conn, $check_associations_query);
-            mysqli_stmt_bind_param($check_associations_stmt, 'si', $nome_categoria, $utente_id);
-            mysqli_stmt_execute($check_associations_stmt);
-            mysqli_stmt_bind_result($check_associations_stmt, $assoc_count);
-            mysqli_stmt_fetch($check_associations_stmt);
-            mysqli_stmt_close($check_associations_stmt);
-
-            if ($assoc_count > 0) {
-                echo json_encode(array("message" => "Impossibile eliminare la categoria. È associata a una o più transazioni.", "code" => 409));
-                exit();
-            }
-
-            // Verifica anche per le milestones
-            $check_milestones_query = "SELECT COUNT(*) FROM milestones WHERE CATEGORIA_ID = ? AND UTENTE_FK_ID = ?";
-            $check_milestones_stmt = mysqli_prepare($conn, $check_milestones_query);
-            mysqli_stmt_bind_param($check_milestones_stmt, 'si', $nome_categoria, $utente_id);
-            mysqli_stmt_execute($check_milestones_stmt);
-            mysqli_stmt_bind_result($check_milestones_stmt, $milestone_count);
-            mysqli_stmt_fetch($check_milestones_stmt);
-            mysqli_stmt_close($check_milestones_stmt);
-
-            if ($milestone_count > 0) {
-                echo json_encode(array("message" => "Impossibile eliminare la categoria. È associata a una o più milestones.", "code" => 409));
-                exit();
-            }
-
-            // Elimina la categoria
-            $query = "DELETE FROM categoria WHERE UTENTE_FK_ID = ? AND CATEGORIA_ID = ?";
-            $stmt = mysqli_prepare($conn, $query);
-            mysqli_stmt_bind_param($stmt, 'is', $utente_id, $nome_categoria);
-
-            if (mysqli_stmt_execute($stmt)) {
-                echo json_encode(array("message" => "Categoria eliminata con successo.", "code" => 200));
-            } else {
-                echo json_encode(array("message" => "Errore durante l'eliminazione della categoria." , "code" => 500));
-                mysqli_stmt_close($stmt);
                 mysqli_close($conn);
                 exit();
             }
 
-            mysqli_stmt_close($stmt);
+            // elimino tutte le transizione e milestone associate alla categoria
+            $delete_transizione_query = "DELETE FROM transizione WHERE CATEGORIA_FK_ID = ? AND UTENTE_FK_ID = ?";
+            $delete_transizione_stmt = mysqli_prepare($conn, $delete_transizione_query);
+            if (!$delete_transizione_stmt) {
+                throw new Exception("Errore nella preparazione della query 2: " . mysqli_error($conn));
+            }
+            mysqli_stmt_bind_param($delete_transizione_stmt, 'ii', $categoria_id, $utente_id);
+            mysqli_stmt_execute($delete_transizione_stmt);
+            mysqli_stmt_close($delete_transizione_stmt);
+
+            // elimino tutte le milestone associate alla categoria
+            $delete_milestone_query = "DELETE FROM milestone WHERE CATEGORIA_FK_ID = ? AND UTENTE_FK_ID = ?";
+            $delete_milestone_stmt = mysqli_prepare($conn, $delete_milestone_query);
+            if (!$delete_milestone_stmt) {
+                throw new Exception("Errore nella preparazione della query 3: " . mysqli_error($conn));
+            }
+            mysqli_stmt_bind_param($delete_milestone_stmt, 'ii', $categoria_id, $utente_id);
+            mysqli_stmt_execute($delete_milestone_stmt);
+            mysqli_stmt_close($delete_milestone_stmt);
+
+            // Elimina la categoria
+            $delete_query = "DELETE FROM categoria WHERE UTENTE_FK_ID = ? AND CATEGORIA_ID = ?";
+            $delete_stmt = mysqli_prepare($conn, $delete_query);
+            if (!$delete_stmt) {
+                throw new Exception("Errore nella preparazione della query 4: " . mysqli_error($conn));
+            }
+            mysqli_stmt_bind_param($delete_stmt, 'ii', $utente_id, $categoria_id);
+
+            if (mysqli_stmt_execute($delete_stmt)) {
+                echo json_encode(array("message" => "Categoria eliminata con successo.", "code" => 200));
+            } else {
+                throw new Exception("Errore durante l'eliminazione della categoria.");
+            }
+
+            mysqli_stmt_close($delete_stmt);
             mysqli_close($conn);
         } catch (Exception $e) {
             http_response_code(500);

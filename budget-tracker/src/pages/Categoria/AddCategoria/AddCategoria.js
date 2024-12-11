@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Modal from "../../../components/modal/modal";
 
-function AddCategoria({ onClose, utenteId, color }) {
+function AddCategoria({ onClose, utenteId }) {
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
@@ -29,6 +29,7 @@ function AddCategoria({ onClose, utenteId, color }) {
           `${baseurl}/tipologia/GET_Tipologie.php`
         );
         setTipologie(response.data || []);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching tipologie:", error);
         setError("Errore nel caricamento delle tipologie");
@@ -133,6 +134,7 @@ function AddCategoria({ onClose, utenteId, color }) {
           </div>
           <div className="modal-form-group">
             <label>Tipologia Allegata</label>
+
             <select
               name="nomeTipologiaAllegata"
               value={formData.nomeTipologiaAllegata}
@@ -142,12 +144,14 @@ function AddCategoria({ onClose, utenteId, color }) {
               <option value="">Seleziona una tipologia</option>
               {tipologie && tipologie.length > 0 ? (
                 tipologie.map((tipologia) => (
-                  <option
-                    key={tipologia.TIPOLOGIA_ID}
-                    value={tipologia.TIPOLOGIA_Nome}
-                  >
-                    {tipologia.TIPOLOGIA_Nome}
-                  </option>
+                  <>
+                    <option
+                      key={tipologia.TIPOLOGIA_ID}
+                      value={tipologia.TIPOLOGIA_Nome}
+                    >
+                      {tipologia.TIPOLOGIA_Nome}
+                    </option>
+                  </>
                 ))
               ) : (
                 <option value="" disabled>

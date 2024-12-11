@@ -28,6 +28,7 @@ function EditCategoria({ categoria, onUpdate, onClose, show }) {
         "CATEGORIA_newDescrizione",
         formData.CATEGORIA_newDescrizione
       );
+      updateData.append("UTENTE_ID", localStorage.getItem("UTENTE_ID"));
 
       const response = await axios.post(
         `${baseurl}/categoria/PUT_Categoria.php`,

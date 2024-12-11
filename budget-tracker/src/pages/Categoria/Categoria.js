@@ -5,7 +5,7 @@ import AddCategoria from "./AddCategoria/AddCategoria";
 import EditCategoria from "./AddCategoria/EditCategoria";
 import Sidebar from "../../components/sidebar/sidebar";
 
-import { FaTrash, FaEdit, FaDownload } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 
 function Categoria() {
   const navigate = useNavigate();
@@ -26,25 +26,34 @@ function Categoria() {
     const userData = JSON.parse(storedData);
 
     setUsername(userData.UTENTE_Username);
-    setUtenteId(userData.UTENTE_ID);
+    setUtenteId(localStorage.getItem("UTENTE_ID"));
   }, [navigate]);
 
   const handleDeleteCategoria = async (categoriaId) => {
     try {
       const baseurl = process.env.REACT_APP_BASE_URL;
+      const utenteID = localStorage.getItem("UTENTE_ID");
       const formData = new FormData();
-      formData.append("CATEGORIA_ID", categoriaId);
-      formData.append("UTENTE_ID", utenteId);
 
-      await axios.post(`${baseurl}/categoria/DELETE_Categoria.php`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      formData.append("CATEGORIA_ID", categoriaId);
+      formData.append("UTENTE_ID", utenteID);
+
+      const response = await axios.post(
+        `${baseurl}/categoria/DELETE_Categoria.php`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("respone del delete: \n\n\n", response.data);
 
       setCategorie((prevCategorie) =>
         prevCategorie.filter((c) => c.CATEGORIA_ID !== categoriaId)
       );
+      // console.log("categoria eliminata con successo: ", categoriaId);
     } catch (error) {
       console.error("Errore durante l'eliminazione della categoria:", error);
     }

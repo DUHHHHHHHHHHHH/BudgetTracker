@@ -53,8 +53,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_stmt_execute($check_stmt);
             mysqli_stmt_store_result($check_stmt);
             $check_result = mysqli_stmt_num_rows($check_stmt);
-
-            mysqli_stmt_close($check_stmt);
             
             if ($check_result > 0) {
 
@@ -64,6 +62,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 mysqli_close($conn);
                 exit;
             }
+
+            mysqli_stmt_close($check_stmt);
 
         // Se non ci sono errori, PROCEDO CON L'UPDATE DEI CAMPI.
                     // Costruisco la query dinamicamente in base ai parametri forniti
@@ -89,19 +89,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $paramValues[] = $CATEGORIA_Nome;
 
             if (!empty($updateFields)) {
-                $query = "UPDATE categoria SET " . implode(", ", $updateFields) . " WHERE UTENTE_FK_ID = ? AND CATEGORIA_Nome = ?";
-                $stmt = mysqli_prepare($conn, $query);
+                $query3 = "UPDATE categoria SET " . implode(", ", $updateFields) . " WHERE UTENTE_FK_ID = ? AND CATEGORIA_Nome = ?";
+                $stmt3 = mysqli_prepare($conn, $query3);
 
                 // Creo array di riferimenti per bind_param
                 $params = array($paramTypes);
                 foreach ($paramValues as $key => $value) {
                     $params[] = &$paramValues[$key];
                 }
-                call_user_func_array(array($stmt, 'bind_param'), $params);
+                call_user_func_array(array($stmt3, 'bind_param'), $params);
 
-                mysqli_stmt_execute($stmt);
+                mysqli_stmt_execute($stmt3);
 
-                if (mysqli_stmt_affected_rows($stmt) > 0) {
+            if (mysqli_stmt_affected_rows($stmt3) > 0) {
 
                 http_response_code(200);
                 echo json_encode(
@@ -113,17 +113,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             "righe_modificate" => mysqli_stmt_affected_rows($stmt),
                             "campi_aggiornati" => $updateFields
                         )
-                )
-            );
+                    )
+                );
 
             } else {
-                // vedo se esiste già il nome della categoria che voglio modificare
                 http_response_code(404);
-                echo json_encode(array( "message" => "Categoria Già Esistente con il nome '$newNome'", "code" => 404));
-
+                echo json_encode(array( "message" => "Update non effettuato.", "code" => 404, "campi" => $_POST));
             }
 
-                mysqli_stmt_close($stmt);
+                mysqli_stmt_close($stmt3);
                 mysqli_close($conn);
             } else {
                 http_response_code(400);
@@ -135,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     } else {
         http_response_code(400);
-        echo json_encode(array("message" => "Tutti i campi sono richiesti.", "code" => 400));
+        echo json_encode(array("message" => "Tutti i campi sono richiesti.", "code" => 400, "campi" => $_POST));
     }
 } else {
     http_response_code(405);
