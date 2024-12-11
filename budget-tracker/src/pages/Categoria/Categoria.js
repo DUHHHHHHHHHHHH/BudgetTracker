@@ -5,6 +5,8 @@ import AddCategoria from "./AddCategoria/AddCategoria";
 import EditCategoria from "./AddCategoria/EditCategoria";
 import Sidebar from "../../components/sidebar/sidebar";
 
+import { FaTrash, FaEdit, FaDownload } from "react-icons/fa";
+
 function Categoria() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -212,7 +214,7 @@ function Categoria() {
                           transition: "background-color 0.3s ease",
                         }}
                       >
-                        🗑
+                        <FaTrash />
                       </button>
                     </td>
                   </tr>

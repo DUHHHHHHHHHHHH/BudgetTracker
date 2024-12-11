@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import AddTransizione from "./AddTransizione/AddTransizione";
 import EditTransizione from "./AddTransizione/EditTransizione";
 
+import { FaTrash } from "react-icons/fa";
+
 function Transizioni({
   boolSelected,
   categoriaNome,
@@ -241,7 +243,7 @@ function Transizioni({
                       transition: "background-color 0.3s ease",
                     }}
                   >
-                    🗑
+                    <FaTrash />
                   </button>
                 </td>
               </tr>

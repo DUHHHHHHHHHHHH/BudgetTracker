@@ -3,6 +3,8 @@ import axios from "axios";
 import AddMilestone from "./AddMilestone/AddMilestones";
 import EditMilestone from "./AddMilestone/EditMilestones";
 
+import { FaTrash } from "react-icons/fa";
+
 function Milestones({
   boolSelected,
   categoriaNome,
@@ -232,7 +234,7 @@ function Milestones({
                       transition: "background-color 0.3s ease",
                     }}
                   >
-                    🗑
+                    <FaTrash />
                   </button>
                 </td>
               </tr>
