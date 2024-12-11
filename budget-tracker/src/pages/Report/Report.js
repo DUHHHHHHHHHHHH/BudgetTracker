@@ -27,6 +27,7 @@ function Report() {
     const storedData = localStorage.getItem("UTENTE_Data");
     const userData = JSON.parse(storedData);
 
+    console.log(userData.UTENTE_ID);
     setUsername(userData.UTENTE_Username);
     setUtenteId(userData.UTENTE_ID);
   }, [navigate]);
