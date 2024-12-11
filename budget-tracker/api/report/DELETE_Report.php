@@ -32,27 +32,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_stmt_fetch($stmt);
             mysqli_stmt_close($stmt);
 
-            /*
+            $REPORT_PATH = "../../{$file_path}";
 
-            // Se la path del file è trovata
-            if (!empty($file_path)) {
-                // Definisci la path fisica del file sul server (ad esempio, nella cartella 'uploads/')
-                $full_file_path = $_SERVER['DOCUMENT_ROOT'] . "../../" . $file_path;
-
-                // Verifica se il file esiste e, in tal caso, elimina il file fisico
-                if (file_exists($full_file_path)) {
-                    if (unlink($full_file_path)) {
-                        echo json_encode(array("message" => "File eliminato con successo.", "code" => 200));
-                    } else {
-                        echo json_encode(array("message" => "Errore durante l'eliminazione del file.", "code" => 500));
-                    }
-                } else {
-                    echo json_encode(array("message" => "Il file non esiste più.", "code" => 404));
-                }
+            // Elimina il file associato al report
+            if (!empty($REPORT_PATH) && file_exists($REPORT_PATH)) {
+                unlink($REPORT_PATH);
             }
-
-            */
-
 
             // Elimina il record dal database
             $query = "DELETE FROM report WHERE UTENTE_FK_ID = ? AND REPORT_ID = ?";

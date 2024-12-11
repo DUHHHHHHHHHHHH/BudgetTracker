@@ -50,17 +50,47 @@ function AddReport({ categoriaNome, categoriaid, utenteId }) {
       const transizioni = responseTransizioni.data || [];
       const milestones = responseMilestones.data || [];
 
+      const currentDate = new Date();
+      const formattedDate = currentDate.toISOString().split("T")[0]; // "YYYY-MM-DD"
+
       // GENERAZIONE DEL CSV
-      let csvContent = "data:text/csv;charset=utf-8,";
-      csvContent += "Tipo,Dati\n";
+      let csvContent = `NOME REPORT, DESCRIZIONE, DATA GENERAZIONE\n`;
+      csvContent += `${nome}, ${descrizione}, ${formattedDate}\n\n\n`;
 
-      transizioni.forEach((transizione) => {
-        csvContent += `Transizione,${transizione.TRANSIZIONE_Nome},${transizione.TRANSIZIONE_Data},${transizione.TRANSIZIONE_QTA},${transizione.TRANSIZIONE_Tipo}\n`;
-      });
+      const transizioniCount = transizioni.length;
+      const milestonesCount = milestones.length;
 
-      milestones.forEach((milestone) => {
-        csvContent += `Milestone,${milestone.MILESTONE_Nome},${milestone.MILESTONE_Descrizione},${milestone.MILESTONE_DataInizio},${milestone.MILESTONE_DataFine}\n`;
-      });
+      if (transizioni.length === 0 && milestones.length === 0) {
+        csvContent += "Nessun dato trovato\n\n";
+        csvContent += `Transizioni:, ${transizioniCount}\n`;
+        csvContent += `Milestones:, ${milestonesCount}\n`;
+      } else {
+        if (transizioni.length > 0) {
+          csvContent += `Transizioni:, ${transizioniCount}\n\n`;
+          csvContent += `NOME, DATA, BUDGET, TIPO\n`;
+
+          transizioni.forEach((transizione) => {
+            csvContent += `${transizione.TRANSIZIONE_Nome},${transizione.TRANSIZIONE_Data},${transizione.TRANSIZIONE_QTA},${transizione.TRANSIZIONE_Tipo}\n`;
+          });
+        }
+
+        csvContent += "\n";
+        if (milestones.length > 0) {
+          csvContent += `Milestones:, ${milestonesCount}\n\n`;
+          csvContent += `NOME, DESCRIZIONE, DATA INIZIO, DATA FINE, COMPLETATA\n`;
+          milestones.forEach((milestone) => {
+            let compl = "NO";
+            if (milestone.MILESTONE_Completata) {
+              compl = "SI";
+            }
+
+            csvContent += `${milestone.MILESTONE_Nome},${milestone.MILESTONE_Descrizione},${milestone.MILESTONE_DataInizio},${milestone.MILESTONE_DataFine}, ${compl}\n`;
+          });
+        }
+
+        csvContent += "\n\n\n";
+        csvContent += "fine file. \n";
+      }
 
       // Create a Blob from the CSV string and generate the file
       const blob = new Blob([csvContent], { type: "text/csv" });
