@@ -55,6 +55,12 @@ function Home() {
   return (
     <div>
       <Sidebar username={username} UID={utenteId} Pagina={"Home"} />
+      <div
+        className="container"
+        style={{ alignItems: "center", backgroundColor: "rgb(86, 106, 79)" }}
+      >
+        <h1>Benvenuto, {username}!</h1>
+      </div>
     </div>
   );
 }

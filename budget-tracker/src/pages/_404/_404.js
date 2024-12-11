@@ -1,6 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 const _404 = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("login") === "true";
+    setIsLoggedIn(loggedIn);
+  }, []);
+
+  const handleRedirect = () => {
+    if (isLoggedIn) {
+      window.location.href = "/Home";
+    } else {
+      window.location.href = "/";
+    }
+  };
+
   return (
     <div>
       <div
@@ -40,21 +55,27 @@ const _404 = () => {
         >
           La pagina che hai digitato non esiste.
         </p>
-        <a
-          href="/"
+        <button
+          onClick={handleRedirect}
           style={{
             marginTop: "2rem",
             padding: "0.75rem 1.5rem",
-            backgroundColor: "#2563eb",
+            backgroundColor: isLoggedIn ? "#2563eb" : "#9ca3af", // Disabilita il pulsante se non loggato
             color: "white",
             borderRadius: "0.5rem",
+            border: "none",
+            cursor: isLoggedIn ? "pointer" : "not-allowed",
             textDecoration: "none",
           }}
-          onMouseOver={(e) => (e.target.style.backgroundColor = "#1d4ed8")}
-          onMouseOut={(e) => (e.target.style.backgroundColor = "#2563eb")}
+          onMouseOver={(e) => {
+            if (isLoggedIn) e.target.style.backgroundColor = "#1d4ed8";
+          }}
+          onMouseOut={(e) => {
+            if (isLoggedIn) e.target.style.backgroundColor = "#2563eb";
+          }}
         >
-          Go back home
-        </a>
+          {isLoggedIn ? "Go back home" : "Login required"}
+        </button>
       </div>
     </div>
   );
