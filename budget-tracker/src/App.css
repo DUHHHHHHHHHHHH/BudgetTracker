@@ -273,7 +273,7 @@ canvas {
 
 .submit-btn {
   padding: 0.75rem;
-  background-color: #734e4e;
+  background-color: #634343;
   color: white;
   border: none;
   border-radius: 4px;
@@ -283,7 +283,7 @@ canvas {
 }
 
 .submit-btn:hover {
-  background-color: #0056b3;
+  background-color: #ad7373;
 }
 
 .submit-btn:disabled {
@@ -323,4 +323,15 @@ canvas {
 .containerForBB {
   max-height: 600px;
   overflow-y: auto;
+}
+
+.profile-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #90a7ad;
+  color: rgb(40, 40, 40);
 }

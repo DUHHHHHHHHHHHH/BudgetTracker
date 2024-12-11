@@ -47,8 +47,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_close($conn);
             exit;
         }
-
-
                 // CONTROLLO SE LA PASSWORD INSERITA E' GIUSTA.
 
                 $check_query = "SELECT * FROM utente WHERE UTENTE_ID = ? AND UTENTE_Password = ?";
@@ -133,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         )
                                     ));
                 } else {
-                    echo json_encode(array("message" => "Nessuna modifica fatta o l'utente non è stato trovato.", "code" => 404));
+                    echo json_encode(array("message" => "Nessuna modifica fatta o l'utente non è stato trovato.", "code" => 404, "campi_inseriti" => $_POST));
                 }
 
                 mysqli_stmt_close($update_stmt);
