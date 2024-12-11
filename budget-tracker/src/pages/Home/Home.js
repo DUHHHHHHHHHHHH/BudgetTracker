@@ -57,7 +57,13 @@ function Home() {
       <Sidebar username={username} UID={utenteId} Pagina={"Home"} />
       <div
         className="container"
-        style={{ alignItems: "center", backgroundColor: "rgb(86, 106, 79)" }}
+        style={{
+          alignItems: "center",
+          backgroundColor: "rgb(86, 106, 79)",
+          background:
+            "linear-gradient(to left, rgb(63 93 93), rgb(86, 106, 79))",
+          height: "100vh",
+        }}
       >
         <h1>Benvenuto, {username}!</h1>
       </div>

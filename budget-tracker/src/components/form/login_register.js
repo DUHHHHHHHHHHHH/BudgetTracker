@@ -162,7 +162,13 @@ function AuthForm() {
   };
 
   return (
-    <div className="auth-container">
+    <div
+      className="auth-container"
+      style={{
+        background:
+          "linear-gradient(to bottom, rgb(47 47 47), rgb(123 123 123))",
+      }}
+    >
       <div className="auth-box">
         <h2 className="auth-title">{isLogin ? "Accedi" : "Registrati"}</h2>
         <div className="auth-toggle">
