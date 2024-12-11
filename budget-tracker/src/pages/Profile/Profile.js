@@ -85,7 +85,7 @@ function Profile() {
         style={{ backgroundColor: "rgb(46, 94, 94)", alignItems: "center" }}
       >
         <div className="profile-box" style={{ width: "400px" }}>
-          <h2>Profilo</h2>
+          <h2 style={{ color: "white" }}>Profilo</h2>
           {isEditing && (
             <button
               onClick={handleCancelClick}
