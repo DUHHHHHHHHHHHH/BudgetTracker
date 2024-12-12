@@ -162,7 +162,6 @@ function AddCategoria({ onClose, utenteId }) {
             {/* devo mostrare la descrizione della tipologia che ho selezionato */}
             {formData.nomeTipologiaAllegata && (
               <p style={{ fontSize: "12px" }}>
-                Descrizione:{" "}
                 {
                   tipologie.find(
                     (tipologia) =>
