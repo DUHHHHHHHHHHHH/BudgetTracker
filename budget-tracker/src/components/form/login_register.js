@@ -196,6 +196,8 @@ function AuthForm() {
                 onChange={handleInputChange}
                 placeholder="Username"
                 className="form-input"
+                required
+                autoComplete="off"
               />
               {errors.UTENTE_Username && (
                 <p className="error-message">{errors.UTENTE_Username}</p>
@@ -211,6 +213,8 @@ function AuthForm() {
               onChange={handleInputChange}
               placeholder="Email address"
               className="form-input"
+              required
+              autoComplete="off"
             />
             {errors.UTENTE_Mail && (
               <p className="error-message">{errors.UTENTE_Mail}</p>
@@ -239,6 +243,8 @@ function AuthForm() {
                 onChange={handleInputChange}
                 placeholder="Password"
                 className="form-input"
+                required
+                autoComplete="off"
               />
               <button
                 type="button"

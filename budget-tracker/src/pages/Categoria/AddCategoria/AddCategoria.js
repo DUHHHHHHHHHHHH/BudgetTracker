@@ -75,12 +75,9 @@ function AddCategoria({ onClose, utenteId }) {
         setError("La categoria esiste già col nome inserito");
       }
     } catch (error) {
-      console.error(
-        "Errore nell'aggiungere la categoria, [TO-DO mettere l'errore per quando il nome categoria è uguale] :",
-        error
-      );
+      console.error("Errore nell'aggiungere la categoria :", error);
       setError(
-        "Errore nell'aggiungere la categoria, Nome categoria già esistente"
+        "Errore! Categoria con Tipologia Allegata già esistente, usare un altro nome"
       );
     }
   };
@@ -162,6 +159,19 @@ function AddCategoria({ onClose, utenteId }) {
                 </option>
               )}
             </select>
+            {/* devo mostrare la descrizione della tipologia che ho selezionato */}
+            {formData.nomeTipologiaAllegata && (
+              <p style={{ fontSize: "12px" }}>
+                Descrizione:{" "}
+                {
+                  tipologie.find(
+                    (tipologia) =>
+                      tipologia.TIPOLOGIA_Nome ===
+                      formData.nomeTipologiaAllegata
+                  )?.TIPOLOGIA_Descrizione
+                }
+              </p>
+            )}
           </div>
           <button type="submit">Salva Categoria</button>
         </form>
