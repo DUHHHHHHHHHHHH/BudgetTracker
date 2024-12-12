@@ -237,6 +237,12 @@ function Categoria() {
             <AddCategoria
               onClose={() => setShowAddCategoria(false)}
               utenteId={utenteId}
+              onAddCategoria={(nuovaCategoria) =>
+                setCategorie((prevCategorie) => [
+                  ...prevCategorie,
+                  nuovaCategoria,
+                ])
+              }
             />
           </div>
 

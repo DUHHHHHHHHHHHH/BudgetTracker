@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Modal from "../../../components/modal/modal";
 
-function AddReport({ categoriaNome, categoriaid, utenteId }) {
+function AddReport({ categoriaNome, categoriaid, utenteId, onAddReport }) {
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
   const [nome, setNome] = useState("");
@@ -145,6 +145,14 @@ function AddReport({ categoriaNome, categoriaid, utenteId }) {
       console.log(response.data.code);
 
       if (response.data.code === 200) {
+        const newReport = {
+          REPORT_ID: response.data.REPORT_ID,
+          REPORT_Nome: nome,
+          REPORT_Descrizione: descrizione,
+          REPORT_DataGenerazione: formattedDate,
+          REPORT_FileExport: response.data.path_file,
+        };
+        onAddReport(newReport);
         handleClose();
       } else {
         console.log(response.data);

@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             mysqli_stmt_execute($stmt);
 
             if (mysqli_stmt_affected_rows($stmt) > 0) {
-                echo json_encode(array("message" => "Report creato con successo.", "code" => 200, "path_file" => $file_path));
+                echo json_encode(array("message" => "Report creato con successo.", "code" => 200, "path_file" => $file_path, "REPORT_ID" => mysqli_insert_id($conn)));
             } else {
                 echo json_encode(array("message" => "Errore durante la creazione del report", "code" => 400));
             }

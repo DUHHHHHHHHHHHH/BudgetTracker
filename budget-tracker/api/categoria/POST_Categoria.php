@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_stmt_execute($insert_stmt);
 
         if (mysqli_stmt_affected_rows($insert_stmt) > 0) {
-            echo json_encode(array("message" => "Categoria creata con successo", "code" => 200));
+            echo json_encode(array("message" => "Categoria creata con successo", "code" => 200, "CATEGORIA_ID" => mysqli_insert_id($conn)));
             http_response_code(200);
         } else {
             echo json_encode(["message" => "Errore durante la creazione della categoria", "code" => 696]);

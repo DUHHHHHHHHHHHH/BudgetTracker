@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Modal from "../../../components/modal/modal";
 
-function AddCategoria({ onClose, utenteId }) {
+function AddCategoria({ onClose, utenteId, onAddCategoria }) {
   const [show, setShow] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
@@ -68,6 +68,15 @@ function AddCategoria({ onClose, utenteId }) {
       );
 
       if (response.data.code === 200) {
+        console.log("response data: ", response.data);
+        const nuovaCategoria = {
+          CATEGORIA_ID: response.data.CATEGORIA_ID, // Supponendo che l'ID venga restituito dal server
+          CATEGORIA_Nome: formData.CATEGORIA_Nome,
+          CATEGORIA_Descrizione: formData.CATEGORIA_Descrizione,
+          CATEGORIA_Budget: formData.CATEGORIA_Budget,
+          TIPOLOGIA_Nome: formData.nomeTipologiaAllegata,
+        };
+        onAddCategoria(nuovaCategoria);
         handleClose();
       }
 
